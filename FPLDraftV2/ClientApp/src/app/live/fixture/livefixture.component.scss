@@ -1,0 +1,90 @@
+
+
+.header-team {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .points {
+    background-color: white;
+    color: black;
+    padding: 8px;
+    border-radius: 6px;
+  }
+
+  .team {
+    flex-grow: 1;
+    text-align: center;
+    margin: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .team-image {
+    max-width: 50px;
+    max-height: 50px;
+  }
+}
+
+.team-sheets {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 8px;
+  font-size: smaller;
+
+  .team-sheet {
+    width: 50%;
+
+    &.h {
+      margin-right: 4px;
+    }
+
+    &.a {
+      margin-left: 4px;
+    }
+
+    .pick {
+
+      .pick-container {
+        display: flex;
+        margin: 8px;
+
+        &.unselected {
+          opacity: 0.3;
+        }
+
+        .pick-info {
+          display: flex;
+          flex-grow: 1;
+
+          .pick-info-player {
+          }
+        }
+
+        .pick-minutes {
+          opacity: 0.6;
+          margin-left: 16px;
+          width: 18px;
+
+          &.in-play {
+            font-weight: bold;
+            color: lawngreen;
+          }
+        }
+
+        .pick-points {
+          margin-left: 16px;
+          width: 18px;
+          text-align: right;
+        }
+      }
+    }
+
+    flex-grow: 1;
+  }
+}

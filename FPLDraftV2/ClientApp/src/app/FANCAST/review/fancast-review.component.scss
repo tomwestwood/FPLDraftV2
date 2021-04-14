@@ -1,0 +1,621 @@
+$total-items: 15;
+
+.hidden {
+  display: none;
+}
+
+.terminal-container {
+  width: calc(100% - 32px);
+  height: calc(100% - 80px);
+  position: absolute;
+  left: 0;
+  background-color: #101010;
+  border-color: white;
+  border-style: solid;
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+
+  .terminal-top {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+
+    .terminal-top-main {
+      flex-grow: 1;
+      margin: 32px;
+      margin-bottom: 0px;
+      background-image: linear-gradient(to right, purple, rebeccapurple);
+
+      .terminal-main-content {
+        height: 100%;
+
+        .terminal-draft-status {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .terminal-draft-manager {
+            display: flex;
+            align-items: center;
+            width: 50%;
+            place-content: flex-end;
+
+            .terminal-draft-manager-badge {
+              max-width: 280px;
+              max-height: 280px;
+            }
+
+            .terminal-draft-manager-info {
+              font-size: x-large;
+            }
+          }
+
+          .high-divider {
+            height: 100%;
+            margin: 64px;
+          }
+
+          .terminal-draft-status-info {
+            width: 50%;
+            font-size: xx-large;
+            font-weight: bold;
+
+            .terminal-announce-player {
+              display: flex;
+              align-items: center;
+              margin: 32px;
+              margin-right: 64px;
+
+              .terminal-announce-info {
+                display: flex;
+                flex-direction: column;
+              }
+
+              .terminal-image-info {
+                display: flex;
+                align-content: center;
+
+                .terminal-image {
+                  max-height: 220px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .breaking-news {
+        background: yellow;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        color: #101010;
+        font-size: 120px;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+        font-weight: bolder;
+
+        .breaking-bar {
+          color: black;
+          background-color: black;
+        }
+      }
+    }
+
+    .terminal-right-sidebar {
+      display: flex;
+      flex-direction: column;
+      min-width: 420px;
+      margin: 8px;
+
+      .terminal-right-header {
+        display: flex;
+        align-items: center;
+        margin: 4px;
+
+        .terminal-date-time {
+          flex-grow: 1;
+
+          .terminal-time {
+            font-size: x-large;
+          }
+
+          .terminal-date {
+            font-size: large;
+          }
+        }
+
+        .terminal-logo {
+          height: 60px;
+        }
+      }
+
+      .terminal-team-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .terminal-team-image {
+          height: 80px;
+          width: 80px;
+        }
+
+        .terminal-team-info {
+          .terminal-team-name {
+            font-size: large;
+          }
+
+          .terminal-manager-name {
+          }
+        }
+      }
+    }
+  }
+
+  .terminal-bottom {
+    margin: 8px;
+
+    .terminal-logo {
+      float: left;
+      max-height: 24px;
+    }
+
+    html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      vertical-align: baseline
+    }
+
+    article,
+    aside,
+    details,
+    figcaption,
+    figure,
+    footer,
+    header,
+    hgroup,
+    menu,
+    nav,
+    section {
+      display: block
+    }
+
+    body {
+      line-height: 1
+    }
+
+    ol,
+    ul {
+      list-style: none
+    }
+
+    blockquote,
+    q {
+      quotes: none
+    }
+
+    blockquote:before,
+    blockquote:after,
+    q:before,
+    q:after {
+      content: '';
+      content: none
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0
+    }
+
+    body {
+      font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #003348;
+    }
+
+    #news_ticker {
+      height: 27px;
+      margin: 40px auto 0;
+      overflow: hidden;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      padding: 3px;
+      position: relative;
+      -webkit-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.5);
+      transform: scale(2);
+      justify-content: center;
+      width: 50%;
+      top: -28px;
+      margin-bottom: -12px;
+    }
+
+    span {
+      float: left;
+      color: rgba(0, 0, 0, .8);
+      color: #001b25;
+      background: yellow;
+      padding: 2px;
+      position: relative;
+      height: 100%;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      -webkit-box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.5);
+      height: 100%;
+      padding-top: 2px;
+    }
+
+    ul {
+      float: left;
+      padding-left: 20px;
+      -webkit-animation: ticker 30s cubic-bezier(1, 0, .5, 0) infinite;
+      -moz-animation: ticker 30s cubic-bezier(1, 0, .5, 0) infinite;
+      animation: ticker 30s cubic-bezier(1, 0, .5, 0) infinite;
+    }
+
+    ul:hover {
+      -webkit-animation-play-state: paused;
+      -moz-animation-play-state: paused;
+      animation-play-state: paused;
+    }
+
+    li {
+      line-height: 24px;
+    }
+
+    #news_ticker a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    @-webkit-keyframes ticker {
+      0% {
+        margin-top: 0;
+      }
+
+      25% {
+        margin-top: -26px;
+      }
+
+      50% {
+        margin-top: -52px;
+      }
+
+      75% {
+        margin-top: -78px;
+      }
+
+      100% {
+        margin-top: 0;
+      }
+    }
+
+    @-moz-keyframes ticker {
+      0% {
+        margin-top: 0;
+      }
+
+      25% {
+        margin-top: -26px;
+      }
+
+      50% {
+        margin-top: -52px;
+      }
+
+      75% {
+        margin-top: -78px;
+      }
+
+      100% {
+        margin-top: 0;
+      }
+    }
+
+    @-ms-keyframes ticker {
+      0% {
+        margin-top: 0;
+      }
+
+      25% {
+        margin-top: -26px;
+      }
+
+      50% {
+        margin-top: -52px;
+      }
+
+      75% {
+        margin-top: -78px;
+      }
+
+      100% {
+        margin-top: 0;
+      }
+    }
+
+    @keyframes ticker {
+      0% {
+        margin-top: 0;
+      }
+
+      25% {
+        margin-top: -26px;
+      }
+
+      50% {
+        margin-top: -52px;
+      }
+
+      75% {
+        margin-top: -78px;
+      }
+
+      100% {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .terminal-divider {
+    margin-bottom: 8px;
+    margin-top: 8px;
+  }
+
+  .terminal-team-players {
+    padding-inline-start: 8px;
+
+    &.big-screen {
+      width: 75%;
+    }
+
+    li {
+      display: block;
+      animation: fadeIn 0.5s linear;
+      animation-fill-mode: both;
+    }
+
+    @for $i from 1 through $total-items {
+      li:nth-child(#{$i}) {
+        animation-delay: .1s * $i;
+      }
+    }
+
+    @-webkit-keyframes fadeIn {
+      0% {
+        opacity: 0;
+        top: 100px;
+      }
+
+      75% {
+        opacity: 0.5;
+        top: 0px;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.fancast-terminal-container {
+  position: absolute;
+  left: 0;
+  background-color: #101010;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+
+  ol,
+  ul {
+    padding-left: 0px;
+    list-style: none
+  }
+
+  .fancast-terminal-background {
+    max-height: 100%;
+    max-width: 100%;
+    display: flex;
+  }
+
+  .fancast-terminal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    .fancast-terminal-overlay-container {
+      display: flex;
+      justify-content: flex-end;
+      height: 100%;
+      align-items: flex-end;
+
+      .fancast-terminal-overlay-container-content {
+        margin: 32px;
+        display: flex;
+        flex-direction: column;
+        background-color: #101010;
+        border: goldenrod 3px solid;
+        display: flex;
+        border-radius: 6px;
+        margin: 4px;
+        padding: 32px;
+        width: 20%;
+
+        .header {
+          background-color: darkgoldenrod;
+          border-radius: 6px;
+          padding: 8px;
+          margin-bottom: 16px;
+          font-size: x-large;
+          font-weight: bold;
+        }
+
+        .footer {
+          padding: 8px;
+          margin-top: 16px;
+          font-size: x-large;
+          font-weight: bold;
+          color: goldenrod;
+        }
+      }
+    }
+  }
+
+  .fancast-announcement-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    .fancast-announcement-background-manager-image {
+      width: 100%;
+      height: 100%;
+      display: flex;
+
+      .manager-image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .fancast-announce-pick {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+      .fancast-announce-pick-content {
+        display: flex;
+        align-items: flex-end;
+        height: 100%;
+        flex-direction: column;
+        padding: 32px;
+
+        .fancast-announce-pick-content-container {
+          background-color: #101010;
+          border: goldenrod 3px solid;
+          width: 30%;
+          display: flex;
+          border-radius: 6px;
+          margin: 4px;
+          padding: 4px;
+
+          &.title {
+            justify-content: center;
+            font-size: xxx-large;
+            font-weight: bold;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .fancast-logo {
+              height: 50px;
+              width: 50px;
+              margin-left: 16px;
+              margin-right: 16px;
+            }
+          }
+
+          &.squad-container {
+            display: flex;
+            flex-direction: column;
+          }
+
+          .content-left {
+            flex-grow: 1;
+            align-self: center;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+
+            .player {
+              font-size: x-large;
+              font-weight: bold;
+            }
+
+            .signs {
+              font-size: x-large;
+              font-weight: bold;
+              background: darkgoldenrod;
+              margin: 8px;
+              border-radius: 6px;
+              padding: 4px;
+            }
+          }
+
+          .content-right {
+            flex-grow: 0;
+
+            .player-image {
+              max-width: 220px;
+              max-height: 170px;
+              margin: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.fancast-terminal-status-overlay {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  justify-content: center;
+
+  .fancast-terminal-manager-squad {
+  }
+
+
+  .fancast-terminal-status-overlay-content {
+    align-self: flex-end;
+    margin: 32px;
+    margin-left: 55%;
+    width: 30%;
+    background-color: #101010;
+    border: 3px solid goldenrod;
+    display: flex;
+
+    .fancast-terminal-manager-text {
+      width: 50%;
+      padding: 8px;
+      padding-left: 16px;
+      background-color: darkgoldenrod;
+
+      .manager-text {
+        font-size: x-large;
+      }
+    }
+
+    .fancast-terminal-status-text {
+      width: 50%;
+      padding: 8px;
+      padding-left: 16px;
+
+      .status-text {
+        font-size: x-large;
+      }
+    }
+  }
+}

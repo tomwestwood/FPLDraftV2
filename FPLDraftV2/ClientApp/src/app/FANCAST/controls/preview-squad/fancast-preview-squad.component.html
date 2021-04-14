@@ -1,0 +1,16 @@
+{{draftSquad}}
+<ul class="squad-list" *ngIf="draftSquad">
+    <li><fancast-terminal-player [player]="draftSquad.player_1" [position]="draftSquad.player_1 ? draftSquad.player_1.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_2" [position]="draftSquad.player_2 ? draftSquad.player_2.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_3" [position]="draftSquad.player_3 ? draftSquad.player_3.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_4" [position]="draftSquad.player_4 ? draftSquad.player_4.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_5" [position]="draftSquad.player_5 ? draftSquad.player_5.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_6" [position]="draftSquad.player_6 ? draftSquad.player_6.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_7" [position]="draftSquad.player_7 ? draftSquad.player_7.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_8" [position]="draftSquad.player_8 ? draftSquad.player_8.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_9" [position]="draftSquad.player_9 ? draftSquad.player_9.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_10" [position]="draftSquad.player_10 ? draftSquad.player_10.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+    <li><fancast-terminal-player [player]="draftSquad.player_11" [position]="draftSquad.player_11 ? draftSquad.player_11.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+  </ul>
+
+<button class="close-button" mat-raised-button mat-dialog-close>Close</button>

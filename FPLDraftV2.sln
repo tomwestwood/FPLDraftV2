@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLDraftV2", "FPLDraftV2\FPLDraftV2.csproj", "{8DE89260-32AA-4C5C-A4BB-991E2C3A328F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPLV2Core", "FPLV2Core\FPLV2Core.csproj", "{6B13F16B-8B1A-4847-B1B5-C4FCAD5E76DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FplPulse", "FplPulse\FplPulse.csproj", "{988465AE-7A6D-4321-80DB-2BF727646F3D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DE89260-32AA-4C5C-A4BB-991E2C3A328F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DE89260-32AA-4C5C-A4BB-991E2C3A328F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DE89260-32AA-4C5C-A4BB-991E2C3A328F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DE89260-32AA-4C5C-A4BB-991E2C3A328F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B13F16B-8B1A-4847-B1B5-C4FCAD5E76DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B13F16B-8B1A-4847-B1B5-C4FCAD5E76DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B13F16B-8B1A-4847-B1B5-C4FCAD5E76DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B13F16B-8B1A-4847-B1B5-C4FCAD5E76DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{988465AE-7A6D-4321-80DB-2BF727646F3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{988465AE-7A6D-4321-80DB-2BF727646F3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{988465AE-7A6D-4321-80DB-2BF727646F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{988465AE-7A6D-4321-80DB-2BF727646F3D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BEBCD9FC-2486-435A-B74C-F4A8DE12B927}
+	EndGlobalSection
+EndGlobal

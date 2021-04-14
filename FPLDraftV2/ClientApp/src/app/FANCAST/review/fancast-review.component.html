@@ -1,0 +1,35 @@
+<div class="fancast-terminal-container">
+  <div class="fancast-terminal-background">
+    <img src="https://fplplusstorage.blob.core.windows.net/images/6/fancast_terminal_background.png" />
+  </div>
+
+  <p>test</p>
+
+  <div class="fancast-terminal-overlay">
+    <div class="fancast-terminal-overlay-container">
+      <div class="fancast-terminal-overlay-container-content" *ngIf="draft">
+        <div class="header">
+          <div class="fancast-terminal-manager-text"><span class="manager-text" [@flyInOut]>{{draft.draft_manager.name}}:</span></div>
+        </div>
+
+        <div class="fancast-terminal-manager-squad" *ngFor="let man of draft.draft_managers">
+          <p></p>
+          <ul [ngClass]="{'hidden': !statusUpdated}" class="terminal-team-players big-screen" *ngIf="man.fancast_draft_squad">
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_1" [position]="man.fancast_draft_squad.player_1 ? man.fancast_draft_squad.player_1.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_2" [position]="man.fancast_draft_squad.player_2 ? man.fancast_draft_squad.player_2.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_3" [position]="man.fancast_draft_squad.player_3 ? man.fancast_draft_squad.player_3.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_4" [position]="man.fancast_draft_squad.player_4 ? man.fancast_draft_squad.player_4.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_5" [position]="man.fancast_draft_squad.player_5 ? man.fancast_draft_squad.player_5.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_6" [position]="man.fancast_draft_squad.player_6 ? man.fancast_draft_squad.player_6.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_7" [position]="man.fancast_draft_squad.player_7 ? man.fancast_draft_squad.player_7.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_8" [position]="man.fancast_draft_squad.player_8 ? man.fancast_draft_squad.player_8.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_9" [position]="man.fancast_draft_squad.player_9 ? man.fancast_draft_squad.player_9.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_10" [position]="man.fancast_draft_squad.player_10 ? draft.draft_manager.fancast_draft_squad.player_10.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="man.fancast_draft_squad.player_11" [position]="man.fancast_draft_squad.player_11 ? draft.draft_manager.fancast_draft_squad.player_11.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

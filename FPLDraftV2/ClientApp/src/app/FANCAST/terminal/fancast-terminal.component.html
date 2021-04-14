@@ -1,0 +1,82 @@
+<div class="fancast-terminal-container">
+  <div class="fancast-terminal-background">
+    <img src="https://fplplusstorage.blob.core.windows.net/images/6/fancast_terminal_background.png" />
+  </div>
+
+  <div class="fancast-terminal-overlay">
+    <div class="fancast-terminal-overlay-container">
+      <div class="fancast-terminal-overlay-container-content" *ngIf="draft">
+        <div class="header">
+          <div class="fancast-terminal-manager-text"><span class="manager-text" [@flyInOut]>{{draft.draft_manager.name}}:</span></div>
+        </div>
+
+        <div class="fancast-terminal-manager-squad" *ngIf="statusUpdated">
+          <ul [ngClass]="{'hidden': !statusUpdated}" class="terminal-team-players big-screen" *ngIf="draft.draft_manager.fancast_draft_squad">
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_1" [position]="draft.draft_manager.fancast_draft_squad.player_1 ? draft.draft_manager.fancast_draft_squad.player_1.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_2" [position]="draft.draft_manager.fancast_draft_squad.player_2 ? draft.draft_manager.fancast_draft_squad.player_2.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_3" [position]="draft.draft_manager.fancast_draft_squad.player_3 ? draft.draft_manager.fancast_draft_squad.player_3.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_4" [position]="draft.draft_manager.fancast_draft_squad.player_4 ? draft.draft_manager.fancast_draft_squad.player_4.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_5" [position]="draft.draft_manager.fancast_draft_squad.player_5 ? draft.draft_manager.fancast_draft_squad.player_5.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_6" [position]="draft.draft_manager.fancast_draft_squad.player_6 ? draft.draft_manager.fancast_draft_squad.player_6.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_7" [position]="draft.draft_manager.fancast_draft_squad.player_7 ? draft.draft_manager.fancast_draft_squad.player_7.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_8" [position]="draft.draft_manager.fancast_draft_squad.player_8 ? draft.draft_manager.fancast_draft_squad.player_8.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_9" [position]="draft.draft_manager.fancast_draft_squad.player_9 ? draft.draft_manager.fancast_draft_squad.player_9.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_10" [position]="draft.draft_manager.fancast_draft_squad.player_10 ? draft.draft_manager.fancast_draft_squad.player_10.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="draft.draft_manager.fancast_draft_squad.player_11" [position]="draft.draft_manager.fancast_draft_squad.player_11 ? draft.draft_manager.fancast_draft_squad.player_11.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          </ul>
+        </div>
+
+        <div class="footer">
+          <div class="fancast-terminal-status-text"><span class="status-text" *ngIf="statusUpdated" [@flyInOut]>{{convertStatusToString(draft.status_id)}}</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="fancast-announcement-background" *ngIf="(breakingNews || announcingPick) && announcementManager">
+    <div class="fancast-announcement-background-manager-image">
+      <img class="manager-image" src="{{announcementManager.manager_image_url}}" />
+    </div>
+    <div class="fancast-announce-pick">
+      <div class="fancast-announce-pick-content">
+
+        <div class="fancast-announce-pick-content-container title" *ngIf="announcementManager" [ngClass]="{'hidden': !announcementManager}" [@fadeInOut]>
+          <img src="https://fplplusstorage.blob.core.windows.net/images/6/fancast_recolour.png" class="fancast-logo" />
+          <div>{{announcementManager.name}}</div>
+          <img src="https://fplplusstorage.blob.core.windows.net/images/6/fancast_recolour.png" class="fancast-logo" />
+        </div>
+
+        <div class="fancast-announce-pick-content-container" *ngIf="announcingPick && announcementPick" [ngClass]="{'hidden': !announcingPick && announcementPick}" [@fadeInOut]>
+          <div class="content-left">
+            <div class="signs">SIGNS</div>
+            <div class="player">{{announcementPick.fancast_player.name}}</div>
+            <div>{{announcementPick.fancast_player.position}}</div>
+            <div>{{announcementPick.fancast_player.era}}</div>
+          </div>
+          <div class="content-right">
+            <img class="player-image" src="{{getPlayerImage(announcementPick.fancast_player)}}" />
+          </div>
+        </div>
+
+        <div class="fancast-announce-pick-content-container squad-container" *ngIf="announcementSquad" [ngClass]="{'hidden': !announcementSquad}" [@fadeInOut]>
+          <div>Squad</div>
+          <ul [ngClass]="{'hidden': !statusUpdated}" class="terminal-team-players big-screen" *ngIf="announcementSquad">
+            <li><fancast-terminal-player [player]="announcementSquad.player_1" [position]="announcementSquad.player_1 ? announcementSquad.player_1.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_2" [position]="announcementSquad.player_2 ? announcementSquad.player_2.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_3" [position]="announcementSquad.player_3 ? announcementSquad.player_3.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_4" [position]="announcementSquad.player_4 ? announcementSquad.player_4.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_5" [position]="announcementSquad.player_5 ? announcementSquad.player_5.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_6" [position]="announcementSquad.player_6 ? announcementSquad.player_6.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_7" [position]="announcementSquad.player_7 ? announcementSquad.player_7.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_8" [position]="announcementSquad.player_8 ? announcementSquad.player_8.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_9" [position]="announcementSquad.player_9 ? announcementSquad.player_9.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_10" [position]="announcementSquad.player_10 ? announcementSquad.player_10.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+            <li><fancast-terminal-player [player]="announcementSquad.player_11" [position]="announcementSquad.player_11 ? announcementSquad.player_11.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

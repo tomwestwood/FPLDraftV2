@@ -1,0 +1,22 @@
+<div class="confirm-player">
+  <div class="confirm-player-header">
+    <div>Confirm {{player.name}}?</div>
+    <img *ngIf="player" class="confirm-badge-image" src="https://upload.wikimedia.org/wikipedia/sco/thumb/f/fc/Wolverhampton_Wanderers.svg/1200px-Wolverhampton_Wanderers.svg.png" />
+  </div>
+  <!--<mat-divider style="width: 100%; margin-top: 8px; margin-bottom: 8px;"></mat-divider>-->
+
+  <div class="confirm-player-details">
+    <div class="confirm-player-info">
+      <div><b>Name:</b> {{player.name}}</div>
+      <div><b>Position:</b> {{player.position}}</div>
+      <div><b>Era:</b> {{player.era}}</div>
+    </div>
+    <div class="confirm-player-divider"></div>
+    <img *ngIf="player" class="confirm-player-image" src="{{getPlayerImage()}}" (error)="replacePlayerImageNotFound($event, player)" />
+  </div>
+  <!--<mat-divider style="width: 100%; margin: 4px;"></mat-divider>-->
+  <div class="confirm-options">
+    <button class="confirm-option-cancel" mat-raised-button color="primary" (click)="onNoClick()">Cancel <span class="option-icon material-icons">cancel</span></button>
+    <button class="confirm-option-confirm" mat-raised-button color="accent" (click)="onYesClick()">Confirm <span class="option-icon icon material-icons">check_circle</span></button>
+  </div>
+</div>

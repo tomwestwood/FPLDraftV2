@@ -1,0 +1,814 @@
+[
+  {
+    "id": 1,
+    "position": "GK",
+    "name": "Andy Marshall",
+    "era": "DJGH"
+  },
+  {
+    "id": 2,
+    "position": "GK",
+    "name": "Carl Ikeme",
+    "era": "MM"
+  },
+  {
+    "id": 3,
+    "position": "GK",
+    "name": "Graham Stack",
+    "era": "MM"
+  },
+  {
+    "id": 4,
+    "position": "GK",
+    "name": "Jan Budtz",
+    "era": "DJGH"
+  },
+  {
+    "id": 5,
+    "position": "GK",
+    "name": "Marcus Hahnemann",
+    "era": "MM"
+  },
+  {
+    "id": 6,
+    "position": "GK",
+    "name": "Matt Murray",
+    "era": "MM"
+  },
+  {
+    "id": 7,
+    "position": "GK",
+    "name": "Michael Oakes",
+    "era": "DJGH"
+  },
+  {
+    "id": 8,
+    "position": "GK",
+    "name": "Mike Stowell",
+    "era": "DJGH"
+  },
+  {
+    "id": 9,
+    "position": "GK",
+    "name": "Paul Jones",
+    "era": "DJGH"
+  },
+  {
+    "id": 10,
+    "position": "GK",
+    "name": "Stefan Postma",
+    "era": "DJGH"
+  },
+  {
+    "id": 11,
+    "position": "GK",
+    "name": "Wayne Hennessey",
+    "era": "MM"
+  },
+  {
+    "id": 12,
+    "position": "DF",
+    "name": "Charlie Mulgrew",
+    "era": "MM"
+  },
+  {
+    "id": 13,
+    "position": "DF",
+    "name": "Christophe Berra",
+    "era": "MM"
+  },
+  {
+    "id": 14,
+    "position": "DF",
+    "name": "Craig Fleming",
+    "era": "MM"
+  },
+  {
+    "id": 15,
+    "position": "DF",
+    "name": "Daniel Jones",
+    "era": "MM"
+  },
+  {
+    "id": 16,
+    "position": "DF",
+    "name": "Darren Bazeley",
+    "era": "DJGH"
+  },
+  {
+    "id": 17,
+    "position": "DF",
+    "name": "Darren Peacock",
+    "era": "DJGH"
+  },
+  {
+    "id": 18,
+    "position": "DF",
+    "name": "Darren Ward",
+    "era": "MM"
+  },
+  {
+    "id": 19,
+    "position": "DF",
+    "name": "David Wheater",
+    "era": "MM"
+  },
+  {
+    "id": 20,
+    "position": "DF",
+    "name": "Denis Irwin",
+    "era": "DJGH"
+  },
+  {
+    "id": 21,
+    "position": "DF",
+    "name": "Gábor Gyepes",
+    "era": "DJGH"
+  },
+  {
+    "id": 22,
+    "position": "DF",
+    "name": "Gary Breen",
+    "era": "MM"
+  },
+  {
+    "id": 23,
+    "position": "DF",
+    "name": "George Elokobi",
+    "era": "MM"
+  },
+  {
+    "id": 24,
+    "position": "DF",
+    "name": "Gunnar Halle",
+    "era": "DJGH"
+  },
+  {
+    "id": 25,
+    "position": "DF",
+    "name": "Isaac Okoronkwo",
+    "era": "DJGH"
+  },
+  {
+    "id": 26,
+    "position": "DF",
+    "name": "Jackie McNamara",
+    "era": "MM"
+  },
+  {
+    "id": 27,
+    "position": "DF",
+    "name": "Jamie Clapham",
+    "era": "MM"
+  },
+  {
+    "id": 28,
+    "position": "DF",
+    "name": "Jason Shackell",
+    "era": "MM"
+  },
+  {
+    "id": 29,
+    "position": "DF",
+    "name": "Joachim Björklund",
+    "era": "DJGH"
+  },
+  {
+    "id": 30,
+    "position": "DF",
+    "name": "Jody Craddock",
+    "era": "MM"
+  },
+  {
+    "id": 31,
+    "position": "DF",
+    "name": "Joleon Lescott",
+    "era": "DJGH"
+  },
+  {
+    "id": 32,
+    "position": "DF",
+    "name": "Keith Lowe",
+    "era": "DJGH"
+  },
+  {
+    "id": 33,
+    "position": "DF",
+    "name": "Kevin Foley",
+    "era": "MM"
+  },
+  {
+    "id": 34,
+    "position": "DF",
+    "name": "Kevin Muscat",
+    "era": "DJGH"
+  },
+  {
+    "id": 35,
+    "position": "DF",
+    "name": "Lee Naylor",
+    "era": "DJGH"
+  },
+  {
+    "id": 36,
+    "position": "DF",
+    "name": "Ludovic Pollet",
+    "era": "DJGH"
+  },
+  {
+    "id": 37,
+    "position": "DF",
+    "name": "Manuel Thetis",
+    "era": "DJGH"
+  },
+  {
+    "id": 38,
+    "position": "DF",
+    "name": "Mark Clyde",
+    "era": "DJGH"
+  },
+  {
+    "id": 39,
+    "position": "DF",
+    "name": "Mark Little",
+    "era": "MM"
+  },
+  {
+    "id": 40,
+    "position": "DF",
+    "name": "Matt Hill",
+    "era": "MM"
+  },
+  {
+    "id": 41,
+    "position": "DF",
+    "name": "Maurice Ross",
+    "era": "DJGH"
+  },
+  {
+    "id": 42,
+    "position": "DF",
+    "name": "Michael Mancienne",
+    "era": "MM"
+  },
+  {
+    "id": 43,
+    "position": "DF",
+    "name": "Mikkel Bischoff",
+    "era": "DJGH"
+  },
+  {
+    "id": 44,
+    "position": "DF",
+    "name": "Mo Camara",
+    "era": "DJGH"
+  },
+  {
+    "id": 45,
+    "position": "DF",
+    "name": "Neill Collins",
+    "era": "MM"
+  },
+  {
+    "id": 46,
+    "position": "DF",
+    "name": "Oleh Luzhny",
+    "era": "DJGH"
+  },
+  {
+    "id": 47,
+    "position": "DF",
+    "name": "Paul Butler",
+    "era": "DJGH"
+  },
+  {
+    "id": 48,
+    "position": "DF",
+    "name": "Richard Stearman",
+    "era": "MM"
+  },
+  {
+    "id": 49,
+    "position": "DF",
+    "name": "Rob Edwards",
+    "era": "DJGH"
+  },
+  {
+    "id": 50,
+    "position": "DF",
+    "name": "Ronald Zubar",
+    "era": "MM"
+  },
+  {
+    "id": 51,
+    "position": "DF",
+    "name": "Ryan Green",
+    "era": "DJGH"
+  },
+  {
+
+    "id": 52,
+    "position": "DF",
+    "name": "Sean Connelly",
+    "era": "DJGH"
+  },
+  {
+    "id": 53,
+    "position": "DF",
+    "name": "Stephen Ward",
+    "era": "MM"
+  },
+  {
+
+    "id": 54,
+    "position": "MF",
+    "name": "Adlène Guedioura",
+    "era": "MM"
+  },
+  {
+    "id": 55,
+    "position": "MF",
+    "name": "Alex Rae",
+    "era": "DJGH"
+  },
+  {
+    "id": 56,
+    "position": "MF",
+    "name": "Andrew Surman",
+    "era": "MM"
+  },
+  {
+    "id": 57,
+    "position": "MF",
+    "name": "Andy Sinton",
+    "era": "DJGH"
+  },
+  {
+    "id": 58,
+    "position": "MF",
+    "name": "Carl Robinson",
+    "era": "DJGH"
+  },
+  {
+    "id": 59,
+    "position": "MF",
+    "name": "Carlos Edwards",
+    "era": "MM"
+  },
+  {
+    "id": 60,
+    "position": "MF",
+    "name": "Colin Cameron",
+    "era": "DJGH"
+  },
+  {
+    "id": 61,
+    "position": "MF",
+    "name": "Darren Anderton",
+    "era": "DJGH"
+  },
+  {
+    "id": 62,
+    "position": "MF",
+    "name": "Darren Potter",
+    "era": "MM"
+  },
+  {
+    "id": 63,
+    "position": "MF",
+    "name": "Darron Gibson",
+    "era": "MM"
+  },
+  {
+    "id": 64,
+    "position": "MF",
+    "name": "David Edwards",
+    "era": "MM"
+  },
+  {
+    "id": 65,
+    "position": "MF",
+    "name": "David Jones",
+    "era": "MM"
+  },
+  {
+    "id": 66,
+    "position": "MF",
+    "name": "Dénes Rósa",
+    "era": "DJGH"
+  },
+  {
+    "id": 67,
+    "position": "MF",
+    "name": "Elliott Bennett",
+    "era": "MM"
+  },
+  {
+    "id": 68,
+    "position": "MF",
+    "name": "Geoffrey Mujangi",
+    "era": "MM"
+  },
+  {
+    "id": 69,
+    "position": "MF",
+    "name": "George Friend",
+    "era": "MM"
+  },
+  {
+    "id": 70,
+    "position": "MF",
+    "name": "Greg Halford",
+    "era": "MM"
+  },
+  {
+    "id": 71,
+    "position": "MF",
+    "name": "Hassan Kachloul",
+    "era": "DJGH"
+  },
+  {
+    "id": 72,
+    "position": "MF",
+    "name": "Joey Guðjónsson",
+    "era": "DJGH"
+  },
+  {
+    "id": 73,
+    "position": "MF",
+    "name": "Karl Henry",
+    "era": "MM"
+  },
+  {
+    "id": 74,
+    "position": "MF",
+    "name": "Keith Andrews",
+    "era": "DJGH"
+  },
+  {
+    "id": 75,
+    "position": "MF",
+    "name": "Kevin Cooper",
+    "era": "DJGH"
+  },
+  {
+    "id": 76,
+    "position": "MF",
+    "name": "Kevin O'Connor",
+    "era": "MM"
+  },
+  {
+    "id": 77,
+    "position": "MF",
+    "name": "Kyel Reid",
+    "era": "MM"
+  },
+  {
+    "id": 78,
+    "position": "MF",
+    "name": "Lewis Gobern",
+    "era": "MM"
+  },
+  {
+    "id": 79,
+    "position": "MF",
+    "name": "Mark Davies",
+    "era": "DJGH"
+  },
+  {
+    "id": 80,
+    "position": "MF",
+    "name": "Mark Kennedy",
+    "era": "DJGH"
+  },
+  {
+    "id": 81,
+    "position": "MF",
+    "name": "Matt Jarvis",
+    "era": "MM"
+  },
+  {
+    "id": 82,
+    "position": "MF",
+    "name": "Michael Gray",
+    "era": "MM"
+  },
+  {
+    "id": 83,
+    "position": "MF",
+    "name": "Michael Kightly",
+    "era": "MM"
+  },
+  {
+    "id": 84,
+    "position": "MF",
+    "name": "Michael McIndoe",
+    "era": "MM"
+  },
+  {
+    "id": 85,
+    "position": "MF",
+    "name": "Nathaniel Mendez-Laing",
+    "era": "MM"
+  },
+  {
+    "id": 86,
+    "position": "MF",
+    "name": "Neil Emblen",
+    "era": "DJGH"
+  },
+  {
+    "id": 87,
+    "position": "MF",
+    "name": "Nenad Milijaš",
+    "era": "MM"
+  },
+  {
+    "id": 88,
+    "position": "MF",
+    "name": "Nigel Quashie",
+    "era": "MM"
+  },
+  {
+    "id": 89,
+    "position": "MF",
+    "name": "Paul Ince",
+    "era": "DJGH"
+  },
+  {
+    "id": 90,
+    "position": "MF",
+    "name": "Rohan Ricketts",
+    "era": "DJGH"
+  },
+  {
+    "id": 91,
+    "position": "MF",
+    "name": "Scott Taylor",
+    "era": "DJGH"
+  },
+  {
+    "id": 92,
+    "position": "MF",
+    "name": "Segundo Castillo",
+    "era": "MM"
+  },
+  {
+    "id": 93,
+    "position": "MF",
+    "name": "Seol Ki-Hyeon",
+    "era": "DJGH"
+  },
+  {
+    "id": 94,
+    "position": "MF",
+    "name": "Seyi Olofinjana",
+    "era": "MM"
+  },
+  {
+    "id": 95,
+    "position": "MF",
+    "name": "Shane Tudor",
+    "era": "DJGH"
+  },
+  {
+    "id": 96,
+    "position": "MF",
+    "name": "Shaun Newton",
+    "era": "DJGH"
+  },
+  {
+    "id": 97,
+    "position": "MF",
+    "name": "Silas ",
+    "era": "DJGH"
+  },
+  {
+    "id": 98,
+    "position": "MF",
+    "name": "Simon Osborn",
+    "era": "DJGH"
+  },
+  {
+    "id": 99,
+    "position": "MF",
+    "name": "Stephen Gleeson",
+    "era": "MM"
+  },
+  {
+    "id": 100,
+    "position": "MF",
+    "name": "Steve Sedgley",
+    "era": "DJGH"
+  },
+  {
+    "id": 101,
+    "position": "MF",
+    "name": "Tom Huddlestone",
+    "era": "DJGH"
+  },
+  {
+    "id": 102,
+    "position": "MF",
+    "name": "Tony Dinning",
+    "era": "DJGH"
+  },
+  {
+    "id": 103,
+    "position": "FW",
+    "name": "Adam Proudlock",
+    "era": "DJGH"
+  },
+  {
+    "id": 104,
+    "position": "FW",
+    "name": "Andy Keogh",
+    "era": "MM"
+  },
+  {
+    "id": 105,
+    "position": "FW",
+    "name": "Ashley Hemmings",
+    "era": "MM"
+  },
+  {
+    "id": 106,
+    "position": "FW",
+    "name": "Carl Cort",
+    "era": "DJGH"
+  },
+  {
+    "id": 107,
+    "position": "FW",
+    "name": "Cédric Roussel",
+    "era": "DJGH"
+  },
+  {
+    "id": 108,
+    "position": "FW",
+    "name": "Chris Iwelumo",
+    "era": "MM"
+  },
+  {
+    "id": 109,
+    "position": "FW",
+    "name": "Colin Larkin",
+    "era": "DJGH"
+  },
+  {
+    "id": 110,
+    "position": "FW",
+    "name": "Craig Davies",
+    "era": "MM"
+  },
+  {
+    "id": 111,
+    "position": "FW",
+    "name": "Dean Sturridge",
+    "era": "DJGH"
+  },
+  {
+    "id": 112,
+    "position": "FW",
+    "name": "Freddy Eastwood",
+    "era": "MM"
+  },
+  {
+    "id": 113,
+    "position": "FW",
+    "name": "Gary Mulligan",
+    "era": "DJGH"
+  },
+  {
+    "id": 114,
+    "position": "FW",
+    "name": "George Ndah",
+    "era": "DJGH"
+  },
+  {
+    "id": 115,
+    "position": "FW",
+    "name": "Henri Camara",
+    "era": "DJGH"
+  },
+  {
+    "id": 116,
+    "position": "FW",
+    "name": "Jay Bothroyd",
+    "era": "MM"
+  },
+  {
+    "id": 117,
+    "position": "FW",
+    "name": "Jemal Johnson",
+    "era": "MM"
+  },
+  {
+    "id": 118,
+    "position": "FW",
+    "name": "Jérémie Aliadière",
+    "era": "DJGH"
+  },
+  {
+    "id": 119,
+    "position": "FW",
+    "name": "Kenny Miller",
+    "era": "DJGH"
+  },
+  {
+    "id": 120,
+    "position": "FW",
+    "name": "Kevin Doyle",
+    "era": "MM"
+  },
+  {
+    "id": 121,
+    "position": "FW",
+    "name": "Kevin Kyle",
+    "era": "MM"
+  },
+  {
+    "id": 122,
+    "position": "FW",
+    "name": "Leon Clarke",
+    "era": "DJGH"
+  },
+  {
+    "id": 123,
+    "position": "FW",
+    "name": "Marlon Harewood",
+    "era": "MM"
+  },
+  {
+    "id": 124,
+    "position": "FW",
+    "name": "Michael Branch",
+    "era": "DJGH"
+  },
+  {
+    "id": 125,
+    "position": "FW",
+    "name": "Nathan Blake",
+    "era": "DJGH"
+  },
+  {
+    "id": 126,
+    "position": "FW",
+    "name": "Robert Taylor",
+    "era": "DJGH"
+  },
+  {
+    "id": 127,
+    "position": "FW",
+    "name": "Sam Vokes",
+    "era": "MM"
+  },
+  {
+    "id": 128,
+    "position": "FW",
+    "name": "Sami Al-Jaber",
+    "era": "DJGH"
+  },
+  {
+    "id": 129,
+    "position": "FW",
+    "name": "Stefan Maierhofer",
+    "era": "MM"
+  },
+  {
+    "id": 130,
+    "position": "FW",
+    "name": "Steffen Iversen",
+    "era": "DJGH"
+  },
+  {
+    "id": 131,
+    "position": "FW",
+    "name": "Stephen Elliott",
+    "era": "MM"
+  },
+  {
+    "id": 132,
+    "position": "FW",
+    "name": "Sylvan Ebanks-Blake",
+    "era": "MM"
+  },
+  {
+    "id": 133,
+    "position": "FW",
+    "name": "Temuri Ketsbaia",
+    "era": "DJGH"
+  },
+  {
+    "id": 134,
+    "position": "FW",
+    "name": "Tomasz Frankowski",
+    "era": "DJGH"
+  },
+  {
+    "id": 135,
+    "position": "FW",
+    "name": "Vio Ganea",
+    "era": "DJGH"
+  }
+]

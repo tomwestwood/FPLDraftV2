@@ -1,0 +1,52 @@
+<div style="margin-top: 20px;">
+  <div mat-card class="team-sheets">
+    <div class="team-sheet h">
+      <div class="header-team">
+        <!--<img class="team-image" src="{{match.teamAManager.team_image_url}}" />-->
+        <div class="team">{{match.teamAName}}</div>
+        <div class="points">{{match.teamALivePoints}}</div>
+      </div>
+      <hr />
+      <div *ngFor="let pick of match.teamAEntry.picks.picks" class="pick">
+        <div class="pick-container" *ngIf="pick.teamPosition <= 11">
+          <div class="pick-info">
+            <div class="pick-info-player">{{pick.player.web_name}} {{pick.isCaptain ? '(C)' : pick.isViceCaptain ? '(VC)' : '' }}</div>
+          </div>
+          <div class="pick-minutes" *ngIf="pick.currentGameHasStarted" [ngClass]="{'in-play' : pick.currentGameHasStarted && !pick.currentGameHasFinished}">'{{pick.minutesPlayed}}</div>
+          <div class="pick-points">{{pick.points * pick.multiplier}}</div>
+        </div>
+      </div>
+      <div *ngFor="let pick of match.teamAEntry.picks.picks" class="pick">
+        <div class="pick-container unselected" *ngIf="pick.teamPosition > 11">
+          <div class="pick-info">{{pick.player.web_name}}</div>
+          <div class="pick-minutes" *ngIf="pick.currentGameHasStarted" [ngClass]="{'in-play' : pick.currentGameHasStarted && !pick.currentGameHasFinished}">'{{pick.minutesPlayed}}</div>
+          <div class="pick-points">{{pick.points * pick.multiplier}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="team-sheet a">
+      <div class="header-team">
+        <div class="points">{{match.teamBLivePoints}}</div>
+        <!--<img class="team-image" src="{{match.teamBManager.team_image_url}}" />-->
+        <div class="team">{{match.teamBName}}</div>
+      </div>
+      <hr />
+      <div *ngFor="let pick of match.teamBEntry.picks.picks" class="pick">
+        <div class="pick-container" *ngIf="pick.teamPosition <= 11">
+          <div class="pick-info">
+            <div class="pick-info-player">{{pick.player.web_name}} {{pick.isCaptain ? '(C)' : pick.isViceCaptain ? '(VC)' : '' }}</div>
+          </div>
+          <div class="pick-minutes" *ngIf="pick.currentGameHasStarted" [ngClass]="{'in-play' : pick.currentGameHasStarted && !pick.currentGameHasFinished}">'{{pick.minutesPlayed}}</div>
+          <div class="pick-points">{{pick.points * pick.multiplier}}</div>
+        </div>
+      </div>
+      <div *ngFor="let pick of match.teamBEntry.picks.picks" class="pick">
+        <div class="pick-container unselected" *ngIf="pick.teamPosition > 11">
+          <div class="pick-info">{{pick.player.web_name}}</div>
+          <div class="pick-minutes" *ngIf="pick.currentGameHasStarted" [ngClass]="{'in-play' : pick.currentGameHasStarted && !pick.currentGameHasFinished}">'{{pick.minutesPlayed}}</div>
+          <div class="pick-points">{{pick.points * pick.multiplier}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

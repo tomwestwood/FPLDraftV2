@@ -1,0 +1,164 @@
+<mat-card style="margin-bottom: 8px;" *ngIf="draft" class="mat-elevation-z8">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image" style="background-image: url('../../assets/draft_logo.png'); background-size: cover;">
+    </div>
+    <mat-card-title>
+      <div style="display: flex; align-items: center; width: 100%;">
+        <div style="margin-right: 8px;">{{draft.draft_name}}</div>
+        <button mat-button color="primary">Watch live</button>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <div style="display: flex; margin-top: 8px;">
+    <mat-card class="mat-elevation-z8" style="margin: 4px;">
+      <div style="display: flex; flex-direction: row; height: 100%;">
+        <div style="display: flex; flex-direction: column; align-self: center;">
+          <div><b>{{draft.draft_manager.name}}</b></div>
+          <div>{{convertStatusToString(draft.status_id)}}</div>
+        </div>
+        <span class="material-icons" style="color: deeppink; margin-left: 16px; justify-content: center; align-self: center;">person</span>
+        <span *ngIf="draft.status_id != 4" class="material-icons" style="color: mediumspringgreen; margin-left: 4px; justify-content: center; align-self: center;">{{convertStatusToIcon(draft.status_id)}}</span>
+        <div *ngIf="draft.status_id == 4" style="justify-content: center; align-self: center; margin-left: 8px; display: flex; align-items: center;">
+          <mat-progress-spinner [color]="Primary" [diameter]="30" style="position: absolute;" [value]="(timer/30)*100"></mat-progress-spinner>
+          <div>{{timer}}</div>
+        </div>
+      </div>
+    </mat-card>
+    <div style="flex-grow: 1;"></div>
+    <mat-card class="mat-elevation-z8" style="text-align: center; margin: 4px; background-color: deeppink;  cursor: pointer;" (click)="viewSquad()" *ngIf="draft.status_id == 4">
+      <div>
+        <div>View my team</div>
+        <span class="material-icons" style="margin-right: 2px;">search</span> <span class="material-icons" style="margin-right: 2px;">recent_actors</span>
+      </div>
+    </mat-card>
+  </div>
+</mat-card>
+<div *ngIf="draft">
+  <div *ngIf="draft.status_id == 1 || draft.status_id == 2" style="display: flex; flex-direction: row;">
+    <div style="display: flex; flex-direction: column; margin-top:16px; margin-bottom: 16px;" [@flyInOut]>
+      <div *ngFor="let manager of draft.draft_managers" style="display: flex; flex-direction: row; align-items: center;">
+        <div style="width: 28px;">
+          <span class="material-icons" style="color: deeppink; margin-right: 2px;" *ngIf="draft.draft_manager_id == manager.id">{{draft.direction == 0 ? 'arrow_downward' : 'arrow_upward'}}</span>
+        </div>
+        <button mat-stroked-button color="{{draft.draft_manager_id == manager.id ? 'primary' : 'accent'}}">{{manager.draft_seed}}</button>
+        <img src="{{manager.team_image_url}}" style="width: 30px; height: 30px;" />
+        <div>{{manager.team_name}}</div>
+        <div>{{manager.name}}</div>
+      </div>
+    </div>
+    <div style="flex-grow: 1;"></div>
+  </div>
+  <div *ngIf="draft.status_id == 3 || draft.status_id == 5 || draft.status_id == 6">
+    <div class="pre-draft-container">
+      <mat-card class="team-container">
+        <div class="team-info-container">
+          <img class="team-logo" src="{{draft.draft_manager.team_image_url}}" />
+          <div src="team-info">
+            <div><b>{{draft.draft_manager.team_name}}</b></div>
+            <div>{{draft.draft_manager.name}}</div>
+          </div>
+        </div>
+        <mat-divider class="divider"></mat-divider>
+        <div class="info-row">
+          <span class="material-icons icon">attach_money</span>
+          <div class="value">£{{getRemainingBudget(draft.draft_manager)}}m remaining</div>
+        </div>
+        <div class="info-row">
+          <span class="material-icons icon">format_indent_increase</span>
+          <div class="value">Pick {{getPickNumber(draft.draft_manager)}} (of 15)</div>
+        </div>
+      </mat-card>
+      <div style="flex-grow: 1;"></div>
+      <ul class="squad-list">
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_1" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_2" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_1" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_2" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_3" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_4" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_5" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_1" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_2" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_3" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_4" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_5" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_1" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_2" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+      </ul>
+    </div>
+  </div>
+  <div *ngIf="draft.status_id == 4">
+    <div class="example-container">
+      <mat-form-field appearance="fill" style="margin-right: 8px; width: 160px;">
+        <mat-label>Find player:</mat-label>
+        <input matInput [(ngModel)]="searchFilter.player_name" (keyup)="updateFilter()" />
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="fplBase.clubs" style="margin-right: 8px; width: 160px;">
+        <mat-label>Club:</mat-label>
+        <mat-select [(value)]="searchFilter.club_id" (selectionChange)="updateFilter()">
+          <mat-option value="0">All</mat-option>
+          <mat-option *ngFor="let club of fplBase.clubs" value="{{club.id}}">
+            <div>
+              {{club.name}} <img src="{{club.badge_url}}" style="height: 20px; width: 20px; margin-left: 16px; vertical-align: middle;" />
+            </div>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="fplBase.positions" style="width: 100px; margin-right: 16px;">
+        <mat-label>Position:</mat-label>
+        <mat-select [(value)]="searchFilter.position_id" (selectionChange)="updateFilter()">
+          <mat-option value="0">All</mat-option>
+          <mat-option *ngFor="let position of fplBase.positions" value="{{position.id}}">
+            <div>{{position.singular_name_short}}</div>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-checkbox [(ngModel)]="searchFilter.showFavourites"
+                    (change)="updateFilter()">
+        Show favourites
+      </mat-checkbox>
+
+    </div>
+    <mat-table [dataSource]="playerDataSource" *ngIf="playerDataSource" class="mat-elevation-z8" matSort matSortActive="now_cost" matSortDirection="desc">
+      <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
+      <mat-row *matRowDef="let element; columns: displayedColumns" [ngClass]="{'player-selected' : element.draft_manager}"></mat-row>
+      <ng-container matColumnDef="web_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <div style="margin-right: 8px;">{{element.web_name}}</div>
+          <span class="material-icons" style="color: deeppink; margin-right: 2px;" *ngIf="element.favourited">stars</span>
+          <span class="material-icons" style="color: mediumspringgreen; margin-right: 2px;" *ngIf="element.draft_manager_id == draft.draft_manager_id">how_to_reg</span>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="position">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Position</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.position.singular_name_short}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="club">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Club</mat-header-cell>
+        <mat-cell *matCellDef="let element"><img src="{{element.club.badge_url}}" style="height: 20px; margin-right: 8px;" /> {{element.club.short_name}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="now_cost">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Value</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.now_cost / 10}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="draftOptions">
+        <mat-header-cell *matHeaderCellDef>Options</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="material-icons" style="color: mediumspringgreen; cursor: pointer;" *ngIf="!element.draft_manager" (click)="playerSelection(element)">add_task</span>
+        </mat-cell>
+      </ng-container>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[10,100,1000]" showFirstLastButtons></mat-paginator>
+  </div>
+  <div *ngIf="draft && draft.status_id != 4">
+    <mat-divider></mat-divider>
+    <div style="text-align: right;">
+      <button mat-button (click)="draftNextStatus()">Continue <span class="material-icons" style="color: mediumspringgreen; margin-right: 2px;">arrow_forward</span></button>
+    </div>
+    <mat-divider style="margin-bottom: 4px;"></mat-divider>
+  </div>
+</div>

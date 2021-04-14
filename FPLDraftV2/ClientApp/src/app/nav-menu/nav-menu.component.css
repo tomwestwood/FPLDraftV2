@@ -1,0 +1,34 @@
+header {
+  background-color: black;
+  color: white;
+  font-size: medium;
+}
+
+navbar {
+  background-color: black;
+  color: white;
+}
+
+.nav-link {
+    color: white;
+}
+
+.navbar-toggler {
+    color: white;
+}
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+  color: white;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+
+.navbar-dark .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;..");
+}

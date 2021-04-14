@@ -1,0 +1,163 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+    <!-- Set this to true if you enable server-side prerendering -->
+    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <UserSecretsId>d80fb601-1032-4f82-af78-206c3ea997cf</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Humanizer" Version="2.8.26" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.5.1" />
+    <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="Slack.Webhooks" Version="1.1.4" />
+    <PackageReference Include="SlackAPI" Version="1.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Content Remove="$(SpaRoot)**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\app\controls\confirm-player\confirm-player.component.ts" />
+    <None Remove="ClientApp\src\app\controls\preview-squad\preview-squad.component.ts" />
+    <None Remove="ClientApp\src\app\controls\terminal-player\terminal-player.component.ts" />
+    <None Remove="ClientApp\src\app\draft\draft.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\controls\confirm-player\fancast-confirm-player.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\controls\preview-squad\fancast-preview-squad.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\controls\terminal-player\fancast-terminal-player.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\draft\fancast-draft.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\models\fancast-player.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\models\fancast-search-filter.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\models\fancast_draft_squad.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\models\fancast_functions.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\review\fancast-review.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\services\fancast.service.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\terminal\fancast-terminal.component.ts" />
+    <None Remove="ClientApp\src\app\live\favouritelist.component.ts" />
+    <None Remove="ClientApp\src\app\favouritelist\favouritelist.component.ts" />
+    <None Remove="ClientApp\src\app\models\draft.ts" />
+    <None Remove="ClientApp\src\app\models\fpl.ts" />
+    <None Remove="ClientApp\src\app\models\searchFilter.ts" />
+    <None Remove="ClientApp\src\app\services\draft.service.ts" />
+    <None Remove="ClientApp\src\app\services\fpl.service.ts" />
+    <None Remove="ClientApp\src\app\services\signalR.service.ts" />
+    <None Remove="ClientApp\src\app\terminal\terminal.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FPLV2Core\FPLV2Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\controls\preview-squad\preview-squad.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\controls\confirm-player\confirm-player.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\controls\terminal-player\terminal-player.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\draft\draft.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\controls\confirm-player\fancast-confirm-player.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\controls\preview-squad\fancast-preview-squad.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\controls\terminal-player\fancast-terminal-player.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\draft\fancast-draft.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\models\fancast_functions.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\models\fancast_draft_squad.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\models\fancast-player.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\models\fancast-search-filter.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\services\fancast.service.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\review\fancast-review.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\FANCAST\terminal\fancast-terminal.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\live\fixture\livefixture.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\favouritelist\favouritelist.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\searchFilter.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\models\fpl.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\models\draft.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\draft.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\signalR.service.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\services\fpl.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\FANCAST\home\" />
+  </ItemGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

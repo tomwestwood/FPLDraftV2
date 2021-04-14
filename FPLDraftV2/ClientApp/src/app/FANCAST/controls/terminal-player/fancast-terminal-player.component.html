@@ -1,0 +1,11 @@
+<div class="terminal-player" *ngIf="player">
+  <div class="terminal-player-position selected">{{position}}</div>
+  <div class="terminal-player-name">
+    <div>{{player.name}} ({{player.era}})</div>
+  </div>
+</div>
+<div class="terminal-player" *ngIf="!player">
+  <div class="terminal-player-position">{{position}}</div>
+  <div class="terminal-player-name">
+    <div>Select player</div>
+</div>

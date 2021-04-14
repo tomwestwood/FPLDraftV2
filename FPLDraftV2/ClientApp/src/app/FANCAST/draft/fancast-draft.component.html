@@ -1,0 +1,172 @@
+<div *ngIf="draft && !signed_in_manager" style="height: 100%; margin: 32px;">
+  <mat-card style="margin-bottom: 8px; vertical-align: central;" class="mat-elevation-z8">
+    <p>Select your user:</p>
+    <div style="display: flex; flex-direction: column;">
+      <button mat-button style="margin: 8px; background-color: darkgoldenrod; color: black;" *ngFor="let draft_manager of draft.draft_managers" (click)="signInAs(draft_manager)">{{draft_manager.name}}</button>
+    </div>
+  </mat-card>
+</div>
+
+<div *ngIf="draft && signed_in_manager">
+  <mat-card style="margin-bottom: 8px;" class="mat-elevation-z8">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image" style="background-image: url('../../assets/draft_logo.png'); background-size: cover;">
+      </div>
+      <mat-card-title>
+        <div style="display: flex; align-items: center; width: 100%;">
+          <div style="margin-right: 8px;">{{draft.draft_name}}</div>
+          <button mat-button color="primary">Watch live</button>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <div style="display: flex; margin-top: 8px;">
+      <mat-card class="mat-elevation-z8" style="margin: 4px;">
+        <div style="display: flex; flex-direction: row; height: 100%;">
+          <div style="display: flex; flex-direction: column; align-self: center;">
+            <div><b>Signed in as:</b></div>
+            <div>{{signed_in_manager.name}}</div>
+          </div>
+          <span class="material-icons" style="color: deeppink; margin-left: 16px; justify-content: center; align-self: center;">person</span>
+        </div>
+      </mat-card>
+      <div style="flex-grow: 1;"></div>
+      <mat-card class="mat-elevation-z8" style="margin: 4px;">
+        <div style="display: flex; flex-direction: row; height: 100%;">
+          <div style="display: flex; flex-direction: column; align-self: center;">
+            <div><b>{{draft.draft_manager.name}}</b></div>
+            <div>{{convertStatusToString(draft.status_id)}}</div>
+          </div>
+          <span *ngIf="draft.status_id != 4" class="material-icons" style="color: mediumspringgreen; margin-left: 4px; justify-content: center; align-self: center;">{{convertStatusToIcon(draft.status_id)}}</span>
+        </div>
+      </mat-card>
+      <mat-card class="mat-elevation-z8" style="text-align: center; margin: 4px; background-color: deeppink;  cursor: pointer;" (click)="viewSquad()">
+        <div>
+          <div>View my team</div>
+          <span class="material-icons" style="margin-right: 2px;">search</span> <span class="material-icons" style="margin-right: 2px;">recent_actors</span>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card>
+  <div *ngIf="draft.draft_manager.id == signed_in_manager.id">
+    <div *ngIf="draft.status_id == 1 || draft.status_id == 2" style="display: flex; flex-direction: row;">
+      <div style="display: flex; flex-direction: column; margin-top:16px; margin-bottom: 16px;" [@flyInOut]>
+        <div *ngFor="let manager of draft.draft_managers" style="display: flex; flex-direction: row; align-items: center;">
+          <div style="width: 28px;">
+            <span class="material-icons" style="color: deeppink; margin-right: 2px;" *ngIf="draft.draft_manager_id == manager.id">{{draft.direction == 0 ? 'arrow_downward' : 'arrow_upward'}}</span>
+          </div>
+          <button mat-stroked-button color="{{draft.draft_manager_id == manager.id ? 'primary' : 'accent'}}">{{manager.draft_seed}}</button>
+          <img src="{{manager.team_image_url}}" style="width: 30px; height: 30px;" />
+          <div>{{manager.team_name}}</div>
+          <div>{{manager.name}}</div>
+        </div>
+      </div>
+      <div style="flex-grow: 1;"></div>
+    </div>
+    <div *ngIf="draft.status_id == 3 || draft.status_id == 5 || draft.status_id == 6">
+      <div class="pre-draft-container">
+        <mat-card class="team-container">
+          <div class="team-info-container">
+            <img class="team-logo" src="{{draft.draft_manager.team_image_url}}" />
+            <div src="team-info">
+              <div><b>{{draft.draft_manager.team_name}}</b></div>
+              <div>{{draft.draft_manager.name}}</div>
+            </div>
+          </div>
+          <mat-divider class="divider"></mat-divider>
+          <div class="info-row">
+            <span class="material-icons icon">format_indent_increase</span>
+            <div class="value">Pick {{getPickNumber(draft.draft_manager)}} (of 11)</div>
+          </div>
+        </mat-card>
+        <div style="flex-grow: 1;"></div>
+        <ul class="squad-list" *ngIf="signed_in_manager">
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_1" [position]="signed_in_manager.fancast_draft_squad.player_1 ? signed_in_manager.fancast_draft_squad.player_1.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_2" [position]="signed_in_manager.fancast_draft_squad.player_2 ? signed_in_manager.fancast_draft_squad.player_2.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_3" [position]="signed_in_manager.fancast_draft_squad.player_3 ? signed_in_manager.fancast_draft_squad.player_3.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_4" [position]="signed_in_manager.fancast_draft_squad.player_4 ? signed_in_manager.fancast_draft_squad.player_4.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_5" [position]="signed_in_manager.fancast_draft_squad.player_5 ? signed_in_manager.fancast_draft_squad.player_5.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_6" [position]="signed_in_manager.fancast_draft_squad.player_6 ? signed_in_manager.fancast_draft_squad.player_6.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_7" [position]="signed_in_manager.fancast_draft_squad.player_7 ? signed_in_manager.fancast_draft_squad.player_7.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_8" [position]="signed_in_manager.fancast_draft_squad.player_8 ? signed_in_manager.fancast_draft_squad.player_8.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_9" [position]="signed_in_manager.fancast_draft_squad.player_9 ? signed_in_manager.fancast_draft_squad.player_9.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_10" [position]="signed_in_manager.fancast_draft_squad.player_10 ? signed_in_manager.fancast_draft_squad.player_10.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+          <li><fancast-terminal-player [player]="signed_in_manager.fancast_draft_squad.player_11" [position]="signed_in_manager.fancast_draft_squad.player_11 ? signed_in_manager.fancast_draft_squad.player_11.position : ''" [@fadeInOut]></fancast-terminal-player></li>
+        </ul>
+      </div>
+    </div>
+    <div *ngIf="draft.status_id == 4">
+      <div class="example-container">
+        <mat-form-field appearance="fill" style="margin-right: 8px; width: 160px;">
+          <mat-label>Find player:</mat-label>
+          <input matInput [(ngModel)]="searchFilter.player_name" (keyup)="updateFilter()" />
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width: 100px; margin-right: 16px;">
+          <mat-label>Position:</mat-label>
+          <mat-select [(value)]="searchFilter.position" (selectionChange)="updateFilter()">
+            <mat-option value="">All</mat-option>
+            <mat-option value="GK">GK</mat-option>
+            <mat-option value="DF">DF</mat-option>
+            <mat-option value="MF">MF</mat-option>
+            <mat-option value="FW">FW</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width: 100px; margin-right: 16px;">
+          <mat-label>Era:</mat-label>
+          <mat-select [(value)]="searchFilter.era" (selectionChange)="updateFilter()">
+            <mat-option value="">All</mat-option>
+            <mat-option value="DJGH">DJGH</mat-option>
+            <mat-option value="MM">MM</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-table [dataSource]="playerDataSource" *ngIf="playerDataSource" class="mat-elevation-z8" matSort>
+        <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
+        <mat-row *matRowDef="let element; columns: displayedColumns" [ngClass]="{'player-selected' : element.draft_manager}"></mat-row>
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div style="margin-right: 8px;">{{element.name}}</div>
+            <span class="material-icons" style="color: deeppink; margin-right: 2px;" *ngIf="element.favourited">stars</span>
+            <span class="material-icons" style="color: mediumspringgreen; margin-right: 2px;" *ngIf="element.draft_manager_id == draft.draft_manager_id">how_to_reg</span>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Position</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div style="margin-right: 8px;">{{element.position}}</div>
+            <span class="material-icons" style="color: deeppink; margin-right: 2px;" *ngIf="element.favourited">stars</span>
+            <span class="material-icons" style="color: mediumspringgreen; margin-right: 2px;" *ngIf="element.draft_manager_id == draft.draft_manager_id">how_to_reg</span>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="era">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Era</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div style="margin-right: 8px;">{{element.era}}</div>
+            <span class="material-icons" style="color: deeppink; margin-right: 2px;" *ngIf="element.favourited">stars</span>
+            <span class="material-icons" style="color: mediumspringgreen; margin-right: 2px;" *ngIf="element.draft_manager_id == draft.draft_manager_id">how_to_reg</span>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="draftOptions">
+          <mat-header-cell *matHeaderCellDef>Options</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <span class="material-icons" style="color: mediumspringgreen; cursor: pointer;" *ngIf="!element.draft_manager" (click)="playerSelection(element)">add_task</span>
+          </mat-cell>
+        </ng-container>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[10,100,1000]" showFirstLastButtons></mat-paginator>
+    </div>
+    <div *ngIf="draft && draft.status_id != 4">
+      <mat-divider></mat-divider>
+      <div style="text-align: right;">
+        <button mat-button (click)="draftNextStatus()">Continue <span class="material-icons" style="color: mediumspringgreen; margin-right: 2px;">arrow_forward</span></button>
+      </div>
+      <mat-divider style="margin-bottom: 4px;"></mat-divider>
+    </div>
+  </div>
+  <div *ngIf="draft.draft_manager.id != signed_in_manager.id">
+    <p>Waiting for {{draft.draft_manager.name}}...</p>
+  </div>
+ </div>
+

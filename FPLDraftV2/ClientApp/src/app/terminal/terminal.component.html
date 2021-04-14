@@ -1,0 +1,109 @@
+<div class="terminal-container" *ngIf="draft && squadTicker">
+  <div class="terminal-top">
+    <div class="terminal-top-main">
+      <div class="terminal-main-content">
+        <div class="terminal-draft-status" *ngIf="!breakingNews">
+          <div class="terminal-draft-manager" *ngIf="managerUpdated" [@flyInOut]>
+            <img class="terminal-draft-manager-badge" src="{{draft.draft_manager.team_image_url}}" />
+            <div class="terminal-draft-manager-info">
+              <div>{{draft.draft_manager.name}}</div>
+              <div>{{draft.draft_manager.team_name}}</div>
+            </div>
+          </div>
+          <mat-divider style="height: 100%; margin: 32px;" [vertical]="true"></mat-divider>
+          <div class="terminal-draft-status-info">
+            <div *ngIf="statusUpdated  && draft.status_id != 5" style="display: flex; align-content: center; align-items: center;" [@flyInOut]>
+              {{convertStatusToString(draft.status_id)}} <div style="margin-left: 64px; font-size: 120px; color: deeppink;" *ngIf="draft.status_id == 4"><b>{{timer}}</b></div>
+            </div>
+            <div *ngIf="announcementPick && announcingPick && draft.status_id == 5" [@flyInOut]>
+              <div class="terminal-announce-player">
+                <div class="terminal-announce-info">
+                  <div>{{announcementPick.player.first_name}} {{announcementPick.player.web_name}}</div>
+                  <div>{{announcementPick.player.position.singular_name}}</div>
+                  <div>{{announcementPick.player.club.name}}</div>
+                  <div>£{{announcementPick.player.now_cost / 10}}m</div>
+                </div>
+                <div style="flex-grow: 1;"></div>
+                <div class="terminal-image-info">
+                  <img *ngIf="announcementPick.player" class="terminal-image" src="{{announcementPick.player.photo_url}}" (error)="replacePlayerImageNotFound($event, player)" />
+                  <img *ngIf="announcementPick.player" class="terminal-image" src="{{announcementPick.player.club.badge_url}}" (error)="replacePlayerImageNotFound($event, player)" />
+                </div>
+              </div>
+            </div>
+            <div *ngIf="statusUpdated && !breakingNews && !announcingPick && (draft.status_id == 3 || draft.status_id == 5)">
+             
+              <ul class="terminal-team-players big-screen" *ngIf="draft.draft_manager.draft_squad">
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_1" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_2" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_1" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_2" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_3" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_4" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_5" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_1" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_2" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_3" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_4" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_5" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_1" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_2" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+                <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="breaking-news" *ngIf="breakingNews">
+          <div>BREAKING NEWS</div>
+          <mat-progress-bar [color]="Accent" mode="indeterminate" class="breaking-bar"></mat-progress-bar>
+        </div>
+      </div>
+      <div>
+        <mat-progress-bar *ngIf="draft.status_id == 4" [color]="Warn" [value]="(timer/30)*100"></mat-progress-bar>
+      </div>
+    </div>
+    <div class="terminal-right-sidebar">
+      <div class="terminal-right-header">
+        <div class="terminal-date-time">
+          <div class="terminal-time">WV1 Draft</div>
+          <div class="terminal-date">Friday 4th September</div>
+        </div>
+        <img class="terminal-logo" src="../../assets/draft_tv.png" />
+      </div>
+      <mat-divider class="terminal-divider"></mat-divider>
+      <div class="terminal-team-header" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
+        <img class="terminal-team-image" src="{{squadTicker.ticker_manager.team_image_url}}" />
+        <div class="terminal-team-info">
+          <div class="terminal-team-name">{{squadTicker.ticker_manager.team_name}}</div>
+          <div class="terminal-manager-name">{{squadTicker.ticker_manager.name}}</div>
+        </div>
+      </div>
+      <mat-divider class="terminal-divider"></mat-divider>
+      <ul class="terminal-team-players" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
+        <li><terminal-player [player]="squadTicker.ticker_squad.gk_1" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.gk_2" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.def_1" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.def_2" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.def_3" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.def_4" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.def_5" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.mid_1" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.mid_2" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.mid_3" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.mid_4" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.mid_5" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.fw_1" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.fw_2" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+        <li><terminal-player [player]="squadTicker.ticker_squad.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+      </ul>
+    </div>
+  </div>
+  <div class="terminal-bottom">
+    <div id="news_ticker">
+      <img class="terminal-logo" src="../../assets/draft_tv.png" />
+      <span>Latest News</span>
+      <ul>
+        <li *ngFor="let tickerItem of tickerItems"><a href="#">{{tickerItem}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>

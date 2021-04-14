@@ -1,0 +1,41 @@
+<!--<div class="confirm-player">
+  <div class="confirm-player-header">
+    <div>Confirm {{player.first_name}} {{player.web_name}}?</div>
+    <img *ngIf="player" class="confirm-badge-image" src="{{player.club.badge_url}}" />
+  </div>
+  <mat-divider style="width: 100%; margin-top: 8px; margin-bottom: 8px;"></mat-divider>
+  <div class="confirm-player-details">
+    <div class="confirm-player-info">
+      <div><b>Club:</b> {{player.club.name}}</div>
+      <div><b>Position:</b> {{player.position.singular_name}}</div>
+      <div><b>Cost:</b> {{player.now_cost / 10}}m</div>
+      <div><b>19/20 points:</b> {{player.total_points}}</div>
+    </div>
+    <div class="confirm-player-divider"></div>
+    <img *ngIf="player" class="confirm-player-image" src="{{player.photo_url}}" (error)="replacePlayerImageNotFound($event, player)" />
+  </div>
+  <mat-divider style="width: 100%; margin: 4px;"></mat-divider>
+  <div class="confirm-options">
+    <button class="confirm-option-cancel" mat-raised-button color="primary" (click)="onNoClick()">Cancel <span class="option-icon material-icons">cancel</span></button>
+    <button class="confirm-option-confirm" mat-raised-button color="accent" (click)="onYesClick()">Confirm <span class="option-icon icon material-icons">check_circle</span></button>
+  </div>
+</div>-->
+  <ul class="squad-list">
+    <li><terminal-player [player]="draftSquad.gk_1" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.gk_2" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.def_1" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.def_2" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.def_3" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.def_4" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.def_5" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.mid_1" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.mid_2" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.mid_3" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.mid_4" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.mid_5" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.fw_1" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.fw_2" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+    <li><terminal-player [player]="draftSquad.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+  </ul>
+
+<button class="close-button" mat-raised-button mat-dialog-close>Close</button>
