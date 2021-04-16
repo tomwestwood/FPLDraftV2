@@ -12,15 +12,17 @@ namespace FPLV2Core.Alerts
     {
         public SlackClient _slackClient;
 
+        private const string _slackWebhookBase = "https://hooks.slack.com/services/T018QK04XT4/B01ARP1HFGW/";
+
         // debug:
-        //private const string _slackClientConnection = "https://hooks.slack.com/services/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";
+        //private const string _slackClientConnection = "IIwG0K4dbK8Mf45UDenr6AWo";
         // live:
-        private const string _slackClientConnection = "https://hooks.slack.com/services/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"; 
+        private const string _slackClientConnection = "tOspmfnAwUSCDRIr6Y0wnCKT"; 
 
 
         public SlackAlert()
         {
-            _slackClient = new SlackClient(_slackClientConnection);
+            _slackClient = new SlackClient($"{_slackWebhookBase}{_slackClientConnection}");
         }
 
         public void MessageAlert(string content, ILogger logger)
