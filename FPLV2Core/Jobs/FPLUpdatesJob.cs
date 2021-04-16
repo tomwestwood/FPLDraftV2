@@ -112,7 +112,7 @@ namespace FPLV2Core.Jobs
 
                 try
                 {
-                    BroadcastAlertMessage("*LINE UP ANNOUNCEMENTS*");
+                    BroadcastAlertMessage("KENBOT TESTING.");
                     _draftFixtures.Matches.ToList().ForEach(df =>
                     {
                         var teamAName = $"*{df.TeamAEntry.TeamName}*:";
