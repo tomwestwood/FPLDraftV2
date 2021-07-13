@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.Serialization.Formatters.Binary;
 using FPLV2Core.Models.FPLDraft;
+using Newtonsoft.Json;
 
 namespace FPLV2Core.Database.DraftDB
 {
@@ -43,7 +45,8 @@ namespace FPLV2Core.Database.DraftDB
                             status_id = (DraftStatus)((int)draftRow["status_id"]),
                             direction = (bool)draftRow["direction"],
                             passcode = (string)draftRow["passcode"],
-                            draft_manager_id = (int)draftRow["draft_manager_id"]
+                            draft_manager_id = (int)draftRow["draft_manager_id"],
+                            draft_round = (int)draftRow["draft_round"]
                         };
                     }
                     catch(Exception ex)
@@ -128,8 +131,14 @@ namespace FPLV2Core.Database.DraftDB
                             {
                                 id = (int)dr["id"],
                                 draft_manager_id = (int)dr["draft_manager_id"],
+                                nominator_id = (int)dr["nominator_id"],
                                 player_id = (int)dr["player_id"],
-                                pick_order = (int)dr["pick_order"]
+                                player_name = (string)dr["player_name"],
+                                pick_order = (int)dr["pick_order"],
+                                draft_id = (int)dr["draft_id"],
+                                value_price = (decimal)dr["value_price"],
+                                signed_price = (decimal)dr["signed_price"],
+                                sealed_bids = JsonConvert.DeserializeObject<IEnumerable<SealedBid>>(dr["sealed_bids"].ToString())
                             });
                         }
                     }
@@ -180,7 +189,7 @@ namespace FPLV2Core.Database.DraftDB
             return draftManagerFavourites;
         }
 
-        public static void SavePick(DraftManagerPick pick)
+        public static DraftManagerPick SavePick(DraftManagerPick pick)
         {
             var sp = "dbo.save_DraftManagerPick";
 
@@ -189,19 +198,26 @@ namespace FPLV2Core.Database.DraftDB
                 using (var cmd = new SqlCommand(sp, conn))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@nominator_id", pick.nominator_id);
                     cmd.Parameters.AddWithValue("@draft_manager_id", pick.draft_manager_id);
                     cmd.Parameters.AddWithValue("@player_id", pick.player_id);
                     cmd.Parameters.AddWithValue("@pick_order", pick.pick_order);
-                    cmd.Parameters.AddWithValue("@player_name", pick.player_name);
+                    cmd.Parameters.AddWithValue("@player_name", pick.player_name ?? pick.player?.web_name ??  "");
                     cmd.Parameters.AddWithValue("@current_points", pick.current_points);
+                    cmd.Parameters.AddWithValue("@draft_id", pick.draft_id);
+                    cmd.Parameters.AddWithValue("@value_price", pick.value_price);
+                    cmd.Parameters.AddWithValue("@signed_price", pick.signed_price);
+                    cmd.Parameters.AddWithValue("@sealed_bids", JsonConvert.SerializeObject(pick.sealed_bids));
 
                     conn.Open();
-                    cmd.ExecuteNonQuery();
+                    pick.id = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    return pick;
                 }
             }
         }
 
-        public static void UpdatePick(DraftManagerPick pick)
+        public static DraftManagerPick UpdatePick(DraftManagerPick pick)
         {
             var sp = "dbo.update_DraftManagerPick";
 
@@ -211,14 +227,21 @@ namespace FPLV2Core.Database.DraftDB
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@id", pick.id);
+                    cmd.Parameters.AddWithValue("@nominator_id", pick.nominator_id);
                     cmd.Parameters.AddWithValue("@draft_manager_id", pick.draft_manager_id);
                     cmd.Parameters.AddWithValue("@player_id", pick.player_id);
                     cmd.Parameters.AddWithValue("@pick_order", pick.pick_order);
-                    cmd.Parameters.AddWithValue("@player_name", pick.player_name);
+                    cmd.Parameters.AddWithValue("@player_name", pick.player_name ?? pick.player?.web_name ?? "");
                     cmd.Parameters.AddWithValue("@current_points", pick.current_points);
+                    cmd.Parameters.AddWithValue("@draft_id", pick.draft_id);
+                    cmd.Parameters.AddWithValue("@value_price", pick.value_price);
+                    cmd.Parameters.AddWithValue("@signed_price", pick.signed_price);
+                    cmd.Parameters.AddWithValue("@sealed_bids", JsonConvert.SerializeObject(pick.sealed_bids));
 
                     conn.Open();
                     cmd.ExecuteNonQuery();
+
+                    return pick;
                 }
             }
         }
@@ -236,6 +259,7 @@ namespace FPLV2Core.Database.DraftDB
                     cmd.Parameters.AddWithValue("@draft_manager_id", draft.draft_manager_id);
                     cmd.Parameters.AddWithValue("@status_id", draft.status_id);
                     cmd.Parameters.AddWithValue("@direction", draft.direction);
+                    cmd.Parameters.AddWithValue("@draft_round", draft.draft_round);
 
                     //try
                     //{

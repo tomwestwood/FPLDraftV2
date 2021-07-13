@@ -37,5 +37,15 @@ namespace FPLV2Core.Models.FPL
         public string TableStatus => Rank == LastRank ? "" : Rank < LastRank ? "+" : "-"; 
 
         public Entry EntryObject { get; set; }
+
+        // live fields:
+        public string LiveOpponentTeamName { get; set; }
+        public string LiveOpponentName { get; set; }
+        public int LiveScore { get; set; }
+        public int LiveOpponentScore { get; set; }
+        public string LiveGameScore => (LiveScore > LiveOpponentScore ? "Winning " : LiveScore < LiveOpponentScore ? "Losing " : "Drawing ") + LiveScore + "-" + LiveOpponentScore;
+        public int LivePoints { get; set; }
+        public int LiveGoalDifference { get; set; }
+        public int LiveRank { get; set; }
     }
 }

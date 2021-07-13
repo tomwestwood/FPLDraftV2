@@ -1,5 +1,21 @@
 $total-items: 15;
 
+.draft {
+    display: flex;
+    flex-direction: row;
+
+    draft-selecting-component {
+        flex-grow: 1;
+    }
+
+    .basic-content {
+        width: 100%;
+        height: 100%;
+        align-self: center;
+        text-align: center;
+    }
+}
+
 .pre-draft-container {
   display: flex;
 
@@ -87,4 +103,9 @@ $total-items: 15;
       }
     }
   }
+}
+
+.basic-progress-bar {
+    width: 200px;
+    display: inline-flex;
 }

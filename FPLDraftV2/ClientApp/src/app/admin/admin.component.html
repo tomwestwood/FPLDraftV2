@@ -1,0 +1,73 @@
+<div class="draft" *ngIf="draft">
+
+  <div class="main-panel">
+
+    <mat-form-field appearance="fill" class="filter-item">
+      <mat-label>Draft round:</mat-label>
+      <input matInput [(ngModel)]="draft.draft_round" type="number" />
+    </mat-form-field>
+
+    <div style="display: flex; flex-direction: row;">
+      <mat-form-field appearance="fill" class="filter-item">
+        <mat-label>Direction:</mat-label>
+        <input matInput disabled value="{{getDraftDirectionDescription()}}" />
+      </mat-form-field>
+
+      <button mat-raised-button style="margin-bottom: 24px; margin-left: 8px;" color="primary" class="header-option-button" (click)="switchDraftDirection()"><span class="material-icons">wifi_protected_setup</span></button>
+    </div>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Manager:</mat-label>
+      <mat-select [(ngModel)]="draft.draft_manager_id" name="food">
+        <mat-option *ngFor="let manager of draft.draft_managers" [value]="manager.id">
+          {{manager.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Status:</mat-label>
+      <select matNativeControl [(ngModel)]="draft.status_id">
+        <option [ngValue]="1">{{getStatusDescriptionFromId(1)}}</option>
+        <option [ngValue]="2">{{getStatusDescriptionFromId(2)}}</option>
+        <option [ngValue]="3">{{getStatusDescriptionFromId(3)}}</option>
+        <option [ngValue]="4">{{getStatusDescriptionFromId(4)}}</option>
+        <option [ngValue]="5">{{getStatusDescriptionFromId(5)}}</option>
+        <option [ngValue]="6">{{getStatusDescriptionFromId(6)}}</option>
+        <option [ngValue]="7">{{getStatusDescriptionFromId(7)}}</option>
+        <option [ngValue]="8">{{getStatusDescriptionFromId(8)}}</option>
+        <option [ngValue]="9">{{getStatusDescriptionFromId(9)}}</option>
+        <option [ngValue]="10">{{getStatusDescriptionFromId(10)}}</option>
+        <option [ngValue]="11">{{getStatusDescriptionFromId(11)}}</option>
+      </select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="header-option-button" (click)="updateDraft()">Update draft <span class="material-icons">thumb_up_alt</span></button>
+  </div>
+
+  <div *ngIf="draft.status_id == 8 || draft.status_id == 9" class="more-info-panel">
+    <h4>{{current_pick.player.web_name}} -> Pick ID: {{current_pick.id}}</h4>
+    <div>
+      <p>Enter bids:</p>
+      <div class="bids">
+        <div *ngFor="let manager of draft.draft_managers" class="bid" [ngClass]="{'bid-received' : draft.status_id == 9 && manager.bid > 0}">
+          <mat-form-field appearance="fill" class="filter-item">
+            <mat-label>{{manager.name}}</mat-label>
+            <input matInput *ngIf="draft.status_id == 8" [(ngModel)]="manager.bid" type="number" />
+            <input matInput *ngIf="draft.status_id == 9" disabled value="{{manager.bid == 0 ? '' : manager.bid}}" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="bid-options">
+        <button mat-raised-button color="primary" class="header-option-button" (click)="submitBids()">Submit bids <span class="material-icons">star_outline</span></button>
+        <button mat-raised-button class="header-option-button" (click)="submitBids()">No bids <span class="material-icons">star_outline</span></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<mat-divider></mat-divider>
+
+<!-- draft.draft_manager_picks -->
+<!-- we can then easily view/edit anything that goes wrong can't we... -->

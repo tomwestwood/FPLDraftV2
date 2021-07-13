@@ -1,0 +1,32 @@
+<div class="draft-header">
+  <!--<div class="draft-header-title">{{draft.draft_name}}</div>-->
+  <div class="draft-status">
+    <div class="draft-header-manager">{{draft.draft_manager.name}}</div>
+    <div class="draft-header-status">{{convertStatusToString(draft.status_id)}}<span class="status-desc status-icon material-icons">{{convertStatusToIcon(draft.status_id)}}</span></div>
+  </div>
+
+  <div class="draft-header-squad">
+    <ul class="squad-list">
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_1" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_2" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_1" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_2" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_3" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_4" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_5" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_1" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_2" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_3" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_4" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_5" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_1" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_2" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+    </ul>
+  </div>
+
+  <button mat-raised-button class="header-option-button" (click)="draftNextStatus()">Favourites <span class="material-icons">star_outline</span></button>
+  <button mat-raised-button class="header-option-button" (click)="draftNextStatus()">Budget <span class="material-icons">savings</span></button>
+  <button mat-raised-button class="header-option-button" color="primary" [disabled]="!enableContinueButton()" (click)="draftNextStatus()">Continue <span class="material-icons">arrow_forward</span></button>
+
+</div>

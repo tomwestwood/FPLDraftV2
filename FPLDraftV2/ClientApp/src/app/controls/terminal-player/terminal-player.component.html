@@ -1,9 +1,9 @@
 <div class="terminal-player" [ngClass]="{'unselected': !player}">
   <div class="terminal-player-position" [ngClass]="{'selected': player}">{{position}}</div>
   <div class="terminal-player-name">
-    <div *ngIf="player">{{player.first_name}} {{player.web_name}} ({{player.club.name}})</div>
+    <div *ngIf="player">{{player.web_name}} ({{player.club.name}})</div>
     <div *ngIf="!player">Select player</div>
   </div>
-  <img *ngIf="player" class="terminal-player-image" src="{{player.photo_url}}" (error)="replacePlayerImageNotFound($event, player)" />
-  <img *ngIf="!player" class="terminal-player-image missing" src="https://platform-static-files.s3.amazonaws.com/premierleague/photos/players/250x250/Photo-Missing.png" />
+  <!--<img *ngIf="player" class="terminal-player-image" src="{{player.photo_url}}" (error)="replacePlayerImageNotFound($event, player)" />
+  <img *ngIf="!player" class="terminal-player-image missing" src="https://platform-static-files.s3.amazonaws.com/premierleague/photos/players/250x250/Photo-Missing.png" />-->
 </div>

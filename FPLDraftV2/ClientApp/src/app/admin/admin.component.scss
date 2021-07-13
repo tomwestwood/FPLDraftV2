@@ -1,0 +1,35 @@
+.draft {
+    display: flex;
+    flex-direction: row;
+
+    .main-panel {
+        margin: 8px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 0;
+    }
+
+    .more-info-panel {
+        margin: 8px;
+        margin-left: 64px;
+    }
+}
+
+.bids {
+    display: flex;
+    flex-direction: row;
+    color: black;
+    flex-wrap: wrap;
+
+    .bid {
+        margin: 4px;
+    }
+}
+
+.bid-options {
+    display: flex;
+}
+
+.bid-received {
+  background-color: green;
+}

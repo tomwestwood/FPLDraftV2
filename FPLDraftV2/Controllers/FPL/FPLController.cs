@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 
 namespace FPLDraftV2.Controllers.FPL
 {
@@ -59,6 +60,69 @@ namespace FPLDraftV2.Controllers.FPL
         public Entry GetEntry(int entryId, int gameweek)
         {
             return _fplService.GetEntryFromID(entryId, gameweek);
+        }
+
+        [HttpGet("getLiveLeague/{league_code}")]
+        public H2hLeague GetLiveLeague(int league_code)
+        {
+            var current_league = _fplService.GetH2hLeague(league_code);
+            var current_gw = GetFixtureGameweek();
+            var fixtures = _fplService.GetH2hFixtures(league_code, current_gw.Id);
+
+            if (current_gw.IsCurrent && !current_gw.Finished)
+            {
+                current_league.Standings.Entries.ToList().ForEach(entry =>
+                {
+                    var involvedMatch = fixtures.Matches.FirstOrDefault(match => match.TeamAId == entry.EntryID || match.TeamBId == entry.EntryID);
+                    var h2hFixture = _fplService.GetH2hFixture(league_code, current_gw.Id, involvedMatch.Id);
+
+                    if (entry.EntryID == involvedMatch.TeamAId)
+                    {
+                        var oppEntry = current_league.Standings.Entries.FirstOrDefault(opEntry => opEntry.EntryID == involvedMatch.TeamBId);
+                        entry.LiveOpponentName = oppEntry.PlayerName_Short;
+                        entry.LiveOpponentTeamName = oppEntry.EntryName;
+                        entry.LiveOpponentScore = h2hFixture.TeamBLivePoints;
+
+                        if (h2hFixture.TeamALivePoints > h2hFixture.TeamBLivePoints)
+                            entry.LivePoints = int.Parse(entry.Total) + 3;
+                        else if (h2hFixture.TeamALivePoints == h2hFixture.TeamBLivePoints)
+                            entry.LivePoints = int.Parse(entry.Total) + 1;
+                        else
+                            entry.LivePoints = int.Parse(entry.Total);
+
+                        entry.LiveGoalDifference = int.Parse(entry.PointsFor) + h2hFixture.TeamALivePoints;
+                        entry.LiveScore = h2hFixture.TeamALivePoints;
+                    }
+                    else if(entry.EntryID == involvedMatch.TeamBId)
+                    {
+                        var oppEntry = current_league.Standings.Entries.FirstOrDefault(opEntry => opEntry.EntryID == involvedMatch.TeamAId);
+                        entry.LiveOpponentName = oppEntry.PlayerName_Short;
+                        entry.LiveOpponentTeamName = oppEntry.EntryName;
+                        entry.LiveOpponentScore = h2hFixture.TeamALivePoints;
+
+                        if (h2hFixture.TeamBLivePoints > h2hFixture.TeamALivePoints)
+                            entry.LivePoints = int.Parse(entry.Total) + 3;
+                        else if (h2hFixture.TeamBLivePoints == h2hFixture.TeamALivePoints)
+                            entry.LivePoints = int.Parse(entry.Total) + 1;
+                        else
+                            entry.LivePoints = int.Parse(entry.Total);
+
+                        entry.LiveGoalDifference = int.Parse(entry.PointsFor) + h2hFixture.TeamBLivePoints;
+                        entry.LiveScore = h2hFixture.TeamBLivePoints;
+                    }
+                });
+            }
+
+            int liveRank = 1;
+            current_league.Standings.Entries.OrderByDescending(a => a.LivePoints).ThenByDescending(a => a.LiveGoalDifference).ToList().ForEach(entry =>
+            {
+                entry.LiveRank = liveRank;
+                liveRank++;
+            });
+
+            current_league.Standings.Entries = current_league.Standings.Entries.OrderBy(a => a.LiveRank).ToList();
+            
+            return current_league;
         }
     }
 }

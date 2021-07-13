@@ -19,6 +19,7 @@ namespace FPLV2Core.Models.FPLDraft
 
         public int draft_manager_id { get; set; }
         public DraftManager draft_manager { get; set; }
+        public int draft_round { get; set; }
 
         public IEnumerable<DraftManager> draft_managers { get; set; }
         public IEnumerable<DraftManagerPick> draft_manager_picks { get; set; }

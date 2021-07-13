@@ -37,10 +37,14 @@ namespace FPLDraftV2.Controllers.FPL
             return DraftDB.GetDraftManagerFavourites(draft_manager_id);
         }
         [HttpPost("savePick")]
-        public bool SavePick(DraftManagerPick pick)
+        public DraftManagerPick SavePick(DraftManagerPick pick)
         {
-            DraftDB.SavePick(pick);
-            return true;
+            return DraftDB.SavePick(pick);
+        }
+        [HttpPost("updatePick")]
+        public DraftManagerPick UpdatePick(DraftManagerPick pick)
+        {
+            return DraftDB.UpdatePick(pick);
         }
         [HttpPost("updateDraft")]
         public void UpdateDraft([FromBody] Draft draft)

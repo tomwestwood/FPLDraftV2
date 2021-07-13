@@ -15,7 +15,8 @@ namespace FplPulse
 
         static void Run()
         {
-            var cmd = new FPLUpdatesJob(new ConsoleLogger(), new SlackAlert());
+            //var cmd = new FPLUpdatesJob(new ConsoleLogger(), new SlackAlert());
+            var cmd = new FPLReportsJob();
             cmd.Run();
         }
     }

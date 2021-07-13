@@ -1,0 +1,75 @@
+
+<!-- this can go into it's own component: -->
+<div class="selection-header">
+  <div class="timer">
+    <mat-progress-spinner class="spinner" [color]="Primary" [diameter]="40" [value]="(timer/30)*100"></mat-progress-spinner>
+    <div class="timer-text">{{timer}}</div>
+  </div>
+  <mat-divider [vertical]="true"></mat-divider>
+  <div class="filters">
+    <mat-form-field appearance="fill" class="filter-item">
+      <mat-label>Find player:</mat-label>
+      <input matInput [(ngModel)]="searchFilter.player_name" (keyup)="updateFilter()" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" *ngIf="fplBase.clubs" class="filter-item">
+      <mat-label>Club:</mat-label>
+      <mat-select [(value)]="searchFilter.club_id" (selectionChange)="updateFilter()">
+        <mat-option value="0">All</mat-option>
+        <mat-option *ngFor="let club of fplBase.clubs" value="{{club.id}}">
+          <div>
+            {{club.name}} <img src="{{club.badge_url}}" style="height: 20px; width: 20px; margin-left: 16px; vertical-align: middle;" />
+          </div>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" *ngIf="fplBase.positions" class="filter-item">
+      <mat-label>Position:</mat-label>
+      <mat-select [(value)]="searchFilter.position_id" (selectionChange)="updateFilter()">
+        <mat-option value="0">All</mat-option>
+        <mat-option *ngFor="let position of fplBase.positions" value="{{position.id}}">
+          <div>{{position.singular_name_short}}</div>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox class="filter-item" [(ngModel)]="searchFilter.showFavourites"
+                  (change)="updateFilter()">
+      Show favourites
+    </mat-checkbox>
+
+  </div>
+</div>
+
+<mat-table [dataSource]="playerDataSource" *ngIf="playerDataSource" class="mat-elevation-z8" matSort matSortActive="now_cost" matSortDirection="desc">
+  <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
+  <mat-row *matRowDef="let element; columns: displayedColumns" [ngClass]="{'player-selected' : element.draft_manager}"></mat-row>
+  <ng-container matColumnDef="web_name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div style="margin-right: 8px;">{{element.web_name}}</div>
+      <span class="material-icons" style="color: deeppink; margin-right: 2px;" *ngIf="element.favourited">stars</span>
+      <span class="material-icons" style="color: mediumspringgreen; margin-right: 2px;" *ngIf="element.draft_manager_id == draft.draft_manager_id">how_to_reg</span>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="position">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Position</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.position.singular_name_short}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="club">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Club</mat-header-cell>
+    <mat-cell *matCellDef="let element"><img src="{{element.club.badge_url}}" style="height: 20px; margin-right: 8px;" /> {{element.club.short_name}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="now_cost">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Value</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.now_cost / 10}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="draftOptions">
+    <mat-header-cell *matHeaderCellDef>Options</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <span class="material-icons" style="color: mediumspringgreen; cursor: pointer;" *ngIf="!element.draft_manager" (click)="selectPlayer(element)">add_task</span>
+    </mat-cell>
+  </ng-container>
+</mat-table>
+<!--<mat-paginator [pageSizeOptions]="[10,100,1000]" showFirstLastButtons></mat-paginator>-->

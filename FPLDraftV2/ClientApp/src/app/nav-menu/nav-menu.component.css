@@ -1,7 +1,6 @@
 header {
-  background-color: black;
   color: white;
-  font-size: medium;
+  font-size: large;
 }
 
 navbar {
@@ -21,7 +20,8 @@ a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
-  color: white;
+  color: #17252A;
+  font-size: x-large;
 }
 
 .box-shadow {

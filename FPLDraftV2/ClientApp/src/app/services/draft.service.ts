@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { Player, Club, FPLBase } from '../models/fpl';
-import { DraftManagerFavourite, Draft, DraftManager, DraftManagerPick, DraftFunctions } from '../models/draft';
+import { Observable } from 'rxjs';
+import { DraftManagerFavourite, Draft, DraftManagerPick, DraftFunctions } from '../models/draft';
+
 @Injectable({ providedIn: 'root' })
 export class DraftService {
   private draftUrl = '/api/draft';
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient) { }  
+
   getDraft(): Observable<Draft> {
     return this.http.get<Draft>(this.draftUrl);
   }
@@ -21,6 +23,9 @@ export class DraftService {
   }
   savePick(pick: DraftManagerPick): Observable<any> {
     return this.http.post(`${this.draftUrl}/savePick`, pick);
+  }
+  updatePick(pick: DraftManagerPick): Observable<any> {
+    return this.http.post(`${this.draftUrl}/updatePick`, pick);
   }
   favouritePlayer(favourite: DraftManagerFavourite): Observable<any> {
     return this.http.post(`${this.draftUrl}/setFavourite`, favourite)

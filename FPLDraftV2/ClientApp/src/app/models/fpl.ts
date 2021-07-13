@@ -55,12 +55,27 @@ export class H2hLeagueMatch {
   teamBManager: DraftManager;
   teamBLivePoints: number;
 }
+export class H2hLeague {
+  standings: H2hLeagueStandings;
+}
+export class H2hLeagueStandings {
+  entries: H2hLeagueEntry[];
+}
 export class H2hLeagueEntry {
   id: number;
   entryId: number;
   entryName: string;
   playerName: string;
   entryObject: Entry;
+
+  // live stuff:
+  liveOpponentTeamName: string;
+  liveOpponentName: string;
+  liveScore: number;
+  liveOpponentScore: number;
+  liveGoalDifference: string;
+  liveRank: string;
+  liveGameScore: string;
 }
 export class Entry {
   id: number;

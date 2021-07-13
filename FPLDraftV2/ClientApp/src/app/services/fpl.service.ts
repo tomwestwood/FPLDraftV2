@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { Player, Club, FPLBase, H2hLeagueMatch } from '../models/fpl';
+import { Player, Position, Club, FPLBase, H2hLeagueMatch, H2hLeagueEntry, H2hLeague } from '../models/fpl';
 @Injectable({ providedIn: 'root' })
 export class FplService {
   private fplBaseUrl = '/api/fpl';
@@ -21,5 +21,9 @@ export class FplService {
 
   getFixture(leagueId: number, gameweekId: number, fixtureId: number): Observable<H2hLeagueMatch> {
     return this.http.get<H2hLeagueMatch>(this.fplBaseUrl + `/getFixture/${leagueId}/${gameweekId}/${fixtureId}`);
+  }
+
+  getLiveLeague(leagueId: number): Observable<H2hLeague> {
+    return this.http.get<H2hLeague>(this.fplBaseUrl + `/getLiveLeague/${leagueId}`);
   }
 }

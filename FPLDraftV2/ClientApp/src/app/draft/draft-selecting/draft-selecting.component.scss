@@ -1,0 +1,43 @@
+.selection-header {
+  background-color: #17252A;
+  border-radius: 6px;
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 8px;
+  display: flex;
+
+  .timer {
+    justify-content: center;
+    align-self: center;
+    margin-left: 8px;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+
+    .spinner {
+      position: relative;
+    }
+
+    .timer-text {
+      position: absolute;
+      text-align: center;
+    }
+  }
+
+  .filter {
+      
+  }
+}
+
+.filter-item {
+  margin-right: 16px;
+}
+
+.mat-divider {
+    margin-left: 8px;
+    margin-right: 16px;
+}
+
+.mat-checkbox {
+  font-size: smaller;
+}

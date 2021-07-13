@@ -1,7 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DraftFunctions = exports.FancastSquadTicker = exports.SquadTicker = exports.DraftSquad = exports.DraftManagerFavourite = exports.DraftManagerPick = exports.DraftManager = exports.Draft = void 0;
+exports.DraftFunctions = exports.FancastSquadTicker = exports.SquadTicker = exports.DraftSquad = exports.DraftManagerFavourite = exports.SealedBid = exports.DraftManagerPick = exports.DraftManager = exports.Draft = exports.DraftStatuses = void 0;
 var fpl_1 = require("./fpl");
+var DraftStatuses;
+(function (DraftStatuses) {
+    DraftStatuses[DraftStatuses["NotStarted"] = 1] = "NotStarted";
+    DraftStatuses[DraftStatuses["Waiting"] = 2] = "Waiting";
+    DraftStatuses[DraftStatuses["PreDraft"] = 3] = "PreDraft";
+    DraftStatuses[DraftStatuses["Drafting"] = 4] = "Drafting";
+    DraftStatuses[DraftStatuses["DraftingComplete"] = 5] = "DraftingComplete";
+    DraftStatuses[DraftStatuses["Timeout"] = 6] = "Timeout";
+    DraftStatuses[DraftStatuses["SealedBids"] = 7] = "SealedBids";
+    DraftStatuses[DraftStatuses["CheckingBids"] = 8] = "CheckingBids";
+    DraftStatuses[DraftStatuses["BidsReceived"] = 9] = "BidsReceived";
+    DraftStatuses[DraftStatuses["FinalChance"] = 10] = "FinalChance";
+    DraftStatuses[DraftStatuses["SigningComplete"] = 11] = "SigningComplete";
+    DraftStatuses[DraftStatuses["SigningFailed"] = 12] = "SigningFailed";
+})(DraftStatuses = exports.DraftStatuses || (exports.DraftStatuses = {}));
 var Draft = /** @class */ (function () {
     function Draft() {
     }
@@ -20,6 +35,12 @@ var DraftManagerPick = /** @class */ (function () {
     return DraftManagerPick;
 }());
 exports.DraftManagerPick = DraftManagerPick;
+var SealedBid = /** @class */ (function () {
+    function SealedBid() {
+    }
+    return SealedBid;
+}());
+exports.SealedBid = SealedBid;
 var DraftManagerFavourite = /** @class */ (function () {
     function DraftManagerFavourite() {
     }
@@ -50,6 +71,7 @@ var DraftFunctions = /** @class */ (function () {
     function DraftFunctions() {
     }
     DraftFunctions.getBasicDraftObject = function (draft) {
+        var _this = this;
         var basicDraft = new Draft();
         basicDraft.id = draft.id;
         basicDraft.direction = draft.direction;
@@ -57,6 +79,7 @@ var DraftFunctions = /** @class */ (function () {
         basicDraft.draft_name = draft.draft_name;
         basicDraft.passcode = draft.passcode;
         basicDraft.status_id = draft.status_id;
+        basicDraft.draft_round = draft.draft_round;
         var basicManager = new DraftManager();
         basicManager.id = draft.draft_manager.id;
         basicManager.draft_id = draft.id;
@@ -69,9 +92,20 @@ var DraftFunctions = /** @class */ (function () {
         basicManager.team_colour_1 = draft.draft_manager.team_colour_1;
         basicManager.team_colour_2 = draft.draft_manager.team_colour_2;
         basicDraft.draft_manager = basicManager;
+        basicDraft.draft_managers = [];
+        draft.draft_managers.forEach(function (dm) {
+            basicDraft.draft_managers.push(dm);
+        });
+        basicDraft.draft_manager_picks = [];
+        draft.draft_manager_picks.forEach(function (dmp) {
+            basicDraft.draft_manager_picks.push(_this.getBasicDraftManagerPickObject(dmp, false));
+        });
         return basicDraft;
     };
-    DraftFunctions.getBasicDraftManagerPickObject = function (pick) {
+    DraftFunctions.getBasicDraftManagerPickObject = function (pick, includeManager) {
+        var _this = this;
+        var _a;
+        if (includeManager === void 0) { includeManager = true; }
         var basicClub = new fpl_1.Club();
         basicClub.id = pick.player.club.id;
         basicClub.code = pick.player.club.code;
@@ -93,45 +127,109 @@ var DraftFunctions = /** @class */ (function () {
         basicPick.player_id = pick.player_id;
         basicPick.pick_order = pick.pick_order;
         basicPick.draft_manager_id = pick.draft_manager_id;
+        basicPick.nominator_id = pick.nominator_id;
         basicPick.player = basicPlayer;
         basicPick.player.club = basicClub;
+        basicPick.draft_id = pick.draft_id;
+        basicPick.value_price = pick.value_price;
+        basicPick.signed_price = pick.signed_price;
+        basicPick.sealed_bids = [];
+        (_a = pick.sealed_bids) === null || _a === void 0 ? void 0 : _a.forEach(function (sb) {
+            basicPick.sealed_bids.push(_this.getBasicSealedBidsObject(sb));
+        });
         return basicPick;
+    };
+    DraftFunctions.getBasicSealedBidsObject = function (sealedBid) {
+        var basicSealedBid = new SealedBid();
+        basicSealedBid.draft_manager_id = sealedBid.draft_manager_id;
+        basicSealedBid.draft_manager_name = sealedBid.draft_manager_name;
+        basicSealedBid.player_id = sealedBid.player_id;
+        basicSealedBid.player_name = sealedBid.player_name;
+        basicSealedBid.bid_amount = sealedBid.bid_amount;
+        basicSealedBid.bid_eligible = sealedBid.bid_eligible;
+        return basicSealedBid;
+    };
+    DraftFunctions.getDraftPicksForManager = function (manager, draft, fplBase) {
+        if (draft.draft_manager_picks) {
+            manager.draft_manager_picks = draft.draft_manager_picks.filter(function (dmp) { return dmp.draft_manager_id == manager.id; });
+            manager.draft_manager_picks.forEach(function (dmp) {
+                fplBase.elements.filter(function (e) { return e.id == dmp.player_id; }).forEach(function (e) {
+                    e.draft_manager_id = manager.id;
+                    //e.draft_manager = manager;
+                    dmp.player = e;
+                });
+            });
+            return manager.draft_manager_picks;
+        }
+        return undefined;
     };
     DraftFunctions.getDraftSquadForManager = function (manager) {
         var squad = new DraftSquad();
         if (manager.draft_manager_picks) {
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[0])
-                squad.gk_1 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[0].player;
+                squad.gk_1 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[0]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[1])
-                squad.gk_2 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[1].player;
+                squad.gk_2 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[1]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[0])
-                squad.def_1 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[0].player;
+                squad.def_1 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[0]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[1])
-                squad.def_2 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[1].player;
+                squad.def_2 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[1]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[2])
-                squad.def_3 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[2].player;
+                squad.def_3 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[2]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[3])
-                squad.def_4 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[3].player;
+                squad.def_4 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[3]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[4])
-                squad.def_5 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[4].player;
+                squad.def_5 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[4]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[0])
-                squad.mid_1 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[0].player;
+                squad.mid_1 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[0]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[1])
-                squad.mid_2 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[1].player;
+                squad.mid_2 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[1]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[2])
-                squad.mid_3 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[2].player;
+                squad.mid_3 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[2]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[3])
-                squad.mid_4 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[3].player;
+                squad.mid_4 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[3]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[4])
-                squad.mid_5 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[4].player;
+                squad.mid_5 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[4]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[0])
-                squad.fw_1 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[0].player;
+                squad.fw_1 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[0]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[1])
-                squad.fw_2 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[1].player;
+                squad.fw_2 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[1]).player;
             if (manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[2])
-                squad.fw_3 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[2].player;
+                squad.fw_3 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[2]).player;
         }
         return squad;
+    };
+    DraftFunctions.setPlayerOwner = function (player, draftManager) {
+        player.draft_manager_id = draftManager.id;
+        player.draft_manager = draftManager;
+    };
+    DraftFunctions.convertStatusToString = function (status) {
+        switch (status) {
+            case 1: return 'Not started';
+            case 2: return 'Waiting';
+            case 3: return 'Pre-draft';
+            case 4: return 'Drafting';
+            case 5: return 'Drafting complete';
+            case 6: return 'TIMEOUT';
+            case 7: return 'Sealed bids';
+            case 8: return 'Checking bids';
+            case 9: return 'Bids received';
+            case 10: return 'Final chance';
+            case 11: return 'Signing complete';
+            case 12: return 'Signing failed';
+            default: return 'Unknown';
+        }
+    };
+    DraftFunctions.convertStatusToIcon = function (status) {
+        switch (status) {
+            case 1: return 'play_circle_outline';
+            case 2: return 'access_time';
+            case 3: return 'hourglass_top';
+            case 4: return 'shopping_cart';
+            case 5: return 'check';
+            case 6: return 'block';
+            default: return 'adb';
+        }
     };
     return DraftFunctions;
 }());

@@ -1,0 +1,43 @@
+<div style="margin-top: 20px;" *ngIf="league">
+  Live table (does not include bench or bonus...)
+  <mat-table [dataSource]="league.standings.entries" class="mat-elevation-z8" matSort>
+    <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
+    <mat-row *matRowDef="let element; columns: displayedColumns"></mat-row>
+    <ng-container matColumnDef="liveRank">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Rank</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div style="margin-right: 8px;" [ngClass]="{'winning': element.liveRank < element.rank, 'losing': element.liveRank > element.rank }">{{element.liveRank}}</div>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="entryName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Team</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div style="margin-right: 8px;">{{element.entryName}}</div>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="liveOpponentTeamName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Opponent</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div style="margin-right: 8px;">{{element.liveOpponentTeamName}}</div>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="liveGameScore">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Score</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div style="margin-right: 8px;" [ngClass]="{'winning': element.liveScore > element.liveOpponentScore, 'losing': element.liveScore < element.liveOpponentScore }">{{element.liveGameScore}}</div>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="livePoints">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Points</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div style="margin-right: 8px;">{{element.livePoints}}</div>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="liveGoalDifference">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>GD</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div style="margin-right: 8px;">{{element.liveGoalDifference}}</div>
+      </mat-cell>
+    </ng-container>
+  </mat-table>
+</div>

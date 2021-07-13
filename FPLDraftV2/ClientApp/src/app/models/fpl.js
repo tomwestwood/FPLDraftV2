@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Pick = exports.EntryPicks = exports.Entry = exports.H2hLeagueEntry = exports.H2hLeagueMatch = exports.Event = exports.Club = exports.Position = exports.Player = exports.FPLBase = void 0;
+exports.Pick = exports.EntryPicks = exports.Entry = exports.H2hLeagueEntry = exports.H2hLeagueStandings = exports.H2hLeague = exports.H2hLeagueMatch = exports.Event = exports.Club = exports.Position = exports.Player = exports.FPLBase = void 0;
 var FPLBase = /** @class */ (function () {
     function FPLBase() {
     }
@@ -37,6 +37,18 @@ var H2hLeagueMatch = /** @class */ (function () {
     return H2hLeagueMatch;
 }());
 exports.H2hLeagueMatch = H2hLeagueMatch;
+var H2hLeague = /** @class */ (function () {
+    function H2hLeague() {
+    }
+    return H2hLeague;
+}());
+exports.H2hLeague = H2hLeague;
+var H2hLeagueStandings = /** @class */ (function () {
+    function H2hLeagueStandings() {
+    }
+    return H2hLeagueStandings;
+}());
+exports.H2hLeagueStandings = H2hLeagueStandings;
 var H2hLeagueEntry = /** @class */ (function () {
     function H2hLeagueEntry() {
     }

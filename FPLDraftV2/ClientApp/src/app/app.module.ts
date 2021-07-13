@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -6,9 +7,12 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { AdminComponent } from './admin/admin.component';
 import { HomeComponent } from './home/home.component';
 import { FavouritelistComponent } from './favouritelist/favouritelist.component';
 import { DraftComponent } from './draft/draft.component';
+import { DraftHeaderComponent } from './draft/draft-header/draft-header.component';
+import { DraftSelectingComponent } from './draft/draft-selecting/draft-selecting.component';
 import { ConfirmPlayerComponent } from './controls/confirm-player/confirm-player.component';
 import { TerminalComponent } from './terminal/terminal.component';
 import { TerminalPlayerComponent } from './controls/terminal-player/terminal-player.component';
@@ -41,19 +45,24 @@ import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TableComponent } from './live/table/table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AdminComponent,
     NavMenuComponent,
     HomeComponent,
     FavouritelistComponent,
     DraftComponent,
+    DraftHeaderComponent,
+    DraftSelectingComponent,
     TerminalPlayerComponent,
     ConfirmPlayerComponent,
     TerminalComponent,
     PreviewSquadComponent,
     LiveFixtureComponent,
+    TableComponent,
 
     // fancast:
     FancastDraftComponent,
@@ -69,10 +78,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'admin', component: AdminComponent },
       { path: 'favouritelist', component: FavouritelistComponent },
       { path: 'draft', component: DraftComponent },
       { path: 'terminal', component: TerminalComponent },
       { path: 'livefixture/:leagueId/:gameweekId/:id', component: LiveFixtureComponent },
+      { path: 'livetable/:leagueId', component: TableComponent },
       { path: 'fancast', component: FancastDraftComponent },
       { path: 'fancastterminal', component: FancastTerminalComponent },
       { path: 'fancastreview', component: FancastReviewComponent }
