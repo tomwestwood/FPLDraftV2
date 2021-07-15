@@ -31,7 +31,7 @@ export class AdminComponent implements OnInit {
 
         if (unset) {
           if (draft.status_id == DraftStatuses.SealedBids || draft.status_id == DraftStatuses.CheckingBids || draft.status_id == DraftStatuses.BidsReceived) {
-            this.current_pick = draft.draft_manager_picks.filter(dmp => dmp.nominator_id == draft.draft_manager_id /* && dmp.pick_order == draft.draft_round */).reduce((p, c) => p.id > c.id ? p : c);
+            this.current_pick = draft.draft_manager_picks.filter(dmp => dmp.nominator_id == draft.draft_manager_id && dmp.pick_order == draft.draft_round).reduce((p, c) => p.id > c.id ? p : c);
             this.current_pick.player = this.fplBase.elements.find(p => p.id == this.current_pick.player_id);
           }
         }
@@ -78,6 +78,17 @@ export class AdminComponent implements OnInit {
         }, 10000);
       });
     }
+  }
+
+  noBids(): void {
+    this.current_pick.pick_order = this.draft.draft_round;
+    this.current_pick.draft_manager_id = this.draft.draft_manager_id;
+    this.current_pick.signed_price = this.current_pick.player.now_cost;
+    this.draft.draft_manager_picks.push(this.current_pick);
+
+    this.draftControllerService.updatePick(this.current_pick).subscribe((savedPick: DraftManagerPick) => {
+      this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
+    });
   }
 
   switchDraftDirection(): void {

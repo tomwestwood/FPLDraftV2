@@ -1,33 +1,15 @@
 <div class="terminal-container" *ngIf="draft && squadTicker">
   <div class="terminal-top">
-    <div class="terminal-left-sidebar">
-
-      <div class="terminal-date-time">
-        <h2>{{draft.draft_name}}</h2>
-      </div>
-
-      <mat-divider></mat-divider>
-
-      <div class="round-info">
-        <div class="round-number">Round {{draft.draft_round}}</div>
-        <div class="round-picks" *ngIf="picksTicker">
-          <div *ngFor="let roundManager of picksTicker" class="round-pick" [ngClass]="{'no-pick': roundManager.has_picked_this_round || (!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed > draft.draft_manager.draft_seed : roundManager.draft_seed < draft.draft_manager.draft_seed), 'current-pick': roundManager.id == draft.draft_manager.id}">
-            <img class="round-pick-badge" src="{{roundManager.team_image_url}}" />
-            <div class="round-pick-name">{{roundManager.team_name}}</div>
-            <span *ngIf="roundManager.has_picked_this_round" class="status-desc status-icon material-icons">done</span>
-            <span *ngIf="(!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed > draft.draft_manager.draft_seed : roundManager.draft_seed < draft.draft_manager.draft_seed)" class="status-desc status-icon material-icons">block</span>
-            <span *ngIf="roundManager.id == draft.draft_manager.id" class="status-desc status-icon material-icons arrow fill-pink">{{draft.direction ? 'arrow_upward' : 'arrow_downward'}}</span>
-          </div>
-        </div>
-      </div>
-
-      
-
-    </div>
     <div class="terminal-top-main">
       <div class="terminal-main-content">
         <div class="terminal-draft-status" *ngIf="!breakingNews">
-          
+          <div class="terminal-draft-manager" *ngIf="managerUpdated" [@flyInOut]>
+            <img class="terminal-draft-manager-badge" src="{{draft.draft_manager.team_image_url}}" />
+            <div class="terminal-draft-manager-info">
+              <div>{{draft.draft_manager.name}}</div>
+              <div>{{draft.draft_manager.team_name}}</div>
+            </div>
+          </div>
           <mat-divider style="height: 100%; margin: 32px;" [vertical]="true"></mat-divider>
           <div class="terminal-draft-status-info">
             <div *ngIf="statusUpdated  && draft.status_id != 5" style="display: flex; align-content: center; align-items: center;" [@flyInOut]>
@@ -81,7 +63,11 @@
     </div>
     <div class="terminal-right-sidebar">
       <div class="terminal-right-header">
-        
+        <div class="terminal-date-time">
+          <div class="terminal-time">WV1 Draft</div>
+          <div class="terminal-date">Friday 4th September</div>
+        </div>
+        <img class="terminal-logo" src="../../assets/draft_tv.png" />
       </div>
       <mat-divider class="terminal-divider"></mat-divider>
       <div class="terminal-team-header" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">

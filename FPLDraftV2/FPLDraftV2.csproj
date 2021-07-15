@@ -73,6 +73,7 @@
     <None Remove="ClientApp\src\app\services\draft.service.ts" />
     <None Remove="ClientApp\src\app\services\fpl.service.ts" />
     <None Remove="ClientApp\src\app\services\signalR.service.ts" />
+    <None Remove="ClientApp\src\app\terminal-old\terminal-old.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal.component.ts" />
   </ItemGroup>
 
@@ -122,6 +123,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\services\fpl.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\terminal-old\terminal-old.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

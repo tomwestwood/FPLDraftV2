@@ -47,7 +47,10 @@ export class DraftManager {
   draft_squad: DraftSquad;
   fancast_draft_squad: FancastDraftSquad;
 
-  bid: number;  
+  bid: number;
+
+  // special:
+  has_picked_this_round: boolean;
 }
 export class DraftManagerPick {
   id: number;
@@ -102,6 +105,11 @@ export class SquadTicker {
   ticker_timer: number;
   ticker_timeout: NodeJS.Timeout;
 }
+export class RoundPicks {
+  round: number;
+  draft_managers: DraftManager[];
+}
+
 export class FancastSquadTicker {
   ticker_manager: DraftManager;
   ticker_squad: FancastDraftSquad;
@@ -140,9 +148,19 @@ export class DraftFunctions {
     });
 
     basicDraft.draft_manager_picks = [];
+    basicDraft.draft_manager.draft_manager_picks = [];
     draft.draft_manager_picks.forEach(dmp => {
       basicDraft.draft_manager_picks.push(this.getBasicDraftManagerPickObject(dmp, false));
+      if (dmp.draft_manager_id == draft.draft_manager.id) {
+        basicDraft.draft_manager.draft_manager_picks.push(this.getBasicDraftManagerPickObject(dmp, false));
+      }
     });
+
+    if (draft.draft_manager.draft_squad) {
+      basicDraft.draft_manager.draft_squad = draft.draft_manager.draft_squad;
+    } else {
+      basicDraft.draft_manager.draft_squad = this.getDraftSquadForManager(basicDraft.draft_manager);
+    }
 
     return basicDraft;
   }
@@ -212,36 +230,21 @@ export class DraftFunctions {
   static getDraftSquadForManager(manager: DraftManager): DraftSquad {
     var squad = new DraftSquad();
     if (manager.draft_manager_picks) {
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 1)[0])
-        squad.gk_1 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 1)[0]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 1)[1])
-        squad.gk_2 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 1)[1]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[0])
-        squad.def_1 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[0]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[1])
-        squad.def_2 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[1]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[2])
-        squad.def_3 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[2]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[3])
-        squad.def_4 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[3]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[4])
-        squad.def_5 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[4]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[0])
-        squad.mid_1 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[0]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[1])
-        squad.mid_2 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[1]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[2])
-        squad.mid_3 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[2]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[3])
-        squad.mid_4 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[3]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[4])
-        squad.mid_5 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[4]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 4)[0])
-        squad.fw_1 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 4)[0]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 4)[1])
-        squad.fw_2 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 4)[1]).player;
-      if (manager.draft_manager_picks.filter(pick => pick.player.position.id == 4)[2])
-        squad.fw_3 = DraftFunctions.getBasicDraftManagerPickObject(manager.draft_manager_picks.filter(pick => pick.player.position.id == 4)[2]).player;
+      squad.gk_1 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 1)[0]?.player ?? undefined;
+      squad.gk_2 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 1)[1]?.player ?? undefined;
+      squad.def_1 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[0]?.player ?? undefined;
+      squad.def_2 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[1]?.player ?? undefined;
+      squad.def_3 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[2]?.player ?? undefined;
+      squad.def_4 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[3]?.player ?? undefined;
+      squad.def_5 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[4]?.player ?? undefined;
+      squad.mid_1 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[0]?.player ?? undefined;
+      squad.mid_2 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[1]?.player ?? undefined;
+      squad.mid_3 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[2]?.player ?? undefined;
+      squad.mid_4 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[3]?.player ?? undefined;
+      squad.mid_5 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 3)[4]?.player ?? undefined;
+      squad.fw_1 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 4)[0]?.player ?? undefined;
+      squad.fw_2 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 4)[1]?.player ?? undefined;
+      squad.fw_3 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 4)[2]?.player ?? undefined;
     }
     return squad;
   }

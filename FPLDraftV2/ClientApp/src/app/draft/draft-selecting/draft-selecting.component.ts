@@ -97,7 +97,7 @@ export class DraftSelectingComponent implements OnInit {
   }
 
   updateFilter(): void {
-    let tempFplBase = this.fplBase.elements.filter(a => a.draft_manager == undefined);
+    let tempFplBase = this.fplBase.elements.filter(a => !this.draft.draft_manager_picks.some(dmp => dmp.player_id == a.id));
     if (this.searchFilter?.position_id > 0)
       tempFplBase = tempFplBase.filter(a => a.position.id == this.searchFilter.position_id);
     if (this.searchFilter?.club_id > 0)

@@ -12,8 +12,6 @@ import { DraftService } from '../services/draft.service';
   styleUrls: ['./draft.component.scss']
 })
 export class DraftComponent implements OnInit {
-  draftService: DraftService;
-
   draftId: number = 13;
   isDraftAuction: boolean = true;
   fplBase: FPLBase;
@@ -21,9 +19,8 @@ export class DraftComponent implements OnInit {
   pick: BehaviorSubject<DraftManagerPick>;
   current_pick: DraftManagerPick;
 
-  constructor(private fplService: FplService, private draftControllerService: DraftControllerService, draftService: DraftService) {
+  constructor(private draftControllerService: DraftControllerService) {
     draftControllerService.getDraft(this.draftId);
-    this.draftService = draftService;
   }
 
   ngOnInit() {

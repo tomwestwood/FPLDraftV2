@@ -24,5 +24,6 @@ namespace FPLV2Core.Models.FPLDraft
 
         public IEnumerable<DraftManagerPick> draft_manager_favourites { get; set; }
         public IEnumerable<DraftManagerFavourite> draft_manager_picks { get; set; }
+        public DraftSquad draft_squad { get; set; }
     }
 }
