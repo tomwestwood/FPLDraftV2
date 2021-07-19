@@ -131,21 +131,106 @@ $total-items: 15;
     .terminal-top-main {
       flex-grow: 1;
       margin: 32px;
-      margin-bottom: 0px;
-      background-color: #3AAFA9;
-      border-radius: 6px;
-      border: 6px solid white;
 
       .terminal-main-content {
-        height: 100%;
+
+        .terminal-update {
+          display: flex;
+          margin-right: 64px;
+
+          .terminal-update-header {
+            display: flex;
+            align-items: center;
+
+            .terminal-update-image {
+              height: 80px;
+              width: 80px;
+              border: 5px solid #c2185b;
+              border-radius: 50%;
+              margin-right: 16px;
+
+              .span-container {
+                display: flex;
+                width: 100%;
+                height: 100%;
+                align-items: center;
+
+                span {
+                  width: 100%;
+                  text-align: center;
+                }
+              }
+            }
+
+            .terminal-timer {
+              margin-right: 16px;
+              justify-content: center;
+              align-self: center;
+              display: flex;
+              align-items: center;
+
+              .spinner {
+                position: relative;
+              }
+
+              .timer-text {
+                position: absolute;
+                text-align: center;
+              }
+            }
+
+            .terminal-update-heading {
+              display: flex;
+              flex-direction: column;
+
+              .bids-container {
+                display: flex;
+                flex-wrap: wrap;
+                margin-top: 4px;
+
+                .bid {
+                  margin-right: 8px;
+                  background-color: #c2185b;
+                  padding: 4px;
+                  padding-right: 16px;
+                  padding-left: 16px;
+                  border-radius: 4px;
+                  display: flex;
+
+                  &.max-bid {
+                      background-color: forestgreen;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .terminal-link {
+          height: 24px;
+          width: 42px;
+          border-right: 5px solid #c2185b;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         .terminal-draft-status {
           height: 100%;
           display: flex;
-          align-items: center;
-          justify-content: center;
-
-
 
           .high-divider {
             height: 100%;
@@ -154,8 +239,6 @@ $total-items: 15;
 
           .terminal-draft-status-info {
             width: 50%;
-            font-size: xx-large;
-            font-weight: bold;
 
             .terminal-announce-player {
               display: flex;
@@ -177,6 +260,53 @@ $total-items: 15;
                 }
               }
             }
+          }
+        }
+
+        .terminal-squad {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          margin-top: 148px;
+
+          .terminal-main-players {
+
+            li {
+              display: block;
+              animation: fadeIn 0.5s linear;
+              animation-fill-mode: both;
+              margin-left: -48px;
+            }
+
+            @for $i from 1 through $total-items {
+              li:nth-child(#{$i}) {
+                animation-delay: .1s * $i;
+              }
+            }
+
+            @-webkit-keyframes fadeIn {
+              0% {
+                opacity: 0;
+                top: 100px;
+              }
+
+              75% {
+                opacity: 0.5;
+                top: 0px;
+              }
+
+              100% {
+                opacity: 1;
+              }
+            }
+          }
+
+          .terminal-main-players-pitch {
+            background-color: green;
+            border: 4px solid white;
+            margin-left: 128px;
+            height: 600px;
+            width: 600px;
           }
         }
       }

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { Club, Player, FPLBase } from '../models/fpl';
 import { FplService } from '../services/fpl.service';
 import { DraftService } from '../services/draft.service';
-import { Draft, DraftManager, DraftManagerFavourite, DraftManagerPick, DraftFunctions, SquadTicker, DraftSquad, RoundPicks } from '../models/draft';
+import { Draft, DraftManager, DraftManagerFavourite, DraftManagerPick, DraftFunctions, SquadTicker, DraftSquad, RoundPicks, DraftStatuses, SealedBid } from '../models/draft';
 import { SearchFilter } from '../models/searchFilter';
 import { MatTableDataSource } from '@angular/material/table';
 import { TemplateParser } from '@angular/compiler';
@@ -46,6 +46,7 @@ export class TerminalComponent implements OnInit {
   draft: Draft;
   timer: number = 30;
   timeout: NodeJS.Timeout;
+  currentPick: DraftManagerPick;
   announcementPick: DraftManagerPick;
   squadTicker: SquadTicker;
   picksTicker: DraftManager[];
@@ -54,6 +55,8 @@ export class TerminalComponent implements OnInit {
   managerUpdated: boolean;
   breakingNews: boolean;
   announcingPick: boolean;
+
+  signingManager: DraftManager;
 
   tickerItems: string[];
 
@@ -88,9 +91,11 @@ export class TerminalComponent implements OnInit {
 
         this.stopTimer();
         if (this.draft.status_id == 4) {
-          this.startTimer();
+          this.startDraftingTimer();
         } else if (this.draft.status_id == 6) {
           this.announceTimeout();
+        } else if (this.draft.status_id == 7) {
+          this.startSealedBidsTimer();
         }
 
         this.statusUpdated = false;
@@ -104,7 +109,15 @@ export class TerminalComponent implements OnInit {
 
         this.picksTicker = this.draftControllerService.getRoundPickStatus();
         //let roundsGroup = this.picksTicker.map(p => p.round);
-        //let 
+        //let
+
+        if (this.draft.status_id >= DraftStatuses.SealedBids) {
+          this.currentPick = this.draftControllerService.getCurrentPick();
+        }
+
+        if (this.draft.status_id == DraftStatuses.SigningComplete) {
+          this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
+        }
       }
     });
 
@@ -134,7 +147,7 @@ export class TerminalComponent implements OnInit {
     clearInterval(this.timeout);
   }
 
-  private startTimer(): void {
+  private startDraftingTimer(): void {
     this.stopTimer();
     this.timer = 30;
     this.draftingAudio.currentTime = 0;
@@ -150,12 +163,46 @@ export class TerminalComponent implements OnInit {
       if (this.timer > 0) {
         this.timer--;
       } else {
-        this.timeElapsed();
+        this.draftingTimeElapsed();
       }
     }, 1000);
   }
-  private timeElapsed(): void {
+  private draftingTimeElapsed(): void {
     this.stopTimer();
+  }
+
+  private startSealedBidsTimer(): void {
+    this.stopTimer();
+    this.timer = 10;
+    this.draftingAudio.currentTime = 0;
+    //var playPromise = this.draftingAudio.play();
+
+    //if (playPromise !== undefined) {
+    //  playPromise.then(_ => {
+    //  }).catch(error => {
+    //  });
+    //}
+
+    this.timeout = setInterval(() => {
+      if (this.timer > 0) {
+        this.timer--;
+      } else {
+        this.sealedBidsTimerElapsed();
+      }
+    }, 1000);
+  }
+
+  private sealedBidsTimerElapsed(): void {
+    this.draftControllerService.setDraftStatus(DraftStatuses.CheckingBids);
+    this.stopTimer();
+  }
+
+  getMaxBid(dmp: DraftManagerPick): SealedBid {
+    return this.draftControllerService.getMaxBid(dmp);
+  }
+
+  getMaxBidAmount(dmp: DraftManagerPick): number {
+    return this.draftControllerService.getMaxBidAmount(dmp);
   }
 
   // announce nomination:

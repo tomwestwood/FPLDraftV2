@@ -31,8 +31,7 @@ export class AdminComponent implements OnInit {
 
         if (unset) {
           if (draft.status_id == DraftStatuses.SealedBids || draft.status_id == DraftStatuses.CheckingBids || draft.status_id == DraftStatuses.BidsReceived) {
-            this.current_pick = draft.draft_manager_picks.filter(dmp => dmp.nominator_id == draft.draft_manager_id && dmp.pick_order == draft.draft_round).reduce((p, c) => p.id > c.id ? p : c);
-            this.current_pick.player = this.fplBase.elements.find(p => p.id == this.current_pick.player_id);
+            this.current_pick = this.draftControllerService.getCurrentPick();
           }
         }
       }
@@ -65,7 +64,8 @@ export class AdminComponent implements OnInit {
           draft_manager_name: dm.name,
           player_id: this.current_pick.player_id,
           player_name: this.current_pick.player.name,
-          bid_eligible: true // todo: check this...
+          bid_eligible: true, // todo: check this...
+          is_max_bid: false
         };        
         sealed_bids.push(sealed_bid);
       });

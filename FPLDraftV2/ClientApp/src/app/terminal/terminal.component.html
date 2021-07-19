@@ -1,5 +1,6 @@
 <div class="terminal-container" *ngIf="draft && squadTicker">
   <div class="terminal-top">
+
     <div class="terminal-left-sidebar">
 
       <div class="terminal-date-time">
@@ -16,72 +17,154 @@
             <div class="round-pick-name">{{roundManager.team_name}}</div>
             <span *ngIf="roundManager.has_picked_this_round" class="status-desc status-icon material-icons">done</span>
             <span *ngIf="(!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed > draft.draft_manager.draft_seed : roundManager.draft_seed < draft.draft_manager.draft_seed)" class="status-desc status-icon material-icons">block</span>
-            <span *ngIf="roundManager.id == draft.draft_manager.id" class="status-desc status-icon material-icons arrow fill-pink">{{draft.direction ? 'arrow_upward' : 'arrow_downward'}}</span>
+            <span *ngIf="roundManager.id == draft.draft_manager.id" class="status-desc status-icon material-icons arrow fill-pink">arrow_downward</span>
+            <!--<span *ngIf="roundManager.id == draft.draft_manager.id" class="status-desc status-icon material-icons arrow fill-pink">{{draft.direction ? 'arrow_upward' : 'arrow_downward'}}</span>-->
           </div>
         </div>
       </div>
 
-      
-
     </div>
+
     <div class="terminal-top-main">
       <div class="terminal-main-content">
-        <div class="terminal-draft-status" *ngIf="!breakingNews">
-          
-          <mat-divider style="height: 100%; margin: 32px;" [vertical]="true"></mat-divider>
-          <div class="terminal-draft-status-info">
-            <div *ngIf="statusUpdated  && draft.status_id != 5" style="display: flex; align-content: center; align-items: center;" [@flyInOut]>
-              {{convertStatusToString(draft.status_id)}} <div style="margin-left: 64px; font-size: 120px; color: deeppink;" *ngIf="draft.status_id == 4"><b>{{timer}}</b></div>
+
+
+        <div *ngIf="draft.status_id >= 2" class="terminal-update">
+          <div class="terminal-update-header">
+            <img class="terminal-update-image" src="{{draft.draft_manager.team_image_url}}" />
+            <div class="terminal-update-heading">
+              <div>{{draft.draft_manager.team_name}}</div>
+              <div>{{draft.draft_manager.name}}</div>
             </div>
-            <div *ngIf="announcementPick && announcingPick && draft.status_id == 5" [@flyInOut]>
-              <div class="terminal-announce-player">
-                <div class="terminal-announce-info">
-                  <div>{{announcementPick.player.first_name}} {{announcementPick.player.web_name}}</div>
-                  <div>{{announcementPick.player.position.singular_name}}</div>
-                  <div>{{announcementPick.player.club.name}}</div>
-                  <div>£{{announcementPick.player.now_cost / 10}}m</div>
-                </div>
-                <div style="flex-grow: 1;"></div>
-                <div class="terminal-image-info">
-                  <img *ngIf="announcementPick.player" class="terminal-image" src="{{announcementPick.player.photo_url}}" (error)="replacePlayerImageNotFound($event, player)" />
-                  <img *ngIf="announcementPick.player" class="terminal-image" src="{{announcementPick.player.club.badge_url}}" (error)="replacePlayerImageNotFound($event, player)" />
-                </div>
-              </div>
+          </div>
+
+          <!-- never be shown... -->
+          <!-- todo: probably need to move this... -->
+          <!--<ul *ngIf="draft.draft_manager.draft_squad && draft.status_id == 99">
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_1" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_2" [position]="'GK'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_1" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_2" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_3" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_4" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.def_5" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_1" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_2" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_3" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_4" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_5" [position]="'MID'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_1" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_2" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+    </ul>-->
+        </div>
+
+        <mat-divider *ngIf="draft.status_id >= 4" [vertical]="true" class="terminal-link"></mat-divider>
+
+        <div class="terminal-update" *ngIf="draft.status_id >= 4">
+          <div class="terminal-update-header">
+            <div class="terminal-timer">
+              <mat-progress-spinner class="spinner" color="primary" [diameter]="80" [value]="draft.status_id == 4 ? (timer/30)*100 : 100"></mat-progress-spinner>
+              <div *ngIf="draft.status_id == 4" class="timer-text">{{timer}}</div>
+              <span *ngIf="draft.status_id > 4 && draft.status_id != 6" class="status-desc status-icon material-icons timer-text">done</span>
+              <span *ngIf="draft.status_id == 6" class="status-desc status-icon material-icons timer-text">timer</span>
             </div>
-            <div *ngIf="statusUpdated && !breakingNews && !announcingPick && (draft.status_id == 3 || draft.status_id == 5)">
-             
-              <ul class="terminal-team-players big-screen" *ngIf="draft.draft_manager.draft_squad">
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_1" [position]="'GK'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_2" [position]="'GK'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_1" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_2" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_3" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_4" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.def_5" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_1" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_2" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_3" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_4" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_5" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_1" [position]="'FW'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_2" [position]="'FW'" [@fadeInOut]></terminal-player></li>
-                <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
-              </ul>
+            <div class="terminal-update-heading">
+              <div>{{draft.status_id == 4 ? 'Now nominating...' : draft.status_id == 6 ? 'Timeout' : 'Nomination successful'}}</div>
             </div>
           </div>
         </div>
-        <div class="breaking-news" *ngIf="breakingNews">
-          <div>BREAKING NEWS</div>
-          <mat-progress-bar [color]="Accent" mode="indeterminate" class="breaking-bar"></mat-progress-bar>
+
+        <mat-divider *ngIf="draft.status_id >= 7" [vertical]="true" class="terminal-link"></mat-divider>
+
+        <div class="terminal-update" *ngIf="draft.status_id >= 7 && currentPick">
+          <div class="terminal-update-header">
+            <img class="terminal-update-image" src="{{currentPick.player.photo_url}}" />
+            <div class="terminal-update-heading">
+              <div>{{draft.draft_manager.team_name}} nominate {{currentPick.player.first_name}} {{currentPick.player.web_name}} of {{currentPick.player.club.name}} ({{currentPick.player.position.singular_name_short}})</div>
+              <div>Value: £{{currentPick.player.now_cost / 10}}m</div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        <mat-progress-bar *ngIf="draft.status_id == 4" [color]="Warn" [value]="(timer/30)*100"></mat-progress-bar>
+
+        <mat-divider *ngIf="draft.status_id == 7" [vertical]="true" class="terminal-link"></mat-divider>
+
+        <div class="terminal-update" *ngIf="draft.status_id == 7">
+          <div class="terminal-update-header">
+            <div class="terminal-timer">
+              <mat-progress-spinner class="spinner" color="primary" [diameter]="80" [value]="draft.status_id == 7 ? (timer/10)*100 : 100"></mat-progress-spinner>
+              <div class="timer-text">{{timer}}</div>
+            </div>
+            <div class="terminal-update-heading">
+              <div>Place your sealed bids now!</div>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider *ngIf="draft.status_id == 8" [vertical]="true" class="terminal-link"></mat-divider>
+
+        <div class="terminal-update" *ngIf="draft.status_id == 8">
+          <div class="terminal-update-header">
+            <div class="terminal-timer">
+              <mat-spinner class="spinner" color="primary" [diameter]="80"></mat-spinner>
+              <span class="status-desc status-icon material-icons timer-text">savings</span>
+            </div>
+            <div class="terminal-update-heading">
+              <div>Your independent adjudicator is now checking and entering any bids...</div>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider *ngIf="draft.status_id >= 9 && draft.status_id < 11" [vertical]="true" class="terminal-link"></mat-divider>
+
+        <div class="terminal-update" *ngIf="draft.status_id >= 9 && draft.status_id < 11">
+          <div class="terminal-update-header">
+            <div class="terminal-update-image">
+              <div class="span-container">
+                <span class="status-desc status-icon material-icons">attach_money</span>
+              </div>
+            </div>
+            <div class="terminal-update-heading">
+              <div>BIDS RECEIVED!</div>
+              <div class="bids-container">
+                <div [ngClass]="{'max-bid': bid.is_max_bid}" class="bid" *ngFor="let bid of currentPick.sealed_bids">{{bid.draft_manager_name}}: £{{bid.bid_amount}}m <span *ngIf="bid.is_max_bid" class="status-desc status-icon material-icons timer-text">done</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider *ngIf="draft.status_id >= 10 && draft.status_id < 11" [vertical]="true" class="terminal-link"></mat-divider>
+
+        <div class="terminal-update" *ngIf="draft.status_id >= 10 && draft.status_id < 11">
+          <div class="terminal-update-header">
+            <div class="terminal-timer">
+              <mat-spinner class="spinner" color="primary" [diameter]="80"></mat-spinner>
+              <span class="status-desc status-icon material-icons timer-text">warning_amber</span>
+            </div>
+            <div class="terminal-update-heading">
+              <div>FINAL CHANCE!</div>
+              <div>{{draft.draft_manager.team_name}} have final refusal on {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{getMaxBidAmount(currentPick)}}m</div>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider *ngIf="draft.status_id == 11" [vertical]="true" class="terminal-link"></mat-divider>
+
+        <div *ngIf="draft.status_id == 11" class="terminal-update">
+          <div class="terminal-update-header">
+            <img class="terminal-update-image" src="{{signingManager.team_image_url}}" />
+            <div class="terminal-update-heading">
+              <div>{{signingManager.team_name}} sign {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{currentPick.signed_price}}m <span class="status-desc status-icon material-icons" style="vertical-align: middle; margin-left: 8px; color: green;">done</span></div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
+
     <div class="terminal-right-sidebar">
       <div class="terminal-right-header">
-        
+        Teams
       </div>
       <mat-divider class="terminal-divider"></mat-divider>
       <div class="terminal-team-header" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
@@ -110,7 +193,9 @@
         <li><terminal-player [player]="squadTicker.ticker_squad.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
       </ul>
     </div>
+
   </div>
+
   <div class="terminal-bottom">
     <div id="news_ticker">
       <img class="terminal-logo" src="../../assets/draft_tv.png" />
@@ -120,4 +205,5 @@
       </ul>
     </div>
   </div>
+
 </div>

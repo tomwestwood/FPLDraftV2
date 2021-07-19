@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { DraftManagerFavourite, Draft, DraftManagerPick, DraftFunctions, DraftManager, DraftStatuses, RoundPicks } from '../../models/draft';
+import { DraftManagerFavourite, Draft, DraftManagerPick, DraftFunctions, DraftManager, DraftStatuses, RoundPicks, SealedBid } from '../../models/draft';
 import { FplService } from '../../services/fpl.service';
 import { SignalRService } from '../../services/signalR.service';
 import { FPLBase } from '../../models/fpl';
@@ -99,6 +99,19 @@ export class DraftControllerService {
 
     this.draft.value.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.value.draft_manager);
     this.updateDraftNotification(this.draft.value);
+  }
+
+  getCurrentPick(): DraftManagerPick {
+    let current_pick = this.draft.value.draft_manager_picks.filter(dmp => dmp.nominator_id == this.draft.value.draft_manager_id && dmp.pick_order == this.draft.value.draft_round).reduce((p, c) => p.id > c.id ? p : c);
+    if (current_pick) {
+      current_pick.player = this.fplBase.value.elements.find(p => p.id == current_pick.player_id);
+
+      if (current_pick.sealed_bids.length > 0) {
+        this.getMaxBid(current_pick);
+      }
+    }
+
+    return current_pick;
   }
 
   getNext12Picks(): RoundPicks[] {
@@ -199,5 +212,26 @@ export class DraftControllerService {
 
   draftIsAuction(): boolean {
     return true;
+  }
+
+  getMaxBid(dmp: DraftManagerPick): SealedBid {
+    let maxBids = dmp.sealed_bids.filter(b => b.bid_amount == this.getMaxBidAmount(dmp));
+    let maxBid: SealedBid;
+
+    if (this.draft.value.direction)
+      maxBid = maxBids.reduce((p, c) => this.getManagerById(p.draft_manager_id).draft_seed > this.getManagerById(c.draft_manager_id).draft_seed ? p : c);
+    else
+      maxBid = maxBids.reduce((p, c) => this.getManagerById(p.draft_manager_id).draft_seed < this.getManagerById(c.draft_manager_id).draft_seed ? p : c);
+
+    maxBid.is_max_bid = true;
+    return maxBid;
+  }
+
+  getMaxBidAmount(dmp: DraftManagerPick): number {
+    return dmp.sealed_bids.reduce((p, c) => p.bid_amount > c.bid_amount ? p : c).bid_amount;
+  }
+
+  getManagerById(id: number): DraftManager {
+    return this.draft.value.draft_managers.find(dm => dm.id == id);
   }
 }

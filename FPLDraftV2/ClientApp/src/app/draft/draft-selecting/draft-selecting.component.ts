@@ -133,10 +133,10 @@ export class DraftSelectingComponent implements OnInit {
     dmp.player = player;
     dmp.draft_id = this.draft.id;
     dmp.value_price = player.now_cost;
+    dmp.pick_order = this.draft.draft_round;
 
     if (!isDraftAuction) {
       dmp.signed_price = player.now_cost;
-      dmp.pick_order = this.draft.draft_manager.draft_manager_picks.length + 1;
       dmp.draft_manager_id = this.draft.draft_manager_id;
     }
 
@@ -168,11 +168,6 @@ export class DraftSelectingComponent implements OnInit {
 
       this.draftControllerService.saveDraft(this.draft).subscribe((draft: Draft) => {
         this.draftControllerService.draft.next(this.draft);
-
-        // todo: remove
-        setTimeout(() => {
-          this.draftControllerService.setDraftStatus(DraftStatuses.CheckingBids);
-        }, 10000);
       });
     });
   }

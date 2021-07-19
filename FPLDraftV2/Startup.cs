@@ -21,7 +21,9 @@ namespace FPLDraftV2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR().AddAzureSignalR("Endpoint=https://fplplussignalr.service.signalr.net;AccessKey=qjIIQiL75LIh/fEjCr8JabegNkkuyI69IPHgmx+aYPM=;Version=1.0;");
+            //services.AddSignalR().AddAzureSignalR("Endpoint=https://fplplussignalr.service.signalr.net;AccessKey=qjIIQiL75LIh/fEjCr8JabegNkkuyI69IPHgmx+aYPM=;Version=1.0;");
+            services.AddSignalR(e => e.MaximumReceiveMessageSize = 102400000).AddAzureSignalR("Endpoint=https://fplplussignalr.service.signalr.net;AccessKey=qjIIQiL75LIh/fEjCr8JabegNkkuyI69IPHgmx+aYPM=;Version=1.0;");
+
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory

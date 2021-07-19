@@ -37,6 +37,8 @@ var DraftManagerPick = /** @class */ (function () {
 exports.DraftManagerPick = DraftManagerPick;
 var SealedBid = /** @class */ (function () {
     function SealedBid() {
+        this.bid_eligible = true;
+        this.is_max_bid = false;
     }
     return SealedBid;
 }());

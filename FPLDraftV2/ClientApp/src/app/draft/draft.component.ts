@@ -69,15 +69,15 @@ export class DraftComponent implements OnInit {
   }
 
   completePick(): void {
-    this.draftControllerService.setNextDraftManager();
     this.draftControllerService.setDraftStatus(DraftStatuses.Waiting);
+    this.draftControllerService.setNextDraftManager();
   }
 
   getMaxBid(dmp: DraftManagerPick): SealedBid {
-    return dmp.sealed_bids.reduce((p, c) => p.bid_amount > c.bid_amount ? p : c);
+    return this.draftControllerService.getMaxBid(dmp);
   }
 
   getMaxBidAmount(dmp: DraftManagerPick): number {
-    return this.getMaxBid(dmp).bid_amount;
+    return this.draftControllerService.getMaxBidAmount(dmp);
   }
 }

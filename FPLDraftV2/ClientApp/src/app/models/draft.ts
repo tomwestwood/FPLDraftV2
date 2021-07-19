@@ -72,7 +72,8 @@ export class SealedBid {
   player_id: number;
   player_name: string;
   bid_amount: number;
-  bid_eligible: boolean;
+  bid_eligible: boolean = true;
+  is_max_bid: boolean = false;
 }
 export class DraftManagerFavourite {
   id: number;
