@@ -40,7 +40,9 @@ export class DraftComponent implements OnInit {
     });
 
     this.draftControllerService.pick.subscribe((pick: DraftManagerPick) => {
-      this.pick.next(pick);
+      if (pick) {
+        this.pick.next(pick);
+      }
     });
   }
 

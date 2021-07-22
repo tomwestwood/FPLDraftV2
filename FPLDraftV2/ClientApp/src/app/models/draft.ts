@@ -214,8 +214,8 @@ export class DraftFunctions {
   }
 
   static getDraftPicksForManager(manager: DraftManager, draft: Draft, fplBase: FPLBase): DraftManagerPick[] {
-    if (draft.draft_manager_picks) {
-      manager.draft_manager_picks = draft.draft_manager_picks.filter(dmp => dmp.draft_manager_id == manager.id);
+    if (manager && draft.draft_manager_picks) {
+      manager.draft_manager_picks = draft.draft_manager_picks?.filter(dmp => dmp.draft_manager_id == manager.id) ?? [];
       manager.draft_manager_picks.forEach(dmp => {
         fplBase.elements.filter(e => e.id == dmp.player_id).forEach(e => {
           e.draft_manager_id = manager.id;

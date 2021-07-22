@@ -106,7 +106,7 @@ export class DraftControllerService {
     if (current_pick) {
       current_pick.player = this.fplBase.value.elements.find(p => p.id == current_pick.player_id);
 
-      if (current_pick.sealed_bids.length > 0) {
+      if (current_pick.sealed_bids?.length > 0) {
         this.getMaxBid(current_pick);
       }
     }

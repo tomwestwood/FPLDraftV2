@@ -168,8 +168,9 @@ var DraftFunctions = /** @class */ (function () {
         return basicSealedBid;
     };
     DraftFunctions.getDraftPicksForManager = function (manager, draft, fplBase) {
-        if (draft.draft_manager_picks) {
-            manager.draft_manager_picks = draft.draft_manager_picks.filter(function (dmp) { return dmp.draft_manager_id == manager.id; });
+        var _a, _b;
+        if (manager && draft.draft_manager_picks) {
+            manager.draft_manager_picks = (_b = (_a = draft.draft_manager_picks) === null || _a === void 0 ? void 0 : _a.filter(function (dmp) { return dmp.draft_manager_id == manager.id; })) !== null && _b !== void 0 ? _b : [];
             manager.draft_manager_picks.forEach(function (dmp) {
                 fplBase.elements.filter(function (e) { return e.id == dmp.player_id; }).forEach(function (e) {
                     e.draft_manager_id = manager.id;

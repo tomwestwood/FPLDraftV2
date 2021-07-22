@@ -18,6 +18,10 @@ import { TerminalComponent } from './terminal/terminal.component';
 import { TerminalPlayerComponent } from './controls/terminal-player/terminal-player.component';
 import { PreviewSquadComponent } from './controls/preview-squad/preview-squad.component';
 import { LiveFixtureComponent } from './live/fixture/liveFixture.component';
+import { TerminalWaitingComponent } from './terminal/terminal-waiting/terminal-waiting.component';
+import { TerminalNominationComponent } from './terminal/terminal-nomination/terminal-nomination.component';
+import { TerminalSigningComponent } from './terminal/terminal-signing/terminal-signing.component';
+import { TerminalTimeoutComponent } from './terminal/terminal-timeout/terminal-timeout.component';
 
 // fancast:
 import { FancastDraftComponent } from './fancast/draft/fancast-draft.component';
@@ -63,6 +67,10 @@ import { TableComponent } from './live/table/table.component';
     PreviewSquadComponent,
     LiveFixtureComponent,
     TableComponent,
+    TerminalWaitingComponent,
+    TerminalNominationComponent,
+    TerminalSigningComponent,
+    TerminalTimeoutComponent,
 
     // fancast:
     FancastDraftComponent,

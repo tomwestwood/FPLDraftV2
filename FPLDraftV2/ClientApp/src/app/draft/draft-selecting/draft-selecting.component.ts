@@ -135,8 +135,10 @@ export class DraftSelectingComponent implements OnInit {
     dmp.value_price = player.now_cost;
     dmp.pick_order = this.draft.draft_round;
 
-    if (!isDraftAuction) {
-      dmp.signed_price = player.now_cost;
+    let dmsLeftInRound = this.draftControllerService.getRemainingDraftManagersInRound(this.draft.draft_managers, this.draft.draft_round, this.draft.draft_manager.draft_seed, this.draft.direction).filter(dm => dm.id != this.draft.draft_manager.id);
+
+    if (!isDraftAuction || dmsLeftInRound.length == 0) {
+      dmp.signed_price = player.now_cost / 10;
       dmp.draft_manager_id = this.draft.draft_manager_id;
     }
 
@@ -146,7 +148,7 @@ export class DraftSelectingComponent implements OnInit {
       var basicPick = DraftFunctions.getBasicDraftManagerPickObject(savedDmp);
       this.draftControllerService.updatePickNotification(basicPick);
 
-      if (!isDraftAuction) {
+      if (!isDraftAuction || dmsLeftInRound.length == 0) {
         var player = this.fplBase.elements.find(a => a.id == savedDmp.player_id);
         if (player) {
           player.draft_manager = this.draft.draft_manager;
@@ -159,9 +161,9 @@ export class DraftSelectingComponent implements OnInit {
       this.draft.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.draft_manager);
       this.draftControllerService.draft.next(this.draft);
 
-      if (!isDraftAuction) {
+      if (!isDraftAuction || dmsLeftInRound.length == 0) {
         this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
-        this.draftControllerService.setNextDraftManager();
+        //this.draftControllerService.setNextDraftManager();
       } else {
         this.draftControllerService.setDraftStatus(DraftStatuses.SealedBids);
       }
@@ -193,11 +195,5 @@ export class DraftSelectingComponent implements OnInit {
     this.stopTimer();
 
     this.draftControllerService.setDraftStatus(DraftStatuses.Timeout);
-
-    // todo: remove
-    setTimeout(() => {
-      this.draftControllerService.setNextDraftManager();
-      this.draftControllerService.setDraftStatus(DraftStatuses.Waiting);
-    }, 5000);
   }
 }

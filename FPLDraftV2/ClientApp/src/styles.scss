@@ -27,6 +27,11 @@ body {
   font-family: Viga, Roboto, "Helvetica Neue", sans-serif;
 }
 
+mat-dialog-container {
+    background-color: #2B7A78 !important;
+    border: 3px solid white;
+}
+
 .player-selected {
   opacity: 0.3;
   cursor: not-allowed;

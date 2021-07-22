@@ -18,6 +18,7 @@
             <span *ngIf="roundManager.has_picked_this_round" class="status-desc status-icon material-icons">done</span>
             <span *ngIf="(!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed > draft.draft_manager.draft_seed : roundManager.draft_seed < draft.draft_manager.draft_seed)" class="status-desc status-icon material-icons">block</span>
             <span *ngIf="roundManager.id == draft.draft_manager.id" class="status-desc status-icon material-icons arrow fill-pink">arrow_downward</span>
+            <mat-spinner (color)="lime" *ngIf="draft.status_id == 7 && (!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed < draft.draft_manager.draft_seed : roundManager.draft_seed > draft.draft_manager.draft_seed)" [diameter]="30" class="status-desc status-icon material-icons arrow fill-pink"><span class="status-desc status-icon material-icons arrow fill-pink">done</span></mat-spinner>
             <!--<span *ngIf="roundManager.id == draft.draft_manager.id" class="status-desc status-icon material-icons arrow fill-pink">{{draft.direction ? 'arrow_upward' : 'arrow_downward'}}</span>-->
           </div>
         </div>
@@ -150,7 +151,7 @@
 
         <mat-divider *ngIf="draft.status_id == 11" [vertical]="true" class="terminal-link"></mat-divider>
 
-        <div *ngIf="draft.status_id == 11" class="terminal-update">
+        <div *ngIf="draft.status_id == 11 && signingManager" class="terminal-update">
           <div class="terminal-update-header">
             <img class="terminal-update-image" src="{{signingManager.team_image_url}}" />
             <div class="terminal-update-heading">

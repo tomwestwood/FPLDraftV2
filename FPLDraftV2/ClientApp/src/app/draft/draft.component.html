@@ -15,7 +15,7 @@
     <button mat-raised-button (click)="signPick(current_pick)">Yes</button>
     <button mat-raised-button (click)="passPick(current_pick)">No</button>
   </div>
-  <div *ngIf="draft.status_id == 11">
+  <div *ngIf="draft.status_id == 6 || draft.status_id == 11">
     <button mat-raised-button (click)="completePick()">Continue to next pick</button>
   </div>
 </div>

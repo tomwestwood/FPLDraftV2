@@ -1,0 +1,17 @@
+<div class="nomination-container">
+  <h2 class="nomination-container-header">NOMINATION:</h2>
+  <div class="nomination-player-container">
+    <div class="nomination-player-info">
+      <div class="player-info-line"><span style="margin-right: 8px;" class="material-icons icon">account_circle</span> {{currentPick.player.first_name}} {{currentPick.player.web_name}}</div>
+      <div class="player-info-line"><img style="margin-right: 8px; height: 24px; width: 24px;" src="{{currentPick.player.club.badge_url}}" /> {{currentPick.player.club.name}}</div>
+      <div class="player-info-line"><span style="margin-right: 8px;" class="material-icons icon">grid_on</span> {{currentPick.player.position.singular_name}}</div>
+      <div class="player-info-line"><span style="margin-right: 8px;" class="material-icons icon">attach_money</span> £{{currentPick.player.now_cost / 10}}m (max bid: £{{(currentPick.player.now_cost * 2) / 10}}m)</div>
+    </div>
+    <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" />
+  </div>
+
+  <div class="nomination-container-footer">
+    <div>Get ready for sealed bids</div>
+    <mat-spinner [diameter]="30"></mat-spinner>
+  </div>
+</div>

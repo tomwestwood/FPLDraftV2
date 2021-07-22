@@ -12,6 +12,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SignalRService } from '../services/signalR.service';
 import { trigger, transition, style, animate, state } from '@angular/animations';
 import { DraftControllerService } from '../draft/services/draft-controller.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TerminalWaitingComponent } from './terminal-waiting/terminal-waiting.component';
+import { ComponentType } from '@angular/cdk/portal';
+import { TerminalNominationComponent } from './terminal-nomination/terminal-nomination.component';
+import { TerminalSigningComponent } from './terminal-signing/terminal-signing.component';
+import { TerminalTimeoutComponent } from './terminal-timeout/terminal-timeout.component';
 @Component({
   selector: 'app-terminal-component',
   templateUrl: './terminal.component.html',
@@ -64,7 +70,7 @@ export class TerminalComponent implements OnInit {
   announceAudio = new Audio('../../assets/Player Reveal_1.wav');
   timeoutAudio = new Audio('../../assets/Sad-trombone.mp3');
 
-  constructor(private draftControllerService: DraftControllerService, private _snackBar: MatSnackBar, private _ngZone: NgZone) {
+  constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog, private _ngZone: NgZone) {
     draftControllerService.getDraft(this.draftId);
   }
 
@@ -89,13 +95,50 @@ export class TerminalComponent implements OnInit {
           this.updateTickerItems();
         }
 
+        if (this.draft.status_id >= DraftStatuses.SealedBids) {
+          this.currentPick = this.draftControllerService.getCurrentPick();
+        }
+
         this.stopTimer();
-        if (this.draft.status_id == 4) {
-          this.startDraftingTimer();
-        } else if (this.draft.status_id == 6) {
-          this.announceTimeout();
-        } else if (this.draft.status_id == 7) {
-          this.startSealedBidsTimer();
+
+        // actions:
+        switch (this.draft.status_id) {
+
+          case DraftStatuses.Waiting:
+            let waitingDialog = this.dialog.open(TerminalWaitingComponent);
+            setTimeout(() => {
+              waitingDialog.close();
+              this.displaySquadTicker = false;
+              setTimeout(() => {
+                this.squadTicker.ticker_manager = this.draft.draft_manager;
+              }, 50);
+            }, 8000);
+            break;
+
+          case DraftStatuses.Drafting:
+            this.startDraftingTimer();
+            break;
+
+          case DraftStatuses.Timeout:
+            this.announceTimeout();
+            break;
+
+          case DraftStatuses.SealedBids:
+            let nominationAndBidsDialog = this.dialog.open(TerminalNominationComponent);
+            setTimeout(() => {
+              nominationAndBidsDialog.close();
+              this.startSealedBidsTimer();
+            }, 8000);
+            break;
+
+          case DraftStatuses.SigningComplete:
+            this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
+            let newSigningDialog = this.dialog.open(TerminalSigningComponent);
+            setTimeout(() => {
+              newSigningDialog.close();
+            }, 8000);            
+            break;
+
         }
 
         this.statusUpdated = false;
@@ -107,17 +150,7 @@ export class TerminalComponent implements OnInit {
           setTimeout(() => { this.managerUpdated = true; }, 50)
         }
 
-        this.picksTicker = this.draftControllerService.getRoundPickStatus();
-        //let roundsGroup = this.picksTicker.map(p => p.round);
-        //let
-
-        if (this.draft.status_id >= DraftStatuses.SealedBids) {
-          this.currentPick = this.draftControllerService.getCurrentPick();
-        }
-
-        if (this.draft.status_id == DraftStatuses.SigningComplete) {
-          this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
-        }
+        this.picksTicker = this.draftControllerService.getRoundPickStatus();        
       }
     });
 
@@ -231,6 +264,11 @@ export class TerminalComponent implements OnInit {
   }
 
   private announceTimeout(): void {
+    let timeoutDialog = this.dialog.open(TerminalTimeoutComponent);
+    setTimeout(() => {
+      timeoutDialog.close();
+    }, 8000);
+
     this.timeoutAudio.currentTime = 0;
     var playPromise = this.timeoutAudio.play();
 
