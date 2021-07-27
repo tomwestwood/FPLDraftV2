@@ -1,0 +1,36 @@
+.next-manager-container {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+
+
+
+  .nomination-player-container {
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    margin-bottom: 16px;
+    margin-top: 16px;
+
+    .nomination-player-image {
+      flex-grow: 0;
+      height: 200px;
+      width: 200px;
+      border: 6px solid #c2185b;
+      border-radius: 50%;
+      padding: 6px;
+      background-color: #17252A;
+    }
+
+    .nomination-badge-image {
+      flex-grow: 0;
+      height: 200px;
+      width: 200px;
+      border: 6px solid #c2185b;
+      border-radius: 50%;
+      padding: 6px;
+      background-color: #17252A;
+      margin-left: -32px;
+    }
+  }
+}

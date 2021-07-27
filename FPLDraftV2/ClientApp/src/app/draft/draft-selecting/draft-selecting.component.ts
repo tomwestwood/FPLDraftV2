@@ -132,7 +132,7 @@ export class DraftSelectingComponent implements OnInit {
     dmp.player_id = player.id;
     dmp.player = player;
     dmp.draft_id = this.draft.id;
-    dmp.value_price = player.now_cost;
+    dmp.value_price = player.now_cost / 10;
     dmp.pick_order = this.draft.draft_round;
 
     let dmsLeftInRound = this.draftControllerService.getRemainingDraftManagersInRound(this.draft.draft_managers, this.draft.draft_round, this.draft.draft_manager.draft_seed, this.draft.direction).filter(dm => dm.id != this.draft.draft_manager.id);

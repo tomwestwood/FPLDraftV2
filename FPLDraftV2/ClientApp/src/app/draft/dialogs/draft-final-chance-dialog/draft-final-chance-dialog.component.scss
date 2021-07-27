@@ -1,0 +1,66 @@
+.final-chance-container {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+
+  .nomination-player-container {
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    margin-bottom: 16px;
+    margin-top: 16px;
+
+    .nomination-player-image {
+      flex-grow: 0;
+      height: 200px;
+      width: 200px;
+      border: 6px solid #c2185b;
+      border-radius: 50%;
+      padding: 6px;
+      background-color: #17252A;
+    }
+
+    .nomination-value {
+      flex-grow: 0;
+      height: 200px;
+      width: 200px;
+      border: 6px solid #c2185b;
+      border-radius: 50%;
+      padding: 6px;
+      background-color: #17252A;
+      margin-left: -32px;
+      display: flex;
+      flex-direction: column;
+
+      .value {
+        display: flex;
+        align-items: center;
+        align-self: center;
+        height: 100%;
+        font-size: xx-large;
+      }
+    }
+  }
+
+  .final-chance-options {
+      display: flex;
+
+      .final-chance-option {
+          flex-grow: 1;
+          margin: 4px;
+          border: 2px white solid;
+
+          .final-chance-icon {
+              margin-left: 4px;
+          }
+
+          &.yes {
+              background-color: forestgreen;
+          }
+
+          &.no {
+              background-color: crimson;
+          }
+      }
+  }
+}

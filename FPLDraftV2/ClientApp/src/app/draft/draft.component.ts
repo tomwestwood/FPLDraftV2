@@ -5,6 +5,10 @@ import { Draft, DraftFunctions, DraftManager, DraftManagerPick, DraftStatuses, S
 import { BehaviorSubject } from 'rxjs';
 import { DraftControllerService } from './services/draft-controller.service';
 import { DraftService } from '../services/draft.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DraftNextManagerDialogComponent } from './dialogs/draft-next-manager-dialog/draft-next-manager-dialog.component';
+import { DraftNewManagerDialogComponent } from './dialogs/draft-new-manager-dialog/draft-new-manager-dialog.component';
+import { DraftFinalChanceDialogComponent } from './dialogs/draft-final-chance-dialog/draft-final-chance-dialog.component';
 
 @Component({
   selector: 'app-draft-component',
@@ -19,7 +23,7 @@ export class DraftComponent implements OnInit {
   pick: BehaviorSubject<DraftManagerPick>;
   current_pick: DraftManagerPick;
 
-  constructor(private draftControllerService: DraftControllerService) {
+  constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog) {
     draftControllerService.getDraft(this.draftId);
   }
 
@@ -32,9 +36,23 @@ export class DraftComponent implements OnInit {
       if (draft) {
         this.draft = draft;
 
+        if (draft.status_id == DraftStatuses.Waiting) {
+          setTimeout(() => {
+            this.dialog.open(DraftNewManagerDialogComponent, { disableClose: true });
+          }, 1000);
+        }
+
         if (draft.status_id == DraftStatuses.FinalChance) {
-          this.current_pick = draft.draft_manager_picks.filter(dmp => dmp.nominator_id == draft.draft_manager_id /* && dmp.pick_order == draft.draft_round */).reduce((p, c) => p.id > c.id ? p : c);
-          this.current_pick.player = this.fplBase.elements.find(p => p.id == this.current_pick.player_id);
+          this.current_pick = this.draftControllerService.getCurrentPick();
+          setTimeout(() => {
+            this.dialog.open(DraftFinalChanceDialogComponent, { disableClose: true });
+          }, 1000);
+        }
+
+        if (draft.status_id == DraftStatuses.Timeout || draft.status_id == DraftStatuses.SigningComplete) {
+          setTimeout(() => {
+            this.dialog.open(DraftNextManagerDialogComponent, { disableClose: true });
+          }, 1000);
         }
       }
     });
@@ -44,35 +62,6 @@ export class DraftComponent implements OnInit {
         this.pick.next(pick);
       }
     });
-  }
-
-  signPick(dmp: DraftManagerPick): void {
-    let highest_bid = this.getMaxBid(dmp);
-    let highest_bidder = this.draft.draft_managers.find(dm => dm.id == highest_bid.draft_manager_id);
-    dmp.pick_order = this.draft.draft_round;
-    dmp.draft_manager_id = this.draft.draft_manager_id;
-    dmp.signed_price = highest_bid.bid_amount;
-    
-    this.draftControllerService.updatePick(dmp).subscribe((savedPick: DraftManagerPick) => {
-      this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
-    });
-  }
-
-  passPick(dmp: DraftManagerPick): void {
-    let highest_bid = this.getMaxBid(dmp);
-    let highest_bidder = this.draft.draft_managers.find(dm => dm.id == highest_bid.draft_manager_id);
-    dmp.pick_order = this.draft.draft_manager_picks.filter(pick => pick.draft_manager_id == highest_bidder.id).length + 1;
-    dmp.draft_manager_id = highest_bidder.id;
-    dmp.signed_price = highest_bid.bid_amount;
-    
-    this.draftControllerService.updatePick(dmp).subscribe((savedPick: DraftManagerPick) => {
-      this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
-    });    
-  }
-
-  completePick(): void {
-    this.draftControllerService.setDraftStatus(DraftStatuses.Waiting);
-    this.draftControllerService.setNextDraftManager();
   }
 
   getMaxBid(dmp: DraftManagerPick): SealedBid {

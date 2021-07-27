@@ -9,15 +9,6 @@
     <div *ngIf="draft.status_id == 10">Final chance</div>
     <mat-progress-bar class="basic-progress-bar" mode="indeterminate"></mat-progress-bar>
   </div>
-  <div *ngIf="draft.status_id == 10 && current_pick">
-    <h2>Final chance...</h2>
-    <div>Sign {{current_pick.player.web_name}} for £{{getMaxBidAmount(current_pick)}}m?</div>
-    <button mat-raised-button (click)="signPick(current_pick)">Yes</button>
-    <button mat-raised-button (click)="passPick(current_pick)">No</button>
-  </div>
-  <div *ngIf="draft.status_id == 6 || draft.status_id == 11">
-    <button mat-raised-button (click)="completePick()">Continue to next pick</button>
-  </div>
 </div>
 
 <!--<div *ngIf="draft">

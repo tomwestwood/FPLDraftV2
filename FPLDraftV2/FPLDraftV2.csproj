@@ -39,6 +39,9 @@
     <None Remove="ClientApp\src\app\controls\confirm-player\confirm-player.component.ts" />
     <None Remove="ClientApp\src\app\controls\preview-squad\preview-squad.component.ts" />
     <None Remove="ClientApp\src\app\controls\terminal-player\terminal-player.component.ts" />
+    <None Remove="ClientApp\src\app\draft\dialogs\draft-final-chance-dialog\draft-final-chance-dialog.component.ts" />
+    <None Remove="ClientApp\src\app\draft\dialogs\draft-new-manager-dialog\draft-new-manager-dialog.component.ts" />
+    <None Remove="ClientApp\src\app\draft\dialogs\draft-next-manager-dialog\draft-next-manager-dialog.component.ts" />
     <None Remove="ClientApp\src\app\draft\draft-header\draft-header.component.ts" />
     <None Remove="ClientApp\src\app\draft\draft-selecting\draft-selecting.component.ts" />
     <None Remove="ClientApp\src\app\draft\draft.component.ts" />
@@ -96,6 +99,15 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\controls\terminal-player\terminal-player.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\draft\dialogs\draft-new-manager-dialog\draft-new-manager-dialog.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\draft\dialogs\draft-final-chance-dialog\draft-final-chance-dialog.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\draft\dialogs\draft-next-manager-dialog\draft-next-manager-dialog.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\draft\draft-header\draft-header.component.ts">

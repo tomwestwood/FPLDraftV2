@@ -98,7 +98,9 @@ export class DraftControllerService {
     }
 
     this.draft.value.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.value.draft_manager);
-    this.updateDraftNotification(this.draft.value);
+    this.saveDraft(this.draft.value).subscribe((draft: Draft) => {
+      this.updateDraftNotification(this.draft.value);
+    });
   }
 
   getCurrentPick(): DraftManagerPick {
@@ -215,7 +217,11 @@ export class DraftControllerService {
   }
 
   getMaxBid(dmp: DraftManagerPick): SealedBid {
-    let maxBids = dmp.sealed_bids.filter(b => b.bid_amount == this.getMaxBidAmount(dmp));
+    if (!dmp.sealed_bids.some(sb => sb.bid_eligible)) {
+      return undefined;
+    }
+
+    let maxBids = dmp.sealed_bids.filter(b => b.bid_eligible && b.bid_amount == this.getMaxBidAmount(dmp));
     let maxBid: SealedBid;
 
     if (this.draft.value.direction)
@@ -228,7 +234,7 @@ export class DraftControllerService {
   }
 
   getMaxBidAmount(dmp: DraftManagerPick): number {
-    return dmp.sealed_bids.reduce((p, c) => p.bid_amount > c.bid_amount ? p : c).bid_amount;
+    return dmp.sealed_bids.filter(sb => sb.bid_eligible).reduce((p, c) => p.bid_amount > c.bid_amount ? p : c).bid_amount;
   }
 
   getManagerById(id: number): DraftManager {

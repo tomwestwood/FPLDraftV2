@@ -1,0 +1,20 @@
+<div class="final-chance-container" *ngIf="currentPick">
+
+  <!-- outcome: -->
+  <h1>FINAL CHANCE:</h1>
+
+  <div>Sign {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{getMaxBidAmount(currentPick)}}m?</div>
+
+ <div class="nomination-player-container">
+    <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" />
+    <div class="nomination-value">
+      <div class="value">£{{getMaxBidAmount(currentPick)}}m</div>
+    </div>
+  </div>
+
+  <!-- next manager/same manager -->
+ <div class="final-chance-options">
+   <button class="final-chance-option no" mat-raised-button (click)="passPick(currentPick)">No</button>
+   <button class="final-chance-option yes" mat-raised-button (click)="signPick(currentPick)">Yes</button>
+ </div>
+</div>

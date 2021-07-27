@@ -6,7 +6,7 @@
       <div class="player-info-line"><span style="margin-right: 8px;" class="material-icons icon">account_circle</span> {{currentPick.player.first_name}} {{currentPick.player.web_name}}</div>
       <div class="player-info-line"><img style="margin-right: 8px; height: 24px; width: 24px;" src="{{currentPick.player.club.badge_url}}" /> {{currentPick.player.club.name}}</div>
       <div class="player-info-line"><span style="margin-right: 8px;" class="material-icons icon">grid_on</span> {{currentPick.player.position.singular_name}}</div>
-      <div class="player-info-line"><span style="margin-right: 8px;" class="material-icons icon">attach_money</span> £{{currentPick.signed_price / 10}}m</div>
+      <div class="player-info-line"><span style="margin-right: 8px;" class="material-icons icon">attach_money</span> £{{currentPick.signed_price}}m</div>
     </div>
     <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" />
     <img class="nomination-badge-image" src="{{signingManager.team_image_url}}" />

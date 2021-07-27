@@ -22,8 +22,8 @@ namespace FPLV2Core.Models.FPLDraft
         public string slack_id { get; set; }
 
 
-        public IEnumerable<DraftManagerPick> draft_manager_favourites { get; set; }
-        public IEnumerable<DraftManagerFavourite> draft_manager_picks { get; set; }
+        public IEnumerable<DraftManagerPick> draft_manager_picks { get; set; }
+        public IEnumerable<DraftManagerFavourite> draft_manager_favourites { get; set; }
         public DraftSquad draft_squad { get; set; }
     }
 }
