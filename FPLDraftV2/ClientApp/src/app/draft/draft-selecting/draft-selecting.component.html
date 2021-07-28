@@ -1,6 +1,11 @@
+<div *ngIf="!showDraftSelecting" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+  <h4 style="color: #17252A; width: 100%; text-align: center; align-items: center; justify-content: center; display: flex;">Get ready to draft in {{draftCountdown}}...</h4>
+  <div style="width: 100%; display: flex; justify-content: center;">
+    <mat-progress-bar style="width: 120px;" [color]="Warn" [value]="(draftCountdown/3)*100"></mat-progress-bar>
+  </div>
+</div>
 
-<!-- this can go into it's own component: -->
-<div class="selection-header">
+<div *ngIf="showDraftSelecting" class="selection-header">
   <div class="timer">
     <mat-progress-spinner class="spinner" color="primary" [diameter]="40" [value]="(timer/30)*100"></mat-progress-spinner>
     <div class="timer-text">{{timer}}</div>
@@ -42,7 +47,7 @@
   </div>
 </div>
 
-<mat-table [dataSource]="playerDataSource" *ngIf="playerDataSource" class="mat-elevation-z8" matSort matSortActive="now_cost" matSortDirection="desc">
+<mat-table [dataSource]="playerDataSource" *ngIf="playerDataSource && showDraftSelecting" class="mat-elevation-z8" matSort matSortActive="now_cost" matSortDirection="desc">
   <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
   <mat-row *matRowDef="let element; columns: displayedColumns" [ngClass]="{'player-selected' : element.draft_manager}"></mat-row>
   <ng-container matColumnDef="web_name">
@@ -72,4 +77,5 @@
     </mat-cell>
   </ng-container>
 </mat-table>
-<mat-paginator [pageSizeOptions]="[10,20,50]" showFirstLastButtons></mat-paginator>
+
+<mat-paginator *ngIf="showDraftSelecting" [pageSizeOptions]="[10,20,50]" showFirstLastButtons></mat-paginator>

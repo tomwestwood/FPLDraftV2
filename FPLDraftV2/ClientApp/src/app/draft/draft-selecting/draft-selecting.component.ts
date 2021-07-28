@@ -42,6 +42,8 @@ export class DraftSelectingComponent implements OnInit {
   draft: Draft;
   fplBase: FPLBase;
   draftStatuses: DraftStatuses;
+  showDraftSelecting: boolean = false;
+  draftCountdown: number = 3;
 
   playerDataSource: MatTableDataSource<Player>;
   displayedColumns: string[] = ['web_name', 'position', 'club', 'now_cost', 'draftOptions'];
@@ -82,7 +84,18 @@ export class DraftSelectingComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchFilter = new SearchFilter();
-    this.startTimer();
+    this.showDraftSelecting = false;
+    this.draftCountdown = 3;
+    this.timeout = setInterval(() => {
+      if (this.draftCountdown > 0) {
+        this.draftCountdown--;
+      }
+    }, 1000);
+
+    setTimeout(() => {
+      this.showDraftSelecting = true;
+      this.startTimer();
+    }, 3000);
   }
 
   selectPlayer(element: Player): void {
