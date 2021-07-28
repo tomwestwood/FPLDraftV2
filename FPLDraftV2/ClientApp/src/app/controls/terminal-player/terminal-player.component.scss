@@ -29,8 +29,13 @@
   }
 
   .terminal-player-image {
-      margin-left: 32px;
+    margin-left: 32px;
     max-height: 30px;
+  }
+
+  .terminal-player-cost {
+    margin-left: 16px;
+    font-size: small;
   }
 
   .missing {

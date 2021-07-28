@@ -183,24 +183,34 @@ var DraftFunctions = /** @class */ (function () {
         return undefined;
     };
     DraftFunctions.getDraftSquadForManager = function (manager) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
         var squad = new DraftSquad();
         if (manager.draft_manager_picks) {
-            squad.gk_1 = (_b = (_a = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[0]) === null || _a === void 0 ? void 0 : _a.player) !== null && _b !== void 0 ? _b : undefined;
-            squad.gk_2 = (_d = (_c = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[1]) === null || _c === void 0 ? void 0 : _c.player) !== null && _d !== void 0 ? _d : undefined;
-            squad.def_1 = (_f = (_e = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[0]) === null || _e === void 0 ? void 0 : _e.player) !== null && _f !== void 0 ? _f : undefined;
-            squad.def_2 = (_h = (_g = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[1]) === null || _g === void 0 ? void 0 : _g.player) !== null && _h !== void 0 ? _h : undefined;
-            squad.def_3 = (_k = (_j = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[2]) === null || _j === void 0 ? void 0 : _j.player) !== null && _k !== void 0 ? _k : undefined;
-            squad.def_4 = (_m = (_l = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[3]) === null || _l === void 0 ? void 0 : _l.player) !== null && _m !== void 0 ? _m : undefined;
-            squad.def_5 = (_p = (_o = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[4]) === null || _o === void 0 ? void 0 : _o.player) !== null && _p !== void 0 ? _p : undefined;
-            squad.mid_1 = (_r = (_q = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[0]) === null || _q === void 0 ? void 0 : _q.player) !== null && _r !== void 0 ? _r : undefined;
-            squad.mid_2 = (_t = (_s = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[1]) === null || _s === void 0 ? void 0 : _s.player) !== null && _t !== void 0 ? _t : undefined;
-            squad.mid_3 = (_v = (_u = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[2]) === null || _u === void 0 ? void 0 : _u.player) !== null && _v !== void 0 ? _v : undefined;
-            squad.mid_4 = (_x = (_w = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[3]) === null || _w === void 0 ? void 0 : _w.player) !== null && _x !== void 0 ? _x : undefined;
-            squad.mid_5 = (_z = (_y = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[4]) === null || _y === void 0 ? void 0 : _y.player) !== null && _z !== void 0 ? _z : undefined;
-            squad.fw_1 = (_1 = (_0 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[0]) === null || _0 === void 0 ? void 0 : _0.player) !== null && _1 !== void 0 ? _1 : undefined;
-            squad.fw_2 = (_3 = (_2 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[1]) === null || _2 === void 0 ? void 0 : _2.player) !== null && _3 !== void 0 ? _3 : undefined;
-            squad.fw_3 = (_5 = (_4 = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[2]) === null || _4 === void 0 ? void 0 : _4.player) !== null && _5 !== void 0 ? _5 : undefined;
+            squad.gk_1 = (_a = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[0]) !== null && _a !== void 0 ? _a : undefined;
+            squad.gk_2 = (_b = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[1]) !== null && _b !== void 0 ? _b : undefined;
+            squad.def_1 = (_c = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[0]) !== null && _c !== void 0 ? _c : undefined;
+            squad.def_2 = (_d = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[1]) !== null && _d !== void 0 ? _d : undefined;
+            squad.def_3 = (_e = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[2]) !== null && _e !== void 0 ? _e : undefined;
+            squad.def_4 = (_f = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[3]) !== null && _f !== void 0 ? _f : undefined;
+            squad.def_5 = (_g = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 2; })[4]) !== null && _g !== void 0 ? _g : undefined;
+            squad.mid_1 = (_h = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[0]) !== null && _h !== void 0 ? _h : undefined;
+            squad.mid_2 = (_j = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[1]) !== null && _j !== void 0 ? _j : undefined;
+            squad.mid_3 = (_k = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[2]) !== null && _k !== void 0 ? _k : undefined;
+            squad.mid_4 = (_l = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[3]) !== null && _l !== void 0 ? _l : undefined;
+            squad.mid_5 = (_m = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 3; })[4]) !== null && _m !== void 0 ? _m : undefined;
+            squad.fw_1 = (_o = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[0]) !== null && _o !== void 0 ? _o : undefined;
+            squad.fw_2 = (_p = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[1]) !== null && _p !== void 0 ? _p : undefined;
+            squad.fw_3 = (_q = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 4; })[2]) !== null && _q !== void 0 ? _q : undefined;
+            squad.num_of_picks = manager.draft_manager_picks.length;
+            squad.budget_spent = manager.draft_manager_picks.reduce(function (sum, current) { return sum + current.signed_price; }, 0);
+            squad.budget_remaining = 100 - squad.budget_spent;
+            squad.budget_per_player = squad.budget_remaining / (15 - squad.num_of_picks);
+        }
+        else {
+            squad.num_of_picks = 0;
+            squad.budget_spent = 0;
+            squad.budget_remaining = 100;
+            squad.budget_per_player = 100 / 15;
         }
         return squad;
     };

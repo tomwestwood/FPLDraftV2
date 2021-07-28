@@ -66,9 +66,13 @@ export class TerminalComponent implements OnInit {
 
   tickerItems: string[];
 
-  draftingAudio = new Audio('../../assets/Countdown Music.wav');
-  announceAudio = new Audio('../../assets/Player Reveal_1.wav');
+  draftingAudio = new Audio('../../assets/kp_lang_music.wav');
+  nominatedAudio = new Audio('../../assets/player_nominated.wav');
+  placeBidsAudio = new Audio('../../assets/place_bids.wav');
   timeoutAudio = new Audio('../../assets/Sad-trombone.mp3');
+  announceAudio = new Audio('../../assets/player_signed.wav');
+
+
 
   constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog, private _ngZone: NgZone) {
     draftControllerService.getDraft(this.draftId);
@@ -112,7 +116,7 @@ export class TerminalComponent implements OnInit {
               setTimeout(() => {
                 this.squadTicker.ticker_manager = this.draft.draft_manager;
               }, 50);
-            }, 8000);
+            }, 4000);
             break;
 
           case DraftStatuses.Drafting:
@@ -125,18 +129,45 @@ export class TerminalComponent implements OnInit {
 
           case DraftStatuses.SealedBids:
             let nominationAndBidsDialog = this.dialog.open(TerminalNominationComponent);
+            this.nominatedAudio.currentTime = 0;
+            let nominatePromise = this.nominatedAudio.play();
+
+            if (nominatePromise !== undefined) {
+              nominatePromise.then(_ => {
+              }).catch(error => {
+              });
+            }
+
             setTimeout(() => {
+              this.placeBidsAudio.currentTime = 0;
+              let placeBidsPromise = this.placeBidsAudio.play();
+
+              if (placeBidsPromise !== undefined) {
+                placeBidsPromise.then(_ => {
+                }).catch(error => {
+                });
+              }
+
               nominationAndBidsDialog.close();
               this.startSealedBidsTimer();
-            }, 8000);
+            }, 5000);
             break;
 
           case DraftStatuses.SigningComplete:
             this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
             let newSigningDialog = this.dialog.open(TerminalSigningComponent);
+            this.announceAudio.currentTime = 0;
+            let announcePromise = this.announceAudio.play();
+
+            if (announcePromise !== undefined) {
+              announcePromise.then(_ => {
+              }).catch(error => {
+              });
+            }
+
             setTimeout(() => {
               newSigningDialog.close();
-            }, 8000);            
+            }, 6000);            
             break;
 
         }
@@ -156,7 +187,7 @@ export class TerminalComponent implements OnInit {
 
     this.draftControllerService.pick.subscribe((pick: DraftManagerPick) => {
       this.announcementPick = pick;
-      this.announcePick(pick); // todo: this is probably where we can flip a nomination and a signing:
+      //this.announcePick(pick); // todo: this is probably where we can flip a nomination and a signing:
     });
   }
 
@@ -184,6 +215,8 @@ export class TerminalComponent implements OnInit {
     this.stopTimer();
     this.timer = 30;
     this.draftingAudio.currentTime = 0;
+    this.draftingAudio.muted = true;
+    this.draftingAudio.muted = false;
     var playPromise = this.draftingAudio.play();
 
     if (playPromise !== undefined) {
@@ -191,14 +224,15 @@ export class TerminalComponent implements OnInit {
       }).catch(error => {
       });
     }
-
-    this.timeout = setInterval(() => {
-      if (this.timer > 0) {
-        this.timer--;
-      } else {
-        this.draftingTimeElapsed();
-      }
-    }, 1000);
+    setTimeout(() => {
+      this.timeout = setInterval(() => {
+        if (this.timer > 0) {
+          this.timer--;
+        } else {
+          this.draftingTimeElapsed();
+        }
+      }, 1000);
+    }, 3000);
   }
   private draftingTimeElapsed(): void {
     this.stopTimer();
@@ -207,14 +241,6 @@ export class TerminalComponent implements OnInit {
   private startSealedBidsTimer(): void {
     this.stopTimer();
     this.timer = 10;
-    this.draftingAudio.currentTime = 0;
-    //var playPromise = this.draftingAudio.play();
-
-    //if (playPromise !== undefined) {
-    //  playPromise.then(_ => {
-    //  }).catch(error => {
-    //  });
-    //}
 
     this.timeout = setInterval(() => {
       if (this.timer > 0) {

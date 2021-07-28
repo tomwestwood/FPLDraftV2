@@ -1,20 +1,26 @@
-<div class="next-manager-container">
+<div class="next-manager-container" *ngIf="draft">
 
   <!-- outcome: -->
   <div *ngIf="draft.status_id == 11 && currentPick">
     <h1>{{currentPick.nominator_id == currentPick.draft_manager_id ? 'You signed:' : 'You got gazumped!:'}}</h1>
-  </div>
-  <h1 *ngIf="draft.status_id == 6">Timeout!!!</h1>
 
-  <div *ngIf="signingManager && currentPick.nominator_id == currentPick.draft_manager_id">You signed {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{currentPick.signed_price}}m</div>
-  <div *ngIf="signingManager && currentPick.nominator_id != currentPick.draft_manager_id">{{signingManager.team_name}} <i>gazumped</i> you on {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{currentPick.signed_price}}m</div>
+    <div *ngIf="signingManager && currentPick.nominator_id == currentPick.draft_manager_id">You signed {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{currentPick.signed_price}}m</div>
+    <div *ngIf="signingManager && currentPick.nominator_id != currentPick.draft_manager_id">{{signingManager.team_name}} <i>gazumped</i> you on {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{currentPick.signed_price}}m</div>
 
-  <!-- visual -->
-  <div class="nomination-player-container">
-    <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" />
-    <img class="nomination-badge-image" src="{{signingManager.team_image_url}}" />
+    <!-- visual -->
+    <div class="nomination-player-container">
+      <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" />
+      <img class="nomination-badge-image" src="{{signingManager.team_image_url}}" />
+    </div>
   </div>
+
+  <div style="margin-bottom: 16px;" *ngIf="draft.status_id == 6">
+    <h1 style="color: crimson;">Timeout!!!</h1>
+    <div>Very unlucky, but you only have yourself to blame.</div>
+  </div>
+
+ 
 
   <!-- next manager/same manager -->
-  <button mat-raised-button color="primary" (click)="completePick()">Continue to next pick <span class="material-icons">arrow_forward</span></button>
+  <button mat-raised-button color="primary" (click)="completePick()">Next pick <span class="material-icons">arrow_forward</span></button>
 </div>

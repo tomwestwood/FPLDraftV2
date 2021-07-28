@@ -37,8 +37,8 @@ $total-items: 15;
 
 
   .draft-header-squad {
-      margin-bottom: 8px;
-      margin-left: -8px;
+    margin-bottom: 8px;
+    margin-left: -8px;
 
     .squad-list {
       padding-inline-start: 0px;
@@ -69,6 +69,39 @@ $total-items: 15;
 
         100% {
           opacity: 1;
+        }
+      }
+    }
+
+    .squad-summary {
+      display: flex;
+      justify-content: center;
+
+      .summary-item {
+        display: flex;
+        flex-direction: column;
+        margin: 8px;
+
+        .summary-item-header {
+            font-size: small;
+            text-align: center;
+        }
+
+        .summary-item-main {
+          justify-content: center;
+          align-self: center;
+          display: flex;
+          align-items: center;
+
+          .spinner {
+              position: relative;
+          }
+
+          .spinner-text {
+              position: absolute;
+              text-align: center;
+              font-size: small;
+          }
         }
       }
     }

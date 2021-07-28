@@ -95,9 +95,13 @@ export class AdminComponent implements OnInit {
     this.current_pick.draft_manager_id = this.draft.draft_manager_id;
     this.current_pick.signed_price = this.current_pick.player.now_cost / 10;
     this.draft.draft_manager_picks.push(this.current_pick);
+    this.draft.draft_manager.draft_manager_picks.push(this.current_pick);
+    this.draft.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.draft_manager);
 
     this.draftControllerService.updatePick(this.current_pick).subscribe((savedPick: DraftManagerPick) => {
-      this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
+      this.draftControllerService.saveDraft(this.draft).subscribe((draft: Draft) => {
+        this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
+      });
     });
   }
 

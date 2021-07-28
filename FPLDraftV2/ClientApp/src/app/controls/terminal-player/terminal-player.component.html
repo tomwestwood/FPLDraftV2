@@ -4,6 +4,7 @@
     <div *ngIf="player">{{player.web_name}} ({{player.club.name}})</div>
     <div *ngIf="!player">Select player</div>
   </div>
+  <div class="terminal-player-cost" *ngIf="cost">£{{cost}}m</div>
   <!--<img *ngIf="player" class="terminal-player-image" src="{{player.photo_url}}" (error)="replacePlayerImageNotFound($event, player)" />
   <img *ngIf="!player" class="terminal-player-image missing" src="https://platform-static-files.s3.amazonaws.com/premierleague/photos/players/250x250/Photo-Missing.png" />-->
 </div>

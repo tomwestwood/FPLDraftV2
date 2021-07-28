@@ -1,5 +1,5 @@
 import { trigger, transition, style, animate, state } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { stat } from 'fs';
@@ -9,6 +9,8 @@ import { FPLBase, Player } from '../../models/fpl';
 import { DraftControllerService } from '../services/draft-controller.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SearchFilter } from '../../models/searchFilter';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'draft-selecting-component',
@@ -47,6 +49,17 @@ export class DraftSelectingComponent implements OnInit {
 
   timer: number = 30;
   timeout: NodeJS.Timeout;
+
+  private paginator: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
+  private sort: MatSort;
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+  }
 
   constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog, private _snackBar: MatSnackBar) {
     draftControllerService.draft.subscribe((draft: Draft) => {
@@ -89,8 +102,8 @@ export class DraftSelectingComponent implements OnInit {
     } else if (element.position.id == 4 && this.draft.draft_manager.draft_manager_picks.filter(dmp => dmp.player.position.id == 4).length >= 3) {
       this._snackBar.open(`You have already selected 3 forwards. Please select a player from another position.`, 'Dismiss', { duration: 2000 });
       return;
-    } else if ((this.draft.draft_manager.draft_manager_picks.reduce(function (a, b) { return a + (b.player.now_cost / 10) }, 0) + (element.now_cost / 10)) > 100) {
-      this._snackBar.open(`Your team value exceeds 100.0m. Please select a cheaper option.`, 'Dismiss', { duration: 2000 });
+    } else if ((this.draft.draft_manager.draft_manager_picks.reduce(function (a, b) { return a + (b.signed_price) }, 0) + (element.now_cost / 10)) > 100) {
+      this._snackBar.open(`Your team value would exceed £100.0m. Please select a cheaper option.`, 'Dismiss', { duration: 2000 });
       return;
     }
     this.confirmPickDialog(element);
@@ -110,7 +123,7 @@ export class DraftSelectingComponent implements OnInit {
     this.playerDataSource.filter = '';
     if (this.searchFilter?.player_name)
       this.playerDataSource.filter = this.searchFilter.player_name.trim().toLocaleLowerCase();
-    //this.setDataSourceAttributes();
+    this.setDataSourceAttributes();
   }
 
   private confirmPickDialog(element: Player): void {
@@ -153,10 +166,10 @@ export class DraftSelectingComponent implements OnInit {
         if (player) {
           player.draft_manager = this.draft.draft_manager;
           player.draft_manager_id = this.draft.draft_manager_id;
+          this.draft.draft_manager.draft_manager_picks.push(savedDmp);
         }
       }
 
-      this.draft.draft_manager.draft_manager_picks.push(savedDmp);
       this.draft.draft_manager_picks.push(savedDmp);
       this.draft.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.draft_manager);
       this.draftControllerService.draft.next(this.draft);
@@ -195,5 +208,10 @@ export class DraftSelectingComponent implements OnInit {
     this.stopTimer();
 
     this.draftControllerService.setDraftStatus(DraftStatuses.Timeout);
+  }
+
+  private setDataSourceAttributes() {
+    this.playerDataSource.paginator = this.paginator;
+    this.playerDataSource.sort = this.sort;
   }
 }

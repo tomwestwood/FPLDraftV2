@@ -8,6 +8,7 @@ import { Player } from '../../models/fpl';
 export class TerminalPlayerComponent implements OnInit {
   @Input() player: Player;
   @Input() position: string;
+  @Input() cost: number;
   constructor() { }
   ngOnInit() { }
   replacePlayerImageNotFound(event, player) {

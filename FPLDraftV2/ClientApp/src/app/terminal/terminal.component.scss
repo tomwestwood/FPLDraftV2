@@ -204,7 +204,7 @@ $total-items: 15;
                   }
 
                   &.ineligible_bid {
-                      background-color: darkred;
+                    background-color: darkred;
                   }
                 }
               }
@@ -627,6 +627,39 @@ $total-items: 15;
 
       100% {
         opacity: 1;
+      }
+    }
+  }
+
+  .squad-summary {
+    display: flex;
+    justify-content: center;
+
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+      margin: 8px;
+
+      .summary-item-header {
+        font-size: small;
+        text-align: center;
+      }
+
+      .summary-item-main {
+        justify-content: center;
+        align-self: center;
+        display: flex;
+        align-items: center;
+
+        .spinner {
+          position: relative;
+        }
+
+        .spinner-text {
+          position: absolute;
+          text-align: center;
+          font-size: small;
+        }
       }
     }
   }

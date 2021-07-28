@@ -55,7 +55,7 @@ export class DraftNextManagerDialogComponent implements OnInit {
 
   completePick(): void {
     this.dialog.closeAll();
-    this.draftControllerService.setDraftStatus(DraftStatuses.Waiting);
     this.draftControllerService.setNextDraftManager();
+    this.draftControllerService.setDraftStatus(DraftStatuses.Waiting);
   }
 }

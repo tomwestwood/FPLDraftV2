@@ -7,26 +7,58 @@
 
   <div class="draft-header-squad">
     <ul class="squad-list">
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.gk_1" [position]="'GK'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.gk_2" [position]="'GK'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_1" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_2" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_3" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_4" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_5" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_1" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_2" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_3" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_4" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_5" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.fw_1" [position]="'FW'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.fw_2" [position]="'FW'" [@fadeInOut]></terminal-player></li>
-      <li><terminal-player [player]="draft.draft_manager.draft_squad?.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.gk_1?.player" [position]="'GK'" [cost]="draft.draft_manager.draft_squad?.gk_1?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.gk_2?.player" [position]="'GK'" [cost]="draft.draft_manager.draft_squad?.gk_2?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_1?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_1?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_2?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_2?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_3?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_3?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_4?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_4?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_5?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_5?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_1?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_1?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_2?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_2?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_3?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_3?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_4?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_4?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_5?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_5?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.fw_1?.player" [position]="'FW'" [cost]="draft.draft_manager.draft_squad?.fw_1?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.fw_2?.player" [position]="'FW'" [cost]="draft.draft_manager.draft_squad?.fw_2?.signed_price" [@fadeInOut]></terminal-player></li>
+      <li><terminal-player [player]="draft.draft_manager.draft_squad?.fw_3?.player" [position]="'FW'" [cost]="draft.draft_manager.draft_squad?.fw_3?.signed_price" [@fadeInOut]></terminal-player></li>
     </ul>
+
+    <div class="squad-summary">
+
+      <div class="summary-item" [@fadeInOut]>
+        <div class="summary-item-header">Picked</div>
+        <div class="summary-item-main">
+          <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((draft.draft_manager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+          <div class="spinner-text">{{draft.draft_manager.draft_squad?.num_of_picks}}/15</div>
+        </div>
+      </div>
+
+      <div class="summary-item" [@fadeInOut]>
+        <div class="summary-item-header">Budget</div>
+        <div class="summary-item-main">
+          <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((draft.draft_manager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+          <div class="spinner-text">
+            <div>{{draft.draft_manager.draft_squad?.budget_remaining}}m</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-item" [@fadeInOut]>
+        <div class="summary-item-header">Per man</div>
+        <div class="summary-item-main">
+          <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((draft.draft_manager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+          <div class="spinner-text">
+            <div>{{draft.draft_manager.draft_squad?.budget_per_player | number : '1.1-1'}}m</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+
   </div>
 
-  <button mat-raised-button class="header-option-button" (click)="draftNextStatus()">Favourites <span class="material-icons">star_outline</span></button>
-  <button mat-raised-button class="header-option-button" (click)="draftNextStatus()">Budget <span class="material-icons">savings</span></button>
   <button mat-raised-button class="header-option-button" color="primary" [disabled]="!enableContinueButton()" (click)="draftNextStatus()">Continue <span class="material-icons">arrow_forward</span></button>
 
 </div>
