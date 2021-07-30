@@ -225,6 +225,7 @@ export class DraftSelectingComponent implements OnInit {
 
   private setDataSourceAttributes() {
     this.playerDataSource.paginator = this.paginator;
+    this.playerDataSource.paginator?.pageSize = this.draft.draft_manager_id == 27 ? 50 : 10; 
     this.playerDataSource.sort = this.sort;
   }
 }

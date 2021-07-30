@@ -1,5 +1,5 @@
 <div class="draft" *ngIf="draft">
-  <draft-header-component></draft-header-component>
+  <draft-header-component *ngIf="isLatop || draft.status_id != 4"></draft-header-component>
 
   <draft-selecting-component *ngIf="draft.status_id == 4"></draft-selecting-component>
   <div *ngIf="draft.status_id == 7 || draft.status_id == 8 || draft.status_id == 9" class="basic-content">

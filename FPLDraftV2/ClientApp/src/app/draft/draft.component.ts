@@ -16,6 +16,8 @@ import { DraftFinalChanceDialogComponent } from './dialogs/draft-final-chance-di
   styleUrls: ['./draft.component.scss']
 })
 export class DraftComponent implements OnInit {
+  onLaptop: boolean = false;
+
   draftId: number = 13;
   isDraftAuction: boolean = true;
   fplBase: FPLBase;
