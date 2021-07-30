@@ -66,9 +66,11 @@ export class TerminalComponent implements OnInit {
 
   tickerItems: string[];
 
+  newManagerAudio = new Audio('../../assets/mustang.mp3');
   draftingAudio = new Audio('../../assets/kp_lang_music.wav');
   nominatedAudio = new Audio('../../assets/player_nominated.wav');
   placeBidsAudio = new Audio('../../assets/place_bids.wav');
+  bidsReceivedAudio = new Audio('../../assets/bloodyhell.mp3');
   timeoutAudio = new Audio('../../assets/Sad-trombone.mp3');
   announceAudio = new Audio('../../assets/player_signed.wav');
 
@@ -110,12 +112,18 @@ export class TerminalComponent implements OnInit {
 
           case DraftStatuses.Waiting:
             let waitingDialog = this.dialog.open(TerminalWaitingComponent);
+
+            this.newManagerAudio.currentTime = 0;
+            let newManagerPromise = this.newManagerAudio.play();
+
+            if (newManagerPromise !== undefined) {
+              newManagerPromise.then(_ => {
+              }).catch(error => {
+              });
+            }
+
             setTimeout(() => {
               waitingDialog.close();
-              this.displaySquadTicker = false;
-              setTimeout(() => {
-                this.squadTicker.ticker_manager = this.draft.draft_manager;
-              }, 50);
             }, 4000);
             break;
 
@@ -153,8 +161,20 @@ export class TerminalComponent implements OnInit {
             }, 5000);
             break;
 
+          case DraftStatuses.BidsReceived:
+            this.bidsReceivedAudio.currentTime = 0;
+            let bidsReceivedPromise = this.bidsReceivedAudio.play();
+
+            if (bidsReceivedPromise !== undefined) {
+              bidsReceivedPromise.then(_ => {
+              }).catch(error => {
+              });
+            }
+            break;
+
           case DraftStatuses.SigningComplete:
             this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
+            this.signingManager.draft_squad = DraftFunctions.getDraftSquadForManager(this.signingManager);
             let newSigningDialog = this.dialog.open(TerminalSigningComponent);
             this.announceAudio.currentTime = 0;
             let announcePromise = this.announceAudio.play();
@@ -445,5 +465,9 @@ export class TerminalComponent implements OnInit {
     randomStatements.push(`Lee Woodall looking to secure first proper draft title this season`);
 
     return randomStatements[Math.floor(Math.random() * randomStatements.length)];
+  }
+
+  replacePlayerImageNotFound(event, player) {
+    event.target.src = `https://fantasy.premierleague.com/dist/img/shirts/standard/shirt_${player.club.code}-66.png`;
   }
 }

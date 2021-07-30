@@ -82,4 +82,8 @@ export class DraftFinalChanceDialogComponent implements OnInit {
   getMaxBidAmount(dmp: DraftManagerPick): number {
     return this.draftControllerService.getMaxBidAmount(dmp);
   }
+
+  replacePlayerImageNotFound(event, player) {
+    event.target.src = `https://fantasy.premierleague.com/dist/img/shirts/standard/shirt_${player.club.code}-66.png`;
+  }
 }

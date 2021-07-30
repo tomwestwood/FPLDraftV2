@@ -95,6 +95,11 @@ export class DraftControllerService {
     } else {
       this.draft.value.direction = !this.draft.value.direction;
       this.draft.value.draft_round = this.draft.value.draft_round + 1;
+      let next_manager = draft_direction
+        ? draft_managers.reduce((p, c) => p.draft_seed < c.draft_seed ? p : c)
+        : draft_managers.reduce((p, c) => p.draft_seed > c.draft_seed ? p : c);
+      this.draft.value.draft_manager = next_manager;
+      this.draft.value.draft_manager_id = next_manager.id;
     }
 
     this.draft.value.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.value.draft_manager);

@@ -343,6 +343,20 @@ $total-items: 15;
       flex-direction: column;
       min-width: 420px;
       margin: 8px;
+      padding: 32px;
+      border: 6px solid #c2185b;
+      border-radius: 18px;
+
+      &.current-manager-team {
+          border: none;
+          margin: 32px;
+          margin-right: 164px;
+          padding: 0px;
+          min-width: 360px;
+          &.justify-center {
+            justify-content: center;
+          }
+      }
 
       .terminal-right-header {
         display: flex;

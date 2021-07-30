@@ -15,7 +15,7 @@ namespace FPLV2Core.Database.DraftDB
 
         public static Draft GetDraft()
         {
-            return GetDraft(3);
+            return GetDraft(13);
         }
 
         public static Draft GetDraft(int draft_id)

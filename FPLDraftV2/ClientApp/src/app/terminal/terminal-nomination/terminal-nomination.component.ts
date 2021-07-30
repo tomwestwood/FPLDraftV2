@@ -53,4 +53,8 @@ export class TerminalNominationComponent implements OnInit {
       }
     });
   }
+
+  replacePlayerImageNotFound(event, player) {
+    event.target.src = `https://fantasy.premierleague.com/dist/img/shirts/standard/shirt_${player.club.code}-66.png`;
+  }
 }

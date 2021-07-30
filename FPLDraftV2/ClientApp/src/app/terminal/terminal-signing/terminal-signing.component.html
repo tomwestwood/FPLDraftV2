@@ -8,7 +8,7 @@
       <div class="player-info-line"><span style="margin-right: 8px;" class="material-icons icon">grid_on</span> {{currentPick.player.position.singular_name}}</div>
       <div class="player-info-line"><span style="margin-right: 8px;" class="material-icons icon">attach_money</span> £{{currentPick.signed_price}}m</div>
     </div>
-    <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" />
+    <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" (error)="replacePlayerImageNotFound($event, currentPick.player)" />
     <img class="nomination-badge-image" src="{{signingManager.team_image_url}}" />
   </div>
 

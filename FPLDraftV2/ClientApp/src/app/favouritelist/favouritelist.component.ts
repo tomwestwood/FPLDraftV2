@@ -165,7 +165,7 @@ export class FavouritelistComponent implements OnInit {
     var transformedCode: number;
     switch (this.signInCode) {
       case '3812':
-        transformedCode = 1;
+        transformedCode = 26;
         break;
       case '2664':
         transformedCode = 3;

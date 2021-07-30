@@ -9,7 +9,7 @@
 
     <!-- visual -->
     <div class="nomination-player-container">
-      <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" />
+      <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" (error)="replacePlayerImageNotFound($event, currentPick.player)" />
       <img class="nomination-badge-image" src="{{signingManager.team_image_url}}" />
     </div>
   </div>

@@ -4,7 +4,7 @@
     <div class="terminal-left-sidebar">
 
       <div class="terminal-date-time">
-        <h2>{{draft.draft_name}}</h2>
+        <h2>KP LANG DRAFT</h2>
       </div>
 
       <mat-divider></mat-divider>
@@ -59,7 +59,7 @@
 
         <div class="terminal-update" *ngIf="draft.status_id >= 7 && currentPick">
           <div class="terminal-update-header">
-            <img class="terminal-update-image" src="{{currentPick.player.photo_url}}" />
+            <img class="terminal-update-image" src="{{currentPick.player.photo_url}}" (error)="replacePlayerImageNotFound($event, currentPick.player)" />
             <div class="terminal-update-heading">
               <div>{{draft.draft_manager.team_name}} nominate {{currentPick.player.first_name}} {{currentPick.player.web_name}} of {{currentPick.player.club.name}} ({{currentPick.player.position.singular_name_short}})</div>
               <div>Value: £{{currentPick.player.now_cost / 10}}m</div>
@@ -142,11 +142,134 @@
       </div>
     </div>
 
-    <div class="terminal-right-sidebar">
-      <div class="terminal-right-header">
-        Teams
+
+    <div class="terminal-right-sidebar" *ngIf="draft.status_id == 2 || (draft.status_id == 11 && currentPick?.draft_manager_id == currentPick?.nominator_id)">
+      <div class="terminal-team-header" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
+        <img class="terminal-team-image" src="{{draft.draft_manager.team_image_url}}" />
+        <div class="terminal-team-info">
+          <div class="terminal-team-name">{{draft.draft_manager.team_name}}</div>
+          <div class="terminal-manager-name">{{draft.draft_manager.name}}</div>
+        </div>
       </div>
-      <mat-divider class="terminal-divider"></mat-divider>
+      <mat-divider class="terminal-divider" style="margin: 16px;"></mat-divider>
+
+      <ul class="terminal-team-players" *ngIf="squadTicker">
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.gk_1?.player" [position]="'GK'" [cost]="draft.draft_manager.draft_squad?.gk_1?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.gk_2?.player" [position]="'GK'" [cost]="draft.draft_manager.draft_squad?.gk_2?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_1?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_1?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_2?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_2?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_3?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_3?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_4?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_4?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.def_5?.player" [position]="'DEF'" [cost]="draft.draft_manager.draft_squad?.def_5?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_1?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_1?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_2?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_2?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_3?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_3?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_4?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_4?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.mid_5?.player" [position]="'MID'" [cost]="draft.draft_manager.draft_squad?.mid_5?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.fw_1?.player" [position]="'FW'" [cost]="draft.draft_manager.draft_squad?.fw_1?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.fw_2?.player" [position]="'FW'" [cost]="draft.draft_manager.draft_squad?.fw_2?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="draft.draft_manager.draft_squad?.fw_3?.player" [position]="'FW'" [cost]="draft.draft_manager.draft_squad?.fw_3?.signed_price"></terminal-player></li>
+      </ul>
+
+      <mat-divider class="terminal-divider" style="margin: 16px;"></mat-divider>
+
+      <div class="squad-summary" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
+
+        <div class="summary-item" [@fadeInOut]>
+          <div class="summary-item-header">Picked</div>
+          <div class="summary-item-main">
+            <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((draft.draft_manager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+            <div class="spinner-text">{{draft.draft_manager.draft_squad?.num_of_picks}}/15</div>
+          </div>
+        </div>
+
+        <div class="summary-item" [@fadeInOut]>
+          <div class="summary-item-header">Budget</div>
+          <div class="summary-item-main">
+            <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((draft.draft_manager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+            <div class="spinner-text">
+              <div>{{draft.draft_manager.draft_squad?.budget_remaining}}m</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-item" [@fadeInOut]>
+          <div class="summary-item-header">Per man</div>
+          <div class="summary-item-main">
+            <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((draft.draft_manager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+            <div class="spinner-text">
+              <div>{{draft.draft_manager.draft_squad?.budget_per_player | number : '1.1-1'}}m</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="terminal-right-sidebar" *ngIf="draft.status_id == 11 && currentPick?.draft_manager_id != currentPick?.nominator_id && signingManager">
+      <div class="terminal-team-header" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
+        <img class="terminal-team-image" src="{{signingManager.team_image_url}}" />
+        <div class="terminal-team-info">
+          <div class="terminal-team-name">{{signingManager.team_name}}</div>
+          <div class="terminal-manager-name">{{signingManager.name}}</div>
+        </div>
+      </div>
+      <mat-divider class="terminal-divider" style="margin: 16px;"></mat-divider>
+
+      <ul class="terminal-team-players" *ngIf="squadTicker">
+        <li><terminal-player [player]="signingManager.draft_squad?.gk_1?.player" [position]="'GK'" [cost]="signingManager.draft_squad?.gk_1?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.gk_2?.player" [position]="'GK'" [cost]="signingManager.draft_squad?.gk_2?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.def_1?.player" [position]="'DEF'" [cost]="signingManager.draft_squad?.def_1?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.def_2?.player" [position]="'DEF'" [cost]="signingManager.draft_squad?.def_2?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.def_3?.player" [position]="'DEF'" [cost]="signingManager.draft_squad?.def_3?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.def_4?.player" [position]="'DEF'" [cost]="signingManager.draft_squad?.def_4?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.def_5?.player" [position]="'DEF'" [cost]="signingManager.draft_squad?.def_5?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.mid_1?.player" [position]="'MID'" [cost]="signingManager.draft_squad?.mid_1?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.mid_2?.player" [position]="'MID'" [cost]="signingManager.draft_squad?.mid_2?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.mid_3?.player" [position]="'MID'" [cost]="signingManager.draft_squad?.mid_3?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.mid_4?.player" [position]="'MID'" [cost]="signingManager.draft_squad?.mid_4?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.mid_5?.player" [position]="'MID'" [cost]="signingManager.draft_squad?.mid_5?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.fw_1?.player" [position]="'FW'" [cost]="signingManager.draft_squad?.fw_1?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.fw_2?.player" [position]="'FW'" [cost]="signingManager.draft_squad?.fw_2?.signed_price"></terminal-player></li>
+        <li><terminal-player [player]="signingManager.draft_squad?.fw_3?.player" [position]="'FW'" [cost]="signingManager.draft_squad?.fw_3?.signed_price"></terminal-player></li>
+      </ul>
+
+      <mat-divider class="terminal-divider" style="margin: 16px;"></mat-divider>
+
+      <div class="squad-summary" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
+
+        <div class="summary-item" [@fadeInOut]>
+          <div class="summary-item-header">Picked</div>
+          <div class="summary-item-main">
+            <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((signingManager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+            <div class="spinner-text">{{signingManager.draft_squad?.num_of_picks}}/15</div>
+          </div>
+        </div>
+
+        <div class="summary-item" [@fadeInOut]>
+          <div class="summary-item-header">Budget</div>
+          <div class="summary-item-main">
+            <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((signingManager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+            <div class="spinner-text">
+              <div>{{signingManager.draft_squad?.budget_remaining}}m</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-item" [@fadeInOut]>
+          <div class="summary-item-header">Per man</div>
+          <div class="summary-item-main">
+            <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((signingManager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+            <div class="spinner-text">
+              <div>{{signingManager.draft_squad?.budget_per_player | number : '1.1-1'}}m</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="terminal-right-sidebar" *ngIf="draft.status_id != 2 && draft.status_id != 11">
       <div class="terminal-team-header" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
         <img class="terminal-team-image" src="{{squadTicker.ticker_manager.team_image_url}}" />
         <div class="terminal-team-info">
@@ -154,7 +277,7 @@
           <div class="terminal-manager-name">{{squadTicker.ticker_manager.name}}</div>
         </div>
       </div>
-      <mat-divider class="terminal-divider"></mat-divider>
+      <mat-divider class="terminal-divider" style="margin: 16px;"></mat-divider>
       <ul class="terminal-team-players" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
         <li><terminal-player [player]="squadTicker.ticker_squad?.gk_1?.player" [position]="'GK'" [cost]="squadTicker.ticker_squad?.gk_1?.signed_price" [@fadeInOut]></terminal-player></li>
         <li><terminal-player [player]="squadTicker.ticker_squad?.gk_2?.player" [position]="'GK'" [cost]="squadTicker.ticker_squad?.gk_2?.signed_price" [@fadeInOut]></terminal-player></li>
@@ -173,6 +296,7 @@
         <li><terminal-player [player]="squadTicker.ticker_squad?.fw_3?.player" [position]="'FW'" [cost]="squadTicker.ticker_squad?.fw_3?.signed_price" [@fadeInOut]></terminal-player></li>
       </ul>
 
+      <mat-divider class="terminal-divider" style="margin: 16px;"></mat-divider>
 
       <div class="squad-summary" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
 

@@ -58,4 +58,8 @@ export class DraftNextManagerDialogComponent implements OnInit {
     this.draftControllerService.setNextDraftManager();
     this.draftControllerService.setDraftStatus(DraftStatuses.Waiting);
   }
+
+  replacePlayerImageNotFound(event, player) {
+    event.target.src = `https://fantasy.premierleague.com/dist/img/shirts/standard/shirt_${player.club.code}-66.png`;
+  }
 }

@@ -6,7 +6,7 @@
   <div>Sign {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{getMaxBidAmount(currentPick)}}m?</div>
 
  <div class="nomination-player-container">
-    <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" />
+    <img class="nomination-player-image" src="{{currentPick.player.photo_url}}" (error)="replacePlayerImageNotFound($event, currentPick.player)" />
     <div class="nomination-value">
       <div class="value">£{{getMaxBidAmount(currentPick)}}m</div>
     </div>
