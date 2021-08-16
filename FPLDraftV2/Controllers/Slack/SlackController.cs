@@ -27,6 +27,7 @@ namespace FPLDraftV2.Controllers.Slack
         private FPLController _fplController;
         private DraftController _draftController;
         private SlackClient _slackClient;
+        private SlackClient _loggingSlackClient;
 
         private static readonly HttpClient client = new HttpClient();
 
@@ -34,19 +35,20 @@ namespace FPLDraftV2.Controllers.Slack
         //private const string _slackClientConnection = "https://hooks.slack.com/services/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";
 
         // waiver LIVE
-        private const string _slackClientConnection = "https://hooks.slack.com/services/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";
+        private const string _slackClientConnection = "https://hooks.slack.com/services/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";
 
         // krg:
         //private const string _slackClientConnection = "https://hooks.slack.com/services/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";
 
         // debug:
-        //private const string _slackClientConnection = "https://hooks.slack.com/services/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";
+        private const string _loggingSlackClientConnection = "https://hooks.slack.com/services/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";
 
         public SlackController()
         {
             _fplController = new FPLController();
             _draftController = new DraftController();
             _slackClient = new SlackClient(_slackClientConnection);
+            _loggingSlackClient = new SlackClient(_loggingSlackClientConnection);
         }
 
         [HttpPost("kenbot")]
@@ -58,14 +60,24 @@ namespace FPLDraftV2.Controllers.Slack
             {
                 if (payload.Text.ToLower().StartsWith("nominate "))
                 {
-                    var nominationJson = JsonNominate(payload);
-                    return new StatusCodeResult(200);
+                    try
+                    {
+                        //_slackClient.PostMessage("It gets to point 2");
+                        var nominationJson = JsonNominate(payload);
+                        if (nominationJson == null)
+                        {
+                            return new StatusCodeResult(200);
+                        }
+                        else
+                        {
+                            return nominationJson;
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        return new JsonResult(ex.ToString());
+                    }
                 }
-                //else if(payload.Text.ToLower().StartsWith("confirm_nomination "))
-                //{
-                //    var nominationJson = JsonNominate(payload);
-                //    return new StatusCodeResult(200);
-                //}
 
                 switch (payload.Text.ToLower())
                 {
@@ -108,21 +120,91 @@ namespace FPLDraftV2.Controllers.Slack
                     var player_id = int.Parse(v.Groups[1].ToString());
 
                     _slackClient.PostBlockMessage(JsonNominated(convertedPayload, player_id));
+
+                    var nominator = _draftController.GetDraftManagers().Value.First(dm => dm.slack_id == $"<@{convertedPayload.user.id}>");
+                    var player = _fplController.Get().Value.elements.First(e => e.id == player_id);
+
+                    CreateNominationEntry(player, nominator, "N/A", 13);
                 }
                 else if(type == "block_actions") // someone has interacted with a block
                 {
                     var convertedPayload = JsonConvert.DeserializeObject<BlockActionsPayload>(payload);
                     var mainAction = convertedPayload.actions.FirstOrDefault();
 
-                    if(mainAction.value == "click_yes")
+                    if (mainAction.value == "click_yes" || mainAction.value == "click_no")
                     {
-                        //convertedPayload.message.blocks.FirstOrDefault().text.text = convertedPayload.message.blocks.FirstOrDefault().text.text.Replace("@Tom Westwood", "~@Tom Westwood~");
-                        //_slackClient.PostUpdateBlocksMessage(JsonConvert.SerializeObject(convertedPayload.message.blocks), convertedPayload.response_url);
-                        _slackClient.PostThreadMessage($"<@{convertedPayload.user.id}> said *YES*.", convertedPayload.message.ts);
-                    }
-                    else if(mainAction.value == "click_no")
-                    {
-                        _slackClient.PostThreadMessage($"<@{convertedPayload.user.id}> said *NO*.", convertedPayload.message.ts);
+                        //_slackClient.PostMessage(payload);
+
+                        Regex regex = new Regex(@"player_id (.*?):");
+                        var v = regex.Match(payload);
+                        var player_id = int.Parse(v.Groups[1].ToString());
+
+                        DraftManager draft_manager = null;
+                        Nomination nomination = null;
+                        try
+                        {
+                            draft_manager = GetDraftManangerFromSlackUsername(convertedPayload.user.id);
+                        }
+                        catch(Exception ex)
+                        {
+                            _loggingSlackClient.PostMessage("Problem getting the draft manager (line 147).");
+                        }
+
+
+                        
+
+                        if (mainAction.value == "click_yes")
+                        {   
+                            _slackClient.PostThreadMessage($"<@{convertedPayload.user.id}> said *YES*.", convertedPayload.message.ts);
+                        }
+                        else if (mainAction.value == "click_no")
+                        {
+                            _slackClient.PostThreadMessage($"<@{convertedPayload.user.id}> said *NO*.", convertedPayload.message.ts);
+                        }
+
+                        if (draft_manager != null)
+                        {
+                            _loggingSlackClient.PostMessage($"manager clicking is: {draft_manager.name} and player id is {player_id}");
+
+                            // eligibility:
+
+                            // already nominated:
+                            //if (nomination.nomination_activity.Any(na => na.manager_id == draft_manager.id))
+                            //{
+                            //    _slackClient.PostThreadMessage("You have already said YES/NO...", convertedPayload.message.ts);
+                            //}
+
+                            // is the nominator:
+
+
+                            try
+                            {
+                                nomination = _draftController.GetActiveNominationByPlayerId(player_id)?.Value;
+                                if (nomination != null)
+                                {
+                                    nomination.nomination_activity.ToList().Add(new NominationActivity()
+                                    {
+                                        manager_id = draft_manager.id,
+                                        response = mainAction.value == "click_yes",
+                                        response_time = DateTime.Now
+                                    });
+
+                                    _loggingSlackClient.PostMessage(JsonConvert.SerializeObject(nomination.nomination_activity));
+                                    _draftController.NominatePlayer(nomination);
+                                }
+                                else
+                                {
+                                    _loggingSlackClient.PostMessage("Cannot find a nomination for player ID: " + player_id);
+                                }
+                            }
+                            catch(Exception ex)
+                            {
+                                _loggingSlackClient.PostMessage("There was a problem getting the nomination. It was: " + ex.Message.ToString());
+                            }
+                        }
+
+
+
                     }
                 }
                 else
@@ -170,21 +252,29 @@ namespace FPLDraftV2.Controllers.Slack
             return new JsonResult(json);
         }
 
+        [HttpGet("kenbot_example_nomination_debug")]
+        public ActionResult KenbotExampleNominationDebug()
+        {
+            var text = "{\u0022Token\u0022:\u00220RHSMDUwLNLfD3rkFVdnvJVQ\u0022,\u0022team_id\u0022:\u0022T018QK04XT4\u0022,\u0022team_domain\u0022:\u0022wv1draftfpl\u0022,\u0022enterprise_id\u0022:null,\u0022enterprise_name\u0022:null,\u0022channel_id\u0022:\u0022D0189SKGABH\u0022,\u0022channel_name\u0022:\u0022directmessage\u0022,\u0022user_id\u0022:null,\u0022user_name\u0022:\u0022scatmanjohn85\u0022,\u0022Command\u0022:\u0022/kenbot\u0022,\u0022Text\u0022:\u0022nominate king\u0022,\u0022response_url\u0022:\u0022https://hooks.slack.com/commands/T018QK04XT4/2325515688151/kdyBx8JrDsfuIfd53vgIwNvX\u0022,\u0022trigger_id\u0022:\u00222346427662484.1296646167922.4e8d1ad1491bd01649d359508cd5500e\u0022}";
+            var payload = JsonConvert.DeserializeObject<SlashCommandRequest>(text);
+            return JsonNominate(payload);
+        }
+
         [HttpGet("kenbot_nominate_manual")]
         public ActionResult KenbotNominate_Manual()
         {
             // get the user -> can they still nominate?
             var draftManagers = _draftController.GetDraftManagers().Value;
-            var nominator = draftManagers.First(dm => dm.name == $"Chris Thompson"); // manager name
+            var nominator = draftManagers.First(dm => dm.name == $"Tom Westwood"); // manager name
             var waiverManagers = draftManagers.Where(dm => dm.waiver_order <= nominator.waiver_order).OrderBy(dm => dm.waiver_order);
 
             // get the player ->
             var fplBase = _fplController.Get().Value;
-            var club = fplBase.clubs.FirstOrDefault(club => club.name.ToLower() == "liverpool");
-            var position = fplBase.positions.FirstOrDefault(pos => pos.singular_name.ToLower() == "defender");
-            var image_url = "https://cdn.realsociedad.eus/Uploads/jugadores/12.png";
+            var club = fplBase.clubs.FirstOrDefault(club => club.name.ToLower() == "aston villa");
+            var position = fplBase.positions.FirstOrDefault(pos => pos.singular_name.ToLower() == "midfielder");
+            var image_url = "https://cdn.fifacm.com/content/media/imgs/fifa21/players/p229906.png?v=22";
             var value = 0;
-            var player = new Element() { first_name = "Ben", second_name = "Davies", web_name = "Ben Davies", club = club, position = position, now_cost = value, code = -1 };
+            var player = new Element() { first_name = "Leon", second_name = "Bailey", web_name = "Leon Bailey", club = club, position = position, now_cost = value, code = -1 };
 
 
             // if all checks out, create a nomination and inform the user!!!
@@ -272,7 +362,7 @@ namespace FPLDraftV2.Controllers.Slack
             return new JsonResult(json);
         }
 
-        private JsonResult JsonNominate(SlashCommandRequest payload)
+        private ActionResult JsonNominate(SlashCommandRequest payload)
         {
             string content = "";
             Element match = null;
@@ -285,8 +375,17 @@ namespace FPLDraftV2.Controllers.Slack
             {
                 var matchOn = payload.Text.Replace("nominate ", "");
                 var fplBase = _fplController.Get().Value;
-                match = fplBase.elements.First(e => e.safe_web_name.ToLower() == matchOn.ToLower());
 
+                var matches = fplBase.elements.Where(e => matchOn.ToLower().Contains(e.first_name.ToLower()) && matchOn.ToLower().Contains(e.safe_web_name.ToLower()));
+                if(matches.Count() == 0)
+                    matches = fplBase.elements.Where(e => e.safe_web_name.ToLower() == matchOn.ToLower());
+
+                if(matches.Count() == 0 )
+                {
+                    return new JsonResult(new { type = "text", text = "Cannot find a player with that name. Please try again." });
+                }
+
+                match = matches.FirstOrDefault();
             }
 
 
@@ -340,18 +439,21 @@ namespace FPLDraftV2.Controllers.Slack
             else
             {
                 //return new JsonResult(payload.trigger_id);
-                if (match != null)
+                if (match?.id >= 0)
                 {
                     return OpenNominationDialogRequest("https://slack.com/api/views.open", payload.trigger_id, match);
                 }
                 else
                 {
-                    return new JsonResult(new { type = "text", text = "cannot find a player with that name", response_type = "in_channel" });
+                    var json = new
+                    {
+                        text = ":soccer: problem with Kenbot command \n to use Kenbot you must use the `/Kenbot` command with one of the following options: \n `/Kenbot league`"
+                    };
+
+                    return new JsonResult(json);
                 }
-                //return new JsonResult("");
             }
         }
-
 
         private JsonResult JsonConfirmNomination(SlashCommandRequest payload)
         {
@@ -420,7 +522,6 @@ namespace FPLDraftV2.Controllers.Slack
             return new JsonResult(json);
         }
 
-
         private string JsonNominated(ViewSubmissionPayload payload, int player_id)
         {
             // get the user -> can they still nominate?
@@ -431,9 +532,7 @@ namespace FPLDraftV2.Controllers.Slack
             // get the player ->
             var player = _fplController.Get().Value.elements.First(e => e.id == player_id);
 
-
             // if all checks out, create a nomination and inform the user!!!
-
             return GetNominatedJson(player, payload.user.id, waiverManagers);
         }
 
@@ -441,7 +540,7 @@ namespace FPLDraftV2.Controllers.Slack
         {
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.PreAuthenticate = true;
-            httpWebRequest.Headers.Add("Authorization", "Bearer xoxb-1296646167922-1297674912434-FkWYjTCnrQve43xwAgwAoqnA");
+            httpWebRequest.Headers.Add("Authorization", "Bearer xoxb-1296646167922-1297674912434-kyEo9KbwugN8Rz4VHFnpiQKr");
             httpWebRequest.Accept = "application/json";
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "POST";
@@ -455,8 +554,23 @@ namespace FPLDraftV2.Controllers.Slack
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = streamReader.ReadToEnd();
-                return new JsonResult(new { type = "text", text = "You opened up a nomination window :eyes:", response_type = "in_channel" });
+                return null;
             }
+        }
+
+        private void CreateNominationEntry(Element match, DraftManager nominator, string slack_identifier, int draft_identifier)
+        {
+            var nomination = new Nomination()
+            {
+                player_id = match.id,
+                nominator_id = nominator.id,
+                date_nominated = DateTime.Now,
+                deadline_date = DateTime.Now.AddDays(1),
+                slack_id = slack_identifier,
+                draft_id = draft_identifier
+            };
+
+            _draftController.NominatePlayer(nomination);
         }
 
         private string GetNominationDialog(string trigger_id, Element playerToNominate)
@@ -520,7 +634,7 @@ namespace FPLDraftV2.Controllers.Slack
                         text = new
                         {
                             type = "mrkdwn",
-                            text = $":rotating_light: *NEW NOMINATION* - <@{user_id}> has nominated {player.first_name} {player.web_name} of {player.club.name} ({player.position.singular_name}):" + Environment.NewLine + Environment.NewLine +
+                            text = $":rotating_light: *NEW NOMINATION* - <@{user_id}> has nominated {player.first_name} {player.web_name} of {player.club.name} ({player.position.singular_name}) player_id {player.id}:" + Environment.NewLine + Environment.NewLine +
                             $"Waiver order is as follows:" + Environment.NewLine +
                             $"{string.Join(Environment.NewLine, waiverManagers.Select(dm => getNominationManagerText(waiverManagers, dm) ))}"
                         },
@@ -573,6 +687,11 @@ namespace FPLDraftV2.Controllers.Slack
         private string getWaiverManagerText(IEnumerable<DraftManager> waiverManagers, DraftManager dm)
         {
             return $"• {(dm.transfers_remaining == 0 ? "~" : string.Empty)}{dm.slack_id}{(dm.transfers_remaining == 0 ? "~" : string.Empty)} { new StringBuilder().Insert(0, ":arrows_counterclockwise:", dm.transfers_remaining) }";
+        }
+
+        private DraftManager GetDraftManangerFromSlackUsername(string username)
+        {
+            return _draftController.GetDraftManagers().Value.FirstOrDefault(dm => dm.slack_id.Contains(username));
         }
     }
 
@@ -638,7 +757,7 @@ namespace FPLDraftV2.Controllers.Slack
             PostMessage(payload, response_url);
         }
 
-        public void PostBlockMessage(string text, string username = null, string channel = null)
+        public string PostBlockMessage(string text, string username = null, string channel = null)
         {
             PostPayload payload = new PostPayload()
             {
@@ -647,11 +766,11 @@ namespace FPLDraftV2.Controllers.Slack
                 Blocks = text
             };
 
-            PostMessage(payload);
+            return PostMessage(payload);
         }
 
         //Post a message using a Payload object
-        public void PostMessage(PostPayload payload, string response_url = null)
+        public string PostMessage(PostPayload payload, string response_url = null)
         {
             string payloadJson = JsonConvert.SerializeObject(payload);
 
@@ -663,7 +782,7 @@ namespace FPLDraftV2.Controllers.Slack
                 var response = client.UploadValues((!string.IsNullOrEmpty(response_url) ? new Uri(response_url) : _uri), "POST", data);
 
                 //The response text is usually "ok"
-                string responseText = _encoding.GetString(response);
+                return _encoding.GetString(response);
             }
         }
     }

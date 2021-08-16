@@ -28,7 +28,7 @@ namespace FPLV2Core.Models.Slack
         public string channel_name { get; set; }
 
         [JsonProperty("user_id")]
-        public string UserId { get; set; }
+        public string user_id { get; set; }
 
         [JsonProperty("user_name")]
         public string user_name { get; set; }

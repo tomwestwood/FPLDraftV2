@@ -325,7 +325,7 @@ namespace FPLV2Core.Database.DraftDB
         }
 
 
-        public static Nomination GetCurrentNomination()
+        public static Nomination GetActiveNominationByPlayerID(int player_id)
         {
             var sp = "sel_nomination";
             var dt = new DataTable();
@@ -336,10 +336,11 @@ namespace FPLV2Core.Database.DraftDB
                 connection.Open();
                 using (var sqlAdapter = new SqlDataAdapter(sqlCmd))
                 {
+                    sqlCmd.Parameters.AddWithValue("@player_id", player_id);
                     sqlAdapter.Fill(dt);
 
                     if (dt.Rows.Count == 0)
-                        throw new Exception("No current nomination...");
+                        throw new Exception("No active nomination matches this action...");
 
                     try
                     {
@@ -347,18 +348,20 @@ namespace FPLV2Core.Database.DraftDB
                         nomination = new Nomination()
                         {
                             id = (int)nominationRow["id"],
-                            date_active = (DateTime)nominationRow["date_active"],
-                            date_nominated = (DateTime?)nominationRow["date_nominated"],
                             player_id = (int)nominationRow["player_id"],
                             nominator_id = (int)nominationRow["nominator_id"],
-                            manager_id = (int)nominationRow["manager_id"],
-                            deadline_date = (DateTime?)nominationRow["deadline_date"],
-                            completion_date = (DateTime?)nominationRow["completion_date"]
+                            date_nominated = (DateTime?)nominationRow["date_nominated"],
+                            slack_id = (string)nominationRow["slack_id"],
+                            draft_id = (int)nominationRow["draft_id"],
+                            manager_id = !nominationRow.IsNull("manager_id") ? (int)nominationRow["manager_id"] : 0,
+                            deadline_date = !nominationRow.IsNull("deadline_date") ? (DateTime?)nominationRow["deadline_date"] : null,
+                            completion_date = !nominationRow.IsNull("completion_date") ? (DateTime?)nominationRow["completion_date"] : null,
+                            nomination_activity = !nominationRow.IsNull("nomination_activity") ? JsonConvert.DeserializeObject<IEnumerable<NominationActivity>>(nominationRow["nomination_activity"].ToString()) : new List<NominationActivity>()
                         };
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("Can't get that nomination...");
+                        throw new Exception("Can't get that nomination... " + ex.Message);
                     }
                 }
             }
@@ -366,22 +369,7 @@ namespace FPLV2Core.Database.DraftDB
             return nomination;
         }
 
-        public static void CreateNominationLink()
-        {
-            var sp = "dbo.create_nomination";
-
-            using (SqlConnection conn = new SqlConnection(db_connection_string))
-            {
-                using (var cmd = new SqlCommand(sp, conn))
-                {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
-        public static void NominatePlayer(int nomination_id, DraftManager draft_manager, int player_id)
+        public static void NominatePlayer(Nomination nomination)
         {
             var sp = "dbo.save_nomination";
 
@@ -389,10 +377,16 @@ namespace FPLV2Core.Database.DraftDB
             {
                 using (var cmd = new SqlCommand(sp, conn))
                 {
-                    cmd.Parameters.AddWithValue("@nomination_id", nomination_id);
-                    cmd.Parameters.AddWithValue("@draft_manager_id", draft_manager.id);
-                    cmd.Parameters.AddWithValue("@draft_manager_order", draft_manager.waiver_order);
-                    cmd.Parameters.AddWithValue("@player_id", player_id);
+                    cmd.Parameters.AddWithValue("@id", nomination.id);
+                    cmd.Parameters.AddWithValue("@player_id", nomination.player_id);
+                    cmd.Parameters.AddWithValue("@nominator_id", nomination.nominator_id);
+                    cmd.Parameters.AddWithValue("@date_nominated", nomination.date_nominated);
+                    cmd.Parameters.AddWithValue("@slack_id", nomination.slack_id);
+                    cmd.Parameters.AddWithValue("@draft_id", nomination.draft_id);
+                    cmd.Parameters.AddWithValue("@manager_id", nomination.manager_id);
+                    cmd.Parameters.AddWithValue("@deadline_date", nomination.deadline_date);
+                    cmd.Parameters.AddWithValue("@completion_date", nomination.completion_date);
+                    cmd.Parameters.AddWithValue("@nomination_activity", JsonConvert.SerializeObject(nomination.nomination_activity));
 
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     conn.Open();

@@ -19,7 +19,7 @@ namespace FPLV2Core.Jobs
         private ICollection<Club> _teams;
         private Event _currentEvent;
 
-        private const int _hard_coded_league_id = 612541;
+        private const int _hard_coded_league_id = 429551;
         private const string var_image_url = "https://pbs.twimg.com/media/EBo9MzKXsAcoO3x.jpg";
         private ICollection<Fixture> _plFixtures;
         private H2hLeagueMatches _draftFixtures;
@@ -29,18 +29,18 @@ namespace FPLV2Core.Jobs
 
         private ICollection<KeyValuePair<int, string>> _tags = new List<KeyValuePair<int, string>>
         {
-            new KeyValuePair<int, string>(2732877,  "<@U019L6Z5T3J>"), // Ant
-            new KeyValuePair<int, string>(2711483,  "<@U01908NL084>"), // Ben
-            new KeyValuePair<int, string>(2708402,  "<@U018SKYEB18>"), // Chris
-            new KeyValuePair<int, string>(2744985,  "<@U018R28C37F>"), // Dan H
-            new KeyValuePair<int, string>(2825881,  "<@U019GF3N28G>"), // Lee
-            new KeyValuePair<int, string>(2739784,  "<@U019LQZSPMW>"), // LP
-            new KeyValuePair<int, string>(2734185,  "<@U018SKMM39Q>"), // Phil
+            new KeyValuePair<int, string>(2088469,  "<@U019L6Z5T3J>"), // Ant
+            new KeyValuePair<int, string>(2056401,  "<@U01908NL084>"), // Ben
+            new KeyValuePair<int, string>(2056264,  "<@U018SKYEB18>"), // Chris
+            new KeyValuePair<int, string>(2081676,  "<@U018R28C37F>"), // Dan H
+            new KeyValuePair<int, string>(2079221,  "<@U019GF3N28G>"), // Lee
+            new KeyValuePair<int, string>(2081329,  "<@U019LQZSPMW>"), // LP
+            new KeyValuePair<int, string>(1843240,  "<@U018SKMM39Q>"), // Phil
             new KeyValuePair<int, string>(2710848,  "<@U018VKEMHM3>"), // Picken
-            new KeyValuePair<int, string>(2730920,  "<@U018P82BA21>"), // Tom
-            new KeyValuePair<int, string>(2747488,  "<@U019LQX01S4>"), // Tommo
-            new KeyValuePair<int, string>(2741381,  "<@U019365M90C>"), // Tony
-            new KeyValuePair<int, string>(2736727,  "<@U018VNAMKTP>")  // Wayne
+            new KeyValuePair<int, string>(2072301,  "<@U018P82BA21>"), // Tom
+            new KeyValuePair<int, string>(2091179,  "<@U019LQX01S4>"), // Tommo
+            new KeyValuePair<int, string>(2085656,  "<@U019365M90C>"), // Tony
+            new KeyValuePair<int, string>(2056313,  "<@U018VNAMKTP>")  // Wayne
         };
 
         public FPLUpdatesJob(ILogger logger, IAlert alerts)

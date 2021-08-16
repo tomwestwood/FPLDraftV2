@@ -12,6 +12,8 @@ namespace FPLDraftV2.Controllers.FPL
     [ApiController]
     public class DraftController
     {
+        private readonly int league_id = 13;
+
         [HttpGet]
         public ActionResult<Draft> Get()
         {
@@ -62,33 +64,22 @@ namespace FPLDraftV2.Controllers.FPL
             DraftDB.UnsetFavourite(favourite);
         }
 
-        [HttpGet("current_nomination")]
-        public ActionResult<Nomination> GetCurrentNomination()
+        [HttpGet("current_nomination/{nomination_id}")]
+        public ActionResult<Nomination> GetActiveNominationByPlayerId(int player_id)
         {
-            return DraftDB.GetCurrentNomination();
+            return DraftDB.GetActiveNominationByPlayerID(player_id);
         }
-        [HttpPost("createNominationLink")]
-        public void CreateNominationLink()
+
+        [HttpPost("nominatePlayer/{nomination}")]
+        public void NominatePlayer(Nomination nomination)
         {
-            DraftDB.CreateNominationLink();
+            DraftDB.NominatePlayer(nomination);
         }
-        [HttpPost("nominatePlayer/{nomination_id}/{draft_manager_id}/{player_id}")]
-        public void NominatePlayer(int nomination_id, int draft_manager_id, int player_id)
-        {
-            var draft_manager = DraftDB.GetDraftManagers(3).First(dm => dm.id == draft_manager_id);
-            DraftDB.NominatePlayer(nomination_id, draft_manager, player_id);
-        }
-        //[HttpPost("yesToNomination/{nomination_id}/{draft_manager_id}")]
-        //public void NominatePlayer(int nomination_id, int draft_manager_id)
-        //{
-        //    var draft_manager = DraftDB.GetDraftManagers(3).First(dm => dm.id == draft_manager_id);
-        //    DraftDB.NominatePlayer(nomination_id, draft_manager, player_id);
-        //}
 
         [HttpGet("draft_managers")]
         public ActionResult<IEnumerable<DraftManager>> GetDraftManagers()
         {
-            return DraftDB.GetDraftManagers(3);
+            return DraftDB.GetDraftManagers(league_id);
         }
 
         [HttpPost("updateDraftManagerWaiverInfo")]
@@ -101,7 +92,7 @@ namespace FPLDraftV2.Controllers.FPL
         public ActionResult<bool> UpdatePickPlayerInfo()
         {
             var fplPlayers = new FPLController().Get().Value.elements;
-            var picks = DraftDB.GetDraftManagerPicks(3); // our league
+            var picks = DraftDB.GetDraftManagerPicks(league_id);
             picks.ForEach(pick =>
             {
                 var matchPlayer = fplPlayers.FirstOrDefault(player => player.id == pick.player_id);
