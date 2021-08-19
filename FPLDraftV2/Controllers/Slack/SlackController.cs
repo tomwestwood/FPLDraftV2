@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using Humanizer;
 using FPLV2Core.Tools;
 using Newtonsoft.Json.Linq;
+using System.Web;
 
 namespace FPLDraftV2.Controllers.Slack
 {
@@ -139,50 +140,73 @@ namespace FPLDraftV2.Controllers.Slack
                         var v = regex.Match(payload);
                         var player_id = int.Parse(v.Groups[1].ToString());
 
+                        IEnumerable<DraftManager> draft_managers = _draftController.GetDraftManagers().Value;
                         DraftManager draft_manager = null;
                         Nomination nomination = null;
+
                         try
                         {
-                            draft_manager = GetDraftManangerFromSlackUsername(convertedPayload.user.id);
+                            draft_manager = GetDraftManangerFromSlackUsername(draft_managers, convertedPayload.user.id);
                         }
                         catch(Exception ex)
                         {
                             _loggingSlackClient.PostMessage("Problem getting the draft manager (line 147).");
                         }
-
-
-                        
-
-                        if (mainAction.value == "click_yes")
-                        {   
-                            _slackClient.PostThreadMessage($"<@{convertedPayload.user.id}> said *YES*.", convertedPayload.message.ts);
-                        }
-                        else if (mainAction.value == "click_no")
+                        try
                         {
-                            _slackClient.PostThreadMessage($"<@{convertedPayload.user.id}> said *NO*.", convertedPayload.message.ts);
+                            nomination = _draftController.GetActiveNominationByPlayerId(player_id)?.Value;
+                        }
+                        catch (Exception ex)
+                        {
+                            _loggingSlackClient.PostMessage("Problem getting the nomination.");
                         }
 
-                        if (draft_manager != null)
+                        var nominating_manager = draft_managers.FirstOrDefault(dm => dm.id == nomination.nominator_id);
+
+                        if (draft_manager != null && nomination != null && nominating_manager != null)
                         {
-                            _loggingSlackClient.PostMessage($"manager clicking is: {draft_manager.name} and player id is {player_id}");
+
+
+                            _loggingSlackClient.PostMessage("Nominating manager seed: " + nominating_manager.waiver_order);
+                            _loggingSlackClient.PostMessage("Voting manager seed: " + draft_manager.waiver_order);
 
                             // eligibility:
+                            if (draft_manager.waiver_order >= nominating_manager.waiver_order)
+                            {
+                                _slackClient.PostThreadMessage($"{draft_manager.slack_id} - you are not eligible to bid on this player (waiver position).", convertedPayload.message.ts, false);
+                                return new StatusCodeResult(200);
+                            }
 
                             // already nominated:
-                            //if (nomination.nomination_activity.Any(na => na.manager_id == draft_manager.id))
-                            //{
-                            //    _slackClient.PostThreadMessage("You have already said YES/NO...", convertedPayload.message.ts);
-                            //}
+                            if (nomination.nomination_activity != null && nomination.nomination_activity.Any(n => n.manager_id == draft_manager.id))
+                            {
+                                _slackClient.PostThreadMessage($"{draft_manager.slack_id} - you have already said Yes/No to this player...", convertedPayload.message.ts, false);
+                                return new StatusCodeResult(200);
+                            }
 
                             // is the nominator:
+                            if (draft_manager.id == nomination.nominator_id)
+                            {
+                                _slackClient.PostThreadMessage($"{draft_manager.slack_id} - you cannot say Yes/No to a player you nominated.", convertedPayload.message.ts, false);
+                                return new StatusCodeResult(200);
+                            }
 
+
+                            if (mainAction.value == "click_yes")
+                            {
+                                _slackClient.PostThreadMessage($"<@{convertedPayload.user.id}> said *YES*.", convertedPayload.message.ts);
+                            }
+                            else if (mainAction.value == "click_no")
+                            {
+                                _slackClient.PostThreadMessage($"<@{convertedPayload.user.id}> said *NO*.", convertedPayload.message.ts);
+                            }
 
                             try
                             {
-                                nomination = _draftController.GetActiveNominationByPlayerId(player_id)?.Value;
+                                
                                 if (nomination != null)
                                 {
-                                    nomination.nomination_activity.ToList().Add(new NominationActivity()
+                                    nomination.nomination_activity.Add(new NominationActivity()
                                     {
                                         manager_id = draft_manager.id,
                                         response = mainAction.value == "click_yes",
@@ -209,7 +233,7 @@ namespace FPLDraftV2.Controllers.Slack
                 }
                 else
                 {
-                    _slackClient.PostMessage(payload);
+                    _loggingSlackClient.PostMessage(payload);
                 }
             }
             catch (Exception ex)
@@ -689,9 +713,9 @@ namespace FPLDraftV2.Controllers.Slack
             return $"• {(dm.transfers_remaining == 0 ? "~" : string.Empty)}{dm.slack_id}{(dm.transfers_remaining == 0 ? "~" : string.Empty)} { new StringBuilder().Insert(0, ":arrows_counterclockwise:", dm.transfers_remaining) }";
         }
 
-        private DraftManager GetDraftManangerFromSlackUsername(string username)
+        private DraftManager GetDraftManangerFromSlackUsername(IEnumerable<DraftManager> draftManagers, string username)
         {
-            return _draftController.GetDraftManagers().Value.FirstOrDefault(dm => dm.slack_id.Contains(username));
+            return draftManagers.FirstOrDefault(dm => dm.slack_id.Contains(username));
         }
     }
 
@@ -699,6 +723,8 @@ namespace FPLDraftV2.Controllers.Slack
     {
         private readonly Uri _uri;
         private readonly Encoding _encoding = new UTF8Encoding();
+        private readonly string _user_access_token = "xoxp-1296646167922-1295274384069-2364978637107-6d4d7c95990543603a9f111588358c0a";
+        private readonly string _bot_access_token = "xoxb-1296646167922-1297674912434-kyEo9KbwugN8Rz4VHFnpiQKr";
 
         public SlackClient(string urlWithAccessToken)
         {
@@ -718,14 +744,15 @@ namespace FPLDraftV2.Controllers.Slack
             PostMessage(payload);
         }
 
-        public void PostThreadMessage(string text, string thread_id, string username = null, string channel = null)
+        public void PostThreadMessage(string text, string thread_id, bool reply_broadcast = true, string username = null, string channel = null)
         {
             PostThreadPayload payload = new PostThreadPayload()
             {
                 Channel = channel,
                 Username = username,
                 Text = text,
-                thread_ts = thread_id
+                thread_ts = thread_id,
+                reply_broadcast = reply_broadcast
             };
 
             PostMessage(payload);
@@ -783,6 +810,27 @@ namespace FPLDraftV2.Controllers.Slack
 
                 //The response text is usually "ok"
                 return _encoding.GetString(response);
+            }
+        }
+
+        public string PostEphermal(string channel, string text, string user, string thread_ts = "")
+        {
+            var apiUri = "https://slack.com/api/chat.postEphemeral";
+
+            using (var wb = new WebClient())
+            {
+                NameValueCollection outgoingQueryString = HttpUtility.ParseQueryString(String.Empty);
+                outgoingQueryString.Add("token", _user_access_token);
+                outgoingQueryString.Add("channel", channel);
+                outgoingQueryString.Add("text", text);
+                outgoingQueryString.Add("user", user);
+                if(thread_ts != string.Empty)
+                    outgoingQueryString.Add("thread_ts", thread_ts);
+
+                var response = wb.UploadValues(apiUri, "POST", outgoingQueryString);
+                string responseString = Encoding.UTF8.GetString(response);
+                var responseHeaders = wb.ResponseHeaders;
+                return responseString;
             }
         }
     }

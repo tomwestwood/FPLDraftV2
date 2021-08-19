@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using FPLV2Core.Models.FPL;
 
 namespace FPLV2Core.Models.FPLDraft
@@ -17,7 +17,7 @@ namespace FPLV2Core.Models.FPLDraft
         public DateTime? deadline_date { get; set; }
         public DateTime? completion_date { get; set; }
 
-        public IEnumerable<NominationActivity> nomination_activity { get; set; }
+        public ObservableCollection<NominationActivity> nomination_activity { get; set; }
 
         public Element player { get; set; }
         public DraftManager nominator { get; set; }

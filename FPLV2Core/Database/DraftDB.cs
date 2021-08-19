@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -356,7 +357,7 @@ namespace FPLV2Core.Database.DraftDB
                             manager_id = !nominationRow.IsNull("manager_id") ? (int)nominationRow["manager_id"] : 0,
                             deadline_date = !nominationRow.IsNull("deadline_date") ? (DateTime?)nominationRow["deadline_date"] : null,
                             completion_date = !nominationRow.IsNull("completion_date") ? (DateTime?)nominationRow["completion_date"] : null,
-                            nomination_activity = !nominationRow.IsNull("nomination_activity") ? JsonConvert.DeserializeObject<IEnumerable<NominationActivity>>(nominationRow["nomination_activity"].ToString()) : new List<NominationActivity>()
+                            nomination_activity = !nominationRow.IsNull("nomination_activity") ? JsonConvert.DeserializeObject<ObservableCollection<NominationActivity>>(nominationRow["nomination_activity"].ToString()) : new ObservableCollection<NominationActivity>()
                         };
                     }
                     catch (Exception ex)

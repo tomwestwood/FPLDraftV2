@@ -18,5 +18,8 @@ namespace FPLV2Core.Models.Slack
 
         [JsonProperty("blocks")]
         public string Blocks { get; set; }
+
+        [JsonProperty("reply_broadcast")]
+        public bool reply_broadcast { get; set; }
     }
 }
