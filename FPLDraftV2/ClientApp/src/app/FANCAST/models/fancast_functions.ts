@@ -58,6 +58,7 @@ export class FancastFunctions {
     basicManager.manager_image_url = draft.draft_manager.manager_image_url;
     basicManager.team_colour_1 = draft.draft_manager.team_colour_1;
     basicManager.team_colour_2 = draft.draft_manager.team_colour_2;
+    basicManager.team_fpl_id = draft.draft_manager.team_fpl_id;
     basicDraft.draft_manager = basicManager;
     return basicDraft;
   }

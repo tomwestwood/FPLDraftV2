@@ -21,6 +21,8 @@ import { TerminalComponent } from './terminal/terminal.component';
 import { TerminalPlayerComponent } from './controls/terminal-player/terminal-player.component';
 import { PreviewSquadComponent } from './controls/preview-squad/preview-squad.component';
 import { LiveFixtureComponent } from './live/fixture/liveFixture.component';
+import { LineupComponent } from './live/lineup/lineup.component';
+import { FixtureLineupsComponent } from './live/fixture-lineups/fixture-lineups.component';
 import { TerminalWaitingComponent } from './terminal/terminal-waiting/terminal-waiting.component';
 import { TerminalNominationComponent } from './terminal/terminal-nomination/terminal-nomination.component';
 import { TerminalSigningComponent } from './terminal/terminal-signing/terminal-signing.component';
@@ -72,6 +74,8 @@ import { TableComponent } from './live/table/table.component';
     TerminalComponent,
     PreviewSquadComponent,
     LiveFixtureComponent,
+    LineupComponent,
+    FixtureLineupsComponent,
     TableComponent,
     TerminalWaitingComponent,
     TerminalNominationComponent,
@@ -98,6 +102,8 @@ import { TableComponent } from './live/table/table.component';
       { path: 'terminal', component: TerminalComponent },
       { path: 'livefixture/:leagueId/:gameweekId/:id', component: LiveFixtureComponent },
       { path: 'livetable/:leagueId', component: TableComponent },
+      { path: 'livelineup/:entryId/:gameweekId', component: LineupComponent },
+      { path: 'livefixturelineups/:leagueId/:gameweekId/:id', component: FixtureLineupsComponent },
       { path: 'fancast', component: FancastDraftComponent },
       { path: 'fancastterminal', component: FancastTerminalComponent },
       { path: 'fancastreview', component: FancastReviewComponent }

@@ -64,6 +64,12 @@ namespace FPLDraftV2.Controllers.FPL
             DraftDB.UnsetFavourite(favourite);
         }
 
+        [HttpGet("active_nomination")]
+        public ActionResult<Nomination> GetMostRecentActiveNomination()
+        {
+            return DraftDB.GetMostRecentActiveNomination();
+        }
+
         [HttpGet("current_nomination/{nomination_id}")]
         public ActionResult<Nomination> GetActiveNominationByPlayerId(int player_id)
         {
@@ -83,9 +89,9 @@ namespace FPLDraftV2.Controllers.FPL
         }
 
         [HttpPost("updateDraftManagerWaiverInfo")]
-        public void UpdateDraftManager_WaiverInfo([FromBody] DraftManager dm)
+        public void UpdateDraftManagerWaiverInfo(DraftManager dm)
         {
-            //DraftDB.(dm);
+            DraftDB.UpdateDraftManagerWaiverInfo(dm);
         }
 
         [HttpGet("updatePickPlayerInfo")]

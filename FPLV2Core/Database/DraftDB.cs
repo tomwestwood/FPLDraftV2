@@ -370,6 +370,49 @@ namespace FPLV2Core.Database.DraftDB
             return nomination;
         }
 
+        public static Nomination GetMostRecentActiveNomination()
+        {
+            var sp = "sel_latest_active_nomination";
+            var dt = new DataTable();
+            var nomination = new Nomination();
+            using (var sqlCmd = new SqlCommand(sp, connection))
+            {
+                sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
+                connection.Open();
+                using (var sqlAdapter = new SqlDataAdapter(sqlCmd))
+                {
+                    sqlAdapter.Fill(dt);
+
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("No active nomination matches this action...");
+
+                    try
+                    {
+                        var nominationRow = dt.Rows[0];
+                        nomination = new Nomination()
+                        {
+                            id = (int)nominationRow["id"],
+                            player_id = (int)nominationRow["player_id"],
+                            nominator_id = (int)nominationRow["nominator_id"],
+                            date_nominated = (DateTime?)nominationRow["date_nominated"],
+                            slack_id = (string)nominationRow["slack_id"],
+                            draft_id = (int)nominationRow["draft_id"],
+                            manager_id = !nominationRow.IsNull("manager_id") ? (int)nominationRow["manager_id"] : 0,
+                            deadline_date = !nominationRow.IsNull("deadline_date") ? (DateTime?)nominationRow["deadline_date"] : null,
+                            completion_date = !nominationRow.IsNull("completion_date") ? (DateTime?)nominationRow["completion_date"] : null,
+                            nomination_activity = !nominationRow.IsNull("nomination_activity") ? JsonConvert.DeserializeObject<ObservableCollection<NominationActivity>>(nominationRow["nomination_activity"].ToString()) : new ObservableCollection<NominationActivity>()
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Can't get that nomination... " + ex.Message);
+                    }
+                }
+            }
+
+            return nomination;
+        }
+
         public static void NominatePlayer(Nomination nomination)
         {
             var sp = "dbo.save_nomination";

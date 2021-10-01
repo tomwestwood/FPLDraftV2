@@ -1,0 +1,26 @@
+<div class="lineup" [ngStyle]="getBackground()">
+  <div class="lineup-container">
+    <div class="team" *ngIf="entry && draftManager">
+      <div class="team-header">
+        <img class="team-badge" src="{{draftManager.team_image_url}}" />
+        <div class="team-header-text">
+          <div class="team-name" [ngStyle]="getTextColour()">{{entry.teamName | uppercase }}</div>
+          <div class="gameweek-info">GAMEWEEK: {{gameweekId | uppercase }}</div>
+        </div>
+      </div>
+      <div class="squad" *ngFor="let pick of entry.picks.picks">
+        <div style="display: flex;">
+          <div style="display: flex; align-items: center; width: 60px;">
+            <div [ngStyle]="getContainerStyle()" style="padding: 8px; height: 38px; width: 60px; margin-left: -5px; overflow: hidden; transform: skew(-20deg); position: absolute;"></div>
+            <div style="margin: 8px; color: white; position: absolute;">{{pick.player.position.singular_name_short | uppercase}}</div>
+          </div>
+          <div style="display: flex; align-items: center; width: 320px; margin-left: 4px;">
+            <div [ngStyle]="getContainerStyle()" style="padding: 8px; width: 320px; height: 38px; margin-left: -5px; overflow: hidden; transform: skew(-20deg); position: absolute;"></div>
+            <div style="margin: 8px; color: white; position: absolute;">{{pick.player.web_name | uppercase}} {{pick.isCaptain ? '(C)' : pick.isViceCaptain ? '(VC)' : ''}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <img class="captain-img" src="{{entryCaptain.photo_url}}" />
+  </div>
+</div>

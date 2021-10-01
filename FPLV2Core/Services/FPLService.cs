@@ -73,7 +73,7 @@ namespace FPLV2Core.Services
             var draftManagers = new List<DraftManager>(); 
             try
             {
-                draftManagers = DraftDB.GetDraftManagers(3);
+                draftManagers = DraftDB.GetDraftManagers(13);
             } catch (Exception ex) {  }
             var baseFpl = GetFPLBase();
 

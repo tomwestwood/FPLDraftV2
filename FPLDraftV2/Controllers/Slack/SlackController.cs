@@ -29,6 +29,7 @@ namespace FPLDraftV2.Controllers.Slack
         private DraftController _draftController;
         private SlackClient _slackClient;
         private SlackClient _loggingSlackClient;
+        private const int _league_id = 429551;
 
         private static readonly HttpClient client = new HttpClient();
 
@@ -55,7 +56,7 @@ namespace FPLDraftV2.Controllers.Slack
         [HttpPost("kenbot")]
         public ActionResult Kenbot([FromForm] SlashCommandRequest payload)
         {
-            JsonResult jsonResult = null;
+            ActionResult jsonResult = null;
 
             if (!string.IsNullOrEmpty(payload.Text))
             {
@@ -92,7 +93,10 @@ namespace FPLDraftV2.Controllers.Slack
                         jsonResult = JsonFixturesBasic(true);
                         break;
                     case "waiver":
-                        jsonResult = JsonWaiverBasic(true);
+                        jsonResult = JsonWaiverBasic();
+                        break;
+                    case "announce":
+                        jsonResult = JsonAnnounce();
                         break;
                 }
             }
@@ -170,13 +174,6 @@ namespace FPLDraftV2.Controllers.Slack
                             _loggingSlackClient.PostMessage("Nominating manager seed: " + nominating_manager.waiver_order);
                             _loggingSlackClient.PostMessage("Voting manager seed: " + draft_manager.waiver_order);
 
-                            // eligibility:
-                            if (draft_manager.waiver_order >= nominating_manager.waiver_order)
-                            {
-                                _slackClient.PostThreadMessage($"{draft_manager.slack_id} - you are not eligible to bid on this player (waiver position).", convertedPayload.message.ts, false);
-                                return new StatusCodeResult(200);
-                            }
-
                             // already nominated:
                             if (nomination.nomination_activity != null && nomination.nomination_activity.Any(n => n.manager_id == draft_manager.id))
                             {
@@ -190,6 +187,13 @@ namespace FPLDraftV2.Controllers.Slack
                                 _slackClient.PostThreadMessage($"{draft_manager.slack_id} - you cannot say Yes/No to a player you nominated.", convertedPayload.message.ts, false);
                                 return new StatusCodeResult(200);
                             }
+
+                            // eligibility:
+                            if (draft_manager.waiver_order >= nominating_manager.waiver_order)
+                            {
+                                _slackClient.PostThreadMessage($"{draft_manager.slack_id} - you are not eligible to bid on this player (waiver position).", convertedPayload.message.ts, false);
+                                return new StatusCodeResult(200);
+                            }                            
 
 
                             if (mainAction.value == "click_yes")
@@ -265,6 +269,12 @@ namespace FPLDraftV2.Controllers.Slack
             return jsonResult;
         }
 
+        [HttpGet("kenbot_announce")]
+        public ActionResult KenbotAnnounce()
+        {
+            return JsonAnnounce();
+        }
+
         [HttpGet("kenbot_fixture_show_more/{id}")]
         public ActionResult KenbotFixtureShowMore(int id)
         {
@@ -289,21 +299,75 @@ namespace FPLDraftV2.Controllers.Slack
         {
             // get the user -> can they still nominate?
             var draftManagers = _draftController.GetDraftManagers().Value;
-            var nominator = draftManagers.First(dm => dm.name == $"Tom Westwood"); // manager name
+            var nominator = draftManagers.First(dm => dm.name == $"Phil Nicklin"); // manager name
             var waiverManagers = draftManagers.Where(dm => dm.waiver_order <= nominator.waiver_order).OrderBy(dm => dm.waiver_order);
 
             // get the player ->
             var fplBase = _fplController.Get().Value;
-            var club = fplBase.clubs.FirstOrDefault(club => club.name.ToLower() == "aston villa");
-            var position = fplBase.positions.FirstOrDefault(pos => pos.singular_name.ToLower() == "midfielder");
-            var image_url = "https://cdn.fifacm.com/content/media/imgs/fifa21/players/p229906.png?v=22";
+            var club = fplBase.clubs.FirstOrDefault(club => club.name.ToLower() == "everton");
+            var position = fplBase.positions.FirstOrDefault(pos => pos.singular_name.ToLower() == "forward");
+            var image_url = "https://www.footyrenders.com/render/Salomon-Rondon-2.png";
             var value = 0;
-            var player = new Element() { first_name = "Leon", second_name = "Bailey", web_name = "Leon Bailey", club = club, position = position, now_cost = value, code = -1 };
+            var player = new Element() { first_name = "Solomon", second_name = "Rondondinho", web_name = "Rondondinho", club = club, position = position, now_cost = value, code = 591, id = 591 };
 
 
             // if all checks out, create a nomination and inform the user!!!
+            CreateNominationEntry(player, nominator, "N/A", 13);
             _slackClient.PostBlockMessage(GetNominatedJson(player, nominator.slack_id, waiverManagers));
             return new JsonResult(GetNominatedJson(player, nominator.slack_id, waiverManagers));
+        }
+
+        private JsonResult JsonAnnounce()
+        {
+            try
+            {
+                var nomination = _draftController.GetMostRecentActiveNomination()?.Value;
+                if (nomination == null)
+                    return new JsonResult(new { type = "Text", text = "There is no active nomination to conclude." });
+
+                var nominatedPlayer = _fplController.Get().Value.elements.FirstOrDefault(e => e.id == nomination.player_id);
+                var draft_managers = _draftController.Get().Value.draft_managers;
+                var confirmingManagerIds = nomination.nomination_activity.Where(n => n.response).Select(n => n.manager_id);
+                var successfulManager = confirmingManagerIds.Any()
+                    ? draft_managers.Where(dm => confirmingManagerIds.Contains(dm.id)).OrderBy(dm => dm.waiver_order).FirstOrDefault()
+                    : draft_managers.FirstOrDefault(dm => dm.id == nomination.nominator_id);
+
+
+                _slackClient.PostMessage($"{successfulManager.team_name} have successfully completed the signing of {nominatedPlayer.first_name} {nominatedPlayer.web_name}.");
+
+                nomination.completion_date = DateTime.Now;
+                nomination.manager_id = successfulManager.id;
+                _draftController.NominatePlayer(nomination);
+
+                var draftManagersToChange = draft_managers.Where(dm => dm.waiver_order >= successfulManager.waiver_order);
+                draftManagersToChange.ToList().ForEach(dm =>
+                {
+                    if (dm.id == successfulManager.id)
+                    {
+                        dm.waiver_order = draft_managers.Count();
+                        dm.transfers_remaining--;
+                    }
+                    else
+                    {
+                        dm.waiver_order--;
+                    }
+
+                    _draftController.UpdateDraftManagerWaiverInfo(dm);
+                });
+
+                return JsonWaiverBasic();
+            }
+            catch (Exception ex)
+            {
+                var json = new
+                {
+                    type = "text",
+                    text = "Error: " + ex.Message.ToString(),
+                    response_type = "in_channel"
+                };
+
+                return new JsonResult(json);
+            }
         }
 
         private JsonResult JsonUnfoundError()
@@ -318,7 +382,7 @@ namespace FPLDraftV2.Controllers.Slack
 
         private JsonResult JsonLeagueTableBasic()
         {
-            var league = _fplController.GetH2hLeague(612541);
+            var league = _fplController.GetH2hLeague(_league_id);
 
             var json = new
             {
@@ -343,7 +407,7 @@ namespace FPLDraftV2.Controllers.Slack
         private JsonResult JsonFixturesBasic(bool scores = false)
         {
             var gw = scores ? _fplController.GetScoresGameweek() : _fplController.GetFixtureGameweek();
-            var fixtures = _fplController.GetH2hFixtures(612541, gw.Id);
+            var fixtures = _fplController.GetH2hFixtures(_league_id, gw.Id);
             string content;
 
             if (scores)
@@ -352,7 +416,7 @@ namespace FPLDraftV2.Controllers.Slack
                 if (gw.Finished)
                     content += string.Join("\n", fixtures.Matches.Select(f => $"{f.TeamAPlayerName} *{f.TeamAPoints}* - *{f.TeamBPoints}* {f.TeamBPlayerName}"));
                 else
-                    content += string.Join("\n", fixtures.Matches.Select(f => $"{f.TeamAPlayerName} *{_fplController.GetEntry(f.TeamAId, gw.Id).Points}* - *{_fplController.GetEntry(f.TeamBId, gw.Id).Points}* {f.TeamBPlayerName}{(!gw.Finished ? $" <https://wv1draft.azurewebsites.net/livefixture/612541/{gw.Id}/{f.Id}|[more info]>" : string.Empty)}"));
+                    content += string.Join("\n", fixtures.Matches.Select(f => $"{f.TeamAPlayerName} *{_fplController.GetEntry(f.TeamAId, gw.Id).Points}* - *{_fplController.GetEntry(f.TeamBId, gw.Id).Points}* {f.TeamBPlayerName}{(!gw.Finished ? $" <https://wv1draft.azurewebsites.net/livefixture/{_league_id}/{gw.Id}/{f.Id}|[more info]>" : string.Empty)}"));
             }
             else
             {
@@ -370,7 +434,7 @@ namespace FPLDraftV2.Controllers.Slack
             return new JsonResult(json);
         }
 
-        private JsonResult JsonWaiverBasic(bool scores = false)
+        private JsonResult JsonWaiverBasic()
         {
             var waiverManagers = _draftController.GetDraftManagers().Value.OrderBy(dm => dm.transfers_remaining == 0).ThenBy(dm => dm.waiver_order);
             var content = $"*The waiver order is now as follows: * {Environment.NewLine}" +
@@ -497,7 +561,7 @@ namespace FPLDraftV2.Controllers.Slack
                     {
                         dm.waiver_order--;
                     }
-                    _draftController.UpdateDraftManager_WaiverInfo(dm);
+                    _draftController.UpdateDraftManagerWaiverInfo(dm);
                 });
             }
 
@@ -744,7 +808,7 @@ namespace FPLDraftV2.Controllers.Slack
             PostMessage(payload);
         }
 
-        public void PostThreadMessage(string text, string thread_id, bool reply_broadcast = true, string username = null, string channel = null)
+        public void PostThreadMessage(string text, string thread_id, bool reply_broadcast = false, string username = null, string channel = null)
         {
             PostThreadPayload payload = new PostThreadPayload()
             {

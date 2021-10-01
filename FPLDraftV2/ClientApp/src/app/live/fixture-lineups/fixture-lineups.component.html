@@ -1,0 +1,111 @@
+<div *ngIf="match" class="lineup">
+  <div class="lineup-container" [ngStyle]="getBackgroundHome()">
+    <div class="team home" *ngIf="match.teamAEntry && match.teamAManager">
+      <div class="team-header">
+        <div class="team-header-text">
+          <div class="team-name" [ngStyle]="getTextColourHome()">{{match.teamAManager.team_nickname | uppercase}}</div>
+          <div class="gameweek-info">{{match.teamAPlayerName | uppercase}}</div>
+        </div>
+        <img class="team-badge" [ngStyle]="getContainerStyleHome()" src="{{match.teamAManager.team_image_url}}" />
+      </div>
+      <div class="squad" *ngFor="let pick of match.teamAEntry.picks.picks | slice:0:11">
+        <div class="squad-row">
+          <div class="squad-row-item captain-marker" *ngIf="pick.isCaptain || pick.isViceCaptain">
+            <div [ngStyle]="getContainerStyleHome()" class="container"></div>
+            <div class="container-text">{{pick.isCaptain ? 'C' : 'VC'}}</div>
+          </div>
+          <div class="squad-row-item player">
+            <div [ngStyle]="getContainerStyleHome()" class="container"></div>
+            <div class="container-text">{{pick.player.web_name | uppercase}}</div>
+          </div>
+          <!--<div class="squad-row-item position home">
+    <div [ngStyle]="getContainerStyleHome()" class="container"></div>
+    <div class="container-text">{{pick.player.position.singular_name_short | uppercase}}</div>
+  </div>-->
+        </div>
+      </div>
+      <div style="margin-top: 32px;"></div>
+      <div class="squad">
+        <div class="squad-row">
+          <div class="squad-row-item player" style="width: 120px;">
+            <div [ngStyle]="getContainerStyleHome()" class="container"></div>
+            <div class="container-text">SUBS:</div>
+          </div>
+        </div>
+      </div>
+      <div class="squad" *ngFor="let pick of match.teamAEntry.picks.picks | slice:11:15">
+        <div class="squad-row">
+          <div class="squad-row-item captain-marker">
+            <div [ngStyle]="getContainerStyleHome()" style="margin-right: 8px; color: white; width: 60px;" *ngIf="pick.isCaptain || pick.isViceCaptain" aria-label="Example icon button with a plus one icon">
+              <span>{{pick.isCaptain ? 'C' : 'VC'}}</span>
+            </div>
+          </div>
+          <div class="squad-row-item player">
+            <div [ngStyle]="getContainerStyleHome()" class="container"></div>
+            <div class="container-text">
+              <span>{{pick.player.web_name | uppercase}}</span>
+            </div>
+            <!--<div class="squad-row-item position home">
+      <div [ngStyle]="getContainerStyleHome()" class="container"></div>
+      <div class="container-text">{{pick.player.position.singular_name_short | uppercase}}</div>
+    </div>-->
+          </div>
+        </div>
+    </div>
+    
+  </div>
+  <div class="versus">
+    <img class="captain-img home" src="{{getHomeCaptain().photo_url}}" />
+    <!--<div>VS</div>-->
+    <img class="captain-img away" src="{{getAwayCaptain().photo_url}}" />
+  </div>
+  <div class="lineup-container" [ngStyle]="getBackgroundAway()">
+    
+    <div class="team away" *ngIf="match.teamBEntry && match.teamBManager">
+      <div class="team-header">
+        <img class="team-badge" [ngStyle]="getContainerStyleAway()" src="{{match.teamBManager.team_image_url}}" />
+        <div class="team-header-text">
+          <div class="team-name" [ngStyle]="getTextColourAway()">{{match.teamBManager.team_nickname | uppercase}}</div>
+          <div class="gameweek-info">{{match.teamBPlayerName | uppercase}}</div>
+        </div>
+      </div>
+      <div class="squad" *ngFor="let pick of match.teamBEntry.picks.picks | slice:0:11">
+        <div class="squad-row">
+          <!--<div class="squad-row-item position away">
+    <div [ngStyle]="getContainerStyleAway()" class="container"></div>
+    <div class="container-text">{{pick.player.position.singular_name_short | uppercase}}</div>
+  </div>-->
+          <div class="squad-row-item player">
+            <div [ngStyle]="getContainerStyleAway()" class="container"></div>
+            <div class="container-text">{{pick.player.web_name | uppercase}}</div>
+          </div>
+          <div class="squad-row-item captain-marker" *ngIf="pick.isCaptain || pick.isViceCaptain">
+            <div [ngStyle]="getContainerStyleAway()" class="container"></div>
+            <div class="container-text">{{pick.isCaptain ? 'C' : 'VC'}}</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 32px;"></div>
+      <div class="squad">
+        <div class="squad-row">
+          <div class="squad-row-item player" style="width: 120px;">
+            <div [ngStyle]="getContainerStyleAway()" class="container"></div>
+            <div class="container-text">SUBS:</div>
+          </div>
+        </div>
+      </div>
+      <div class="squad" *ngFor="let pick of match.teamBEntry.picks.picks | slice:11:15">
+        <div class="squad-row">
+          <div class="squad-row-item player">
+            <div [ngStyle]="getContainerStyleAway()" class="container"></div>
+            <div class="container-text">{{pick.player.web_name | uppercase}} {{pick.isCaptain ? '(C)' : pick.isViceCaptain ? '(VC)' : ''}}</div>
+          </div>
+          <!--<div class="squad-row-item position home">
+        <div [ngStyle]="getContainerStyleHome()" class="container"></div>
+        <div class="container-text">{{pick.player.position.singular_name_short | uppercase}}</div>
+      </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

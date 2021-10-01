@@ -69,6 +69,8 @@
     <None Remove="ClientApp\src\app\FANCAST\terminal\fancast-terminal.component.scss" />
     <None Remove="ClientApp\src\app\live\favouritelist.component.ts" />
     <None Remove="ClientApp\src\app\favouritelist\favouritelist.component.ts" />
+    <None Remove="ClientApp\src\app\live\fixture-lineups\fixture-lineups.component.ts" />
+    <None Remove="ClientApp\src\app\live\lineup\lineup.component.ts" />
     <None Remove="ClientApp\src\app\live\table\table.component.ts" />
     <None Remove="ClientApp\src\app\models\draft.ts" />
     <None Remove="ClientApp\src\app\models\fpl.ts" />
@@ -120,6 +122,12 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\draft\services\draft-controller.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\live\fixture-lineups\fixture-lineups.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\live\lineup\lineup.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\live\table\table.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
