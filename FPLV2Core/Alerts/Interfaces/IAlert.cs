@@ -9,5 +9,7 @@ namespace FPLV2Core.Alerts.Interfaces
         public void MessageAlert(string botMessage, ILogger logger);
 
         public void ImageMessageAlert(string botMessage, string botImage, ILogger logger);
+
+        public void ImageAlert(string imageUrl, ILogger logger);
     }
 }

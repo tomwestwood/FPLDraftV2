@@ -18,9 +18,9 @@ namespace FPLV2Core.Services
     {
         #region HARD-CODED VARIABLES
 
-        private string _cookie = "_fbp=fb.1.1620212698910.1939863606; __gads=ID=3c5b614444a3f333:T=1620212691:S=ALNI_MYv5zk1V9O1OqoxvK8Dvx9DWodARw; _ga=GA1.3.734109848.1620212699; _ga_NREXP8D25C=GS1.1.1628591702.7.1.1628591715.0; _ga=GA1.2.734109848.1620212699; _gid=GA1.2.773403680.1628799767; pl_profile='eyJzIjogIld6SXNNVGd6TnpBeE1UVmQ6MW1FYlYzOnpkM0dvRGNITWFrQ3lnV1ZJY1U2UGlkUUM2SDZaWDhRZVY5dXRoU2tfaTgiLCAidSI6IHsiaWQiOiAxODM3MDExNSwgImZuIjogIlRvbSIsICJsbiI6ICJXZXN0d29vZCIsICJmYyI6IDM5fX0='; csrftoken=2iwoPdUQHTceTQvVV8Kb7fPO8xc4fXOlbUb6ojMjCMKhvxB1yzDpKSSquJmUlt5B; sessionid=.eJxVzMsKwjAQheF3yVrKTNLJJO7cCxaK65DmQsRSirGr4rvb7HR5-Dj_Lpzf3sVtNb3cI4qzQKMYEEmcfmny4ZmW5uuc17lr0g3X-2F1HG-XY_4fiq-l1chLAE-RIgNLhJ6A5JSINRupLbC2NmoCVBylMqyysYop5N4CBhCfL6fFML8:1mEbV3:k6xAL5JsT9kQLYQpo09cOd7yeIFoMo9kdoxgZafzHns";
+        private string _cookie = "pl_profile='eyJzIjogIld6SXNNVGd6TnpBeE1UVmQ6MW5MT2dvOjV4ZHRET0lmV2JDV29Nc212eWlHMGo3Q3hJT2VISGY2dk5jY2F0SlFyMnMiLCAidSI6IHsiaWQiOiAxODM3MDExNSwgImZuIjogIlRvbSIsICJsbiI6ICJXZXN0d29vZCIsICJmYyI6IDM5fX0='; Domain=premierleague.com; expires=Sat, 05 Mar 2022 12:18:14 GMT; Max-Age=1209600; Path=/; Secure";
         const string _fplUsername = "westwood.tom@googlemail.com";
-        const string _fplPassword = "smithy123";
+        const string _fplPassword = "Smithy123";
 
         #endregion
         private HttpClient _httpClient;
@@ -196,19 +196,19 @@ namespace FPLV2Core.Services
         {
             var login_url = "https://users.premierleague.com/accounts/login/";
 
-            using (var wb = new WebClient())
-            {
-                NameValueCollection outgoingQueryString = HttpUtility.ParseQueryString(String.Empty);
-                outgoingQueryString.Add("login", _fplUsername);
-                outgoingQueryString.Add("password", _fplPassword);
-                outgoingQueryString.Add("app", "plfpl-web");
-                outgoingQueryString.Add("redirect-uri", "https://fantasy.premierleague.com/");
+            //using (var wb = new WebClient())
+            //{
+            //    NameValueCollection outgoingQueryString = HttpUtility.ParseQueryString(String.Empty);
+            //    outgoingQueryString.Add("login", _fplUsername);
+            //    outgoingQueryString.Add("password", _fplPassword);
+            //    outgoingQueryString.Add("app", "plfpl-web");
+            //    outgoingQueryString.Add("redirect-uri", "https://fantasy.premierleague.com/");
 
-                var response = wb.UploadValues(login_url, "POST", outgoingQueryString);
-                string responseString = Encoding.UTF8.GetString(response);
+            //    var response = wb.UploadValues(login_url, "POST", outgoingQueryString);
+            //    string responseString = Encoding.UTF8.GetString(response);
 
-                var responseHeaders = wb.ResponseHeaders;
-            }
+            //    var responseHeaders = wb.ResponseHeaders;
+            //}
 
             return string.Empty;
         }

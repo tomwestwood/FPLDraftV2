@@ -124,5 +124,12 @@ namespace FPLDraftV2.Controllers.FPL
             
             return current_league;
         }
+
+        //// new stuff:
+        //[HttpGet("getFixtureGameweek")]
+        //public Event GetFixtureGameweek()
+        //{
+        //    return _fplService.GetFixtureGameweek();
+        //}
     }
 }

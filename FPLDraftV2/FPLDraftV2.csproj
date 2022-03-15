@@ -46,27 +46,17 @@
     <None Remove="ClientApp\src\app\draft\draft-selecting\draft-selecting.component.ts" />
     <None Remove="ClientApp\src\app\draft\draft.component.ts" />
     <None Remove="ClientApp\src\app\draft\services\draft-controller.service.ts" />
-    <None Remove="ClientApp\src\app\FANCAST\controls\confirm-player\fancast-confirm-player.component.html" />
-    <None Remove="ClientApp\src\app\FANCAST\controls\confirm-player\fancast-confirm-player.component.scss" />
-    <None Remove="ClientApp\src\app\FANCAST\controls\preview-squad\fancast-preview-squad.component.html" />
-    <None Remove="ClientApp\src\app\FANCAST\controls\preview-squad\fancast-preview-squad.component.scss" />
-    <None Remove="ClientApp\src\app\FANCAST\controls\terminal-player\fancast-terminal-player.component.html" />
-    <None Remove="ClientApp\src\app\FANCAST\controls\terminal-player\fancast-terminal-player.component.scss" />
-    <None Remove="ClientApp\src\app\FANCAST\data\fancast_players.json" />
-    <None Remove="ClientApp\src\app\FANCAST\draft\fancast-draft.component.html" />
-    <None Remove="ClientApp\src\app\FANCAST\draft\fancast-draft.component.scss" />
-    <None Remove="ClientApp\src\app\FANCAST\models\fancast-player.js" />
-    <None Remove="ClientApp\src\app\FANCAST\models\fancast-player.js.map" />
-    <None Remove="ClientApp\src\app\FANCAST\models\fancast-search-filter.js" />
-    <None Remove="ClientApp\src\app\FANCAST\models\fancast-search-filter.js.map" />
-    <None Remove="ClientApp\src\app\FANCAST\models\fancast_draft_squad.js" />
-    <None Remove="ClientApp\src\app\FANCAST\models\fancast_draft_squad.js.map" />
-    <None Remove="ClientApp\src\app\FANCAST\models\fancast_functions.js" />
-    <None Remove="ClientApp\src\app\FANCAST\models\fancast_functions.js.map" />
-    <None Remove="ClientApp\src\app\FANCAST\review\fancast-review.component.html" />
-    <None Remove="ClientApp\src\app\FANCAST\review\fancast-review.component.scss" />
-    <None Remove="ClientApp\src\app\FANCAST\terminal\fancast-terminal.component.html" />
-    <None Remove="ClientApp\src\app\FANCAST\terminal\fancast-terminal.component.scss" />
+    <None Remove="ClientApp\src\app\FANCAST\controls\confirm-player\fancast-confirm-player.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\controls\preview-squad\fancast-preview-squad.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\controls\terminal-player\fancast-terminal-player.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\draft\fancast-draft.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\models\fancast-player.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\models\fancast-search-filter.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\models\fancast_draft_squad.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\models\fancast_functions.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\review\fancast-review.component.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\services\fancast.service.ts" />
+    <None Remove="ClientApp\src\app\FANCAST\terminal\fancast-terminal.component.ts" />
     <None Remove="ClientApp\src\app\live\favouritelist.component.ts" />
     <None Remove="ClientApp\src\app\favouritelist\favouritelist.component.ts" />
     <None Remove="ClientApp\src\app\live\fixture-lineups\fixture-lineups.component.ts" />
@@ -78,7 +68,6 @@
     <None Remove="ClientApp\src\app\services\draft.service.ts" />
     <None Remove="ClientApp\src\app\services\fpl.service.ts" />
     <None Remove="ClientApp\src\app\services\signalR.service.ts" />
-    <None Remove="ClientApp\src\app\terminal-old\terminal-old.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-nomination\terminal-nomination.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-signing\terminal-signing.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-timeout\terminal-timeout.component.ts" />
@@ -147,9 +136,6 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\services\fpl.service.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\terminal-old\terminal-old.component.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-signing\terminal-signing.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

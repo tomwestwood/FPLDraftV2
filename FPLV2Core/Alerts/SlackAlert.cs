@@ -17,7 +17,7 @@ namespace FPLV2Core.Alerts
         // debug:
         //private const string _slackClientConnection = "IIwG0K4dbK8Mf45UDenr6AWo";
         // live:
-        private const string _slackClientConnection = "1WYfXPBp6JdtixZZ1cvH60BR"; 
+        private const string _slackClientConnection = "1WYfXPBp6JdtixZZ1cvH60BR";
 
 
         public SlackAlert()
@@ -33,7 +33,7 @@ namespace FPLV2Core.Alerts
 
         public void ImageMessageAlert(string content, string imageUrl, ILogger logger)
         {
-            var json =  new[]
+            var json = new[]
             {
                 new
                 {
@@ -56,6 +56,27 @@ namespace FPLV2Core.Alerts
 
             logger.Log(content);
         }
+
+        public void ImageAlert(string imageUrl, ILogger logger)
+        {
+            var json = new[]
+            {
+                new
+                {
+                    type = "section",
+                    attachments = new []
+                    {
+                        new { imageUrl = "C://ss//5334385.png" }
+                    }
+                }
+            };
+
+            _slackClient.PostImage(JsonConvert.SerializeObject(json));
+
+            //logger.Log(content);
+        }
+
+
     }
 
     public class SlackClient
@@ -109,6 +130,21 @@ namespace FPLV2Core.Alerts
                 string responseText = _encoding.GetString(response);
             }
         }
+
+        public void PostImage(string imgUrl, string username = null, string channel = null)
+        {
+            Payload payload = new Payload()
+            {
+                Channel = channel,
+                Username = username,
+                Attachment = new SlackAttachment()
+                {
+                    Fallback = "cannot be found...",
+                    Text = "Fixture...",
+                    Image_Url = "https://wv1draft.azurewebsites.net/livefixturelineups/429551/11/5334347"
+                }
+            };
+        }
     }
 
     public class Payload
@@ -124,6 +160,19 @@ namespace FPLV2Core.Alerts
 
         [JsonProperty("blocks")]
         public string Blocks { get; set; }
+
+        [JsonProperty("attachment")]
+        public SlackAttachment Attachment { get; set; }
+    }
+
+    public class SlackAttachment
+    {
+        [JsonProperty("fallback")]
+        public string Fallback { get; set; }
+        [JsonProperty("text")]
+        public string Text { get; set; }
+        [JsonProperty("image_url")]
+        public string Image_Url { get; set; }
     }
 
     public class SlackCommandRequest

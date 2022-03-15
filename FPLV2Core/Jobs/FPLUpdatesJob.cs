@@ -4,13 +4,15 @@ using System.Linq;
 using FPLV2Core.Models.FPL;
 using FPLV2Core.Alerts.Interfaces;
 using FPLV2Core.Services;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
 
 namespace FPLV2Core.Jobs
 {
     public class FPLUpdatesJob
     {
         private readonly ILogger _logger;
-        private readonly IAlert _alerts;
+        private readonly Alerts.Interfaces.IAlert _alerts;
 
         private readonly FPLService _fplService;
 
@@ -36,14 +38,14 @@ namespace FPLV2Core.Jobs
             new KeyValuePair<int, string>(2079221,  "<@U019GF3N28G>"), // Lee
             new KeyValuePair<int, string>(2081329,  "<@U019LQZSPMW>"), // LP
             new KeyValuePair<int, string>(1843240,  "<@U018SKMM39Q>"), // Phil
-            new KeyValuePair<int, string>(2710848,  "<@U018VKEMHM3>"), // Picken
+            new KeyValuePair<int, string>(2104528,  "<@U018VKEMHM3>"), // Picken
             new KeyValuePair<int, string>(2072301,  "<@U018P82BA21>"), // Tom
             new KeyValuePair<int, string>(2091179,  "<@U019LQX01S4>"), // Tommo
             new KeyValuePair<int, string>(2085656,  "<@U019365M90C>"), // Tony
             new KeyValuePair<int, string>(2056313,  "<@U018VNAMKTP>")  // Wayne
         };
 
-        public FPLUpdatesJob(ILogger logger, IAlert alerts)
+        public FPLUpdatesJob(ILogger logger, Alerts.Interfaces.IAlert alerts)
         {
             _logger = logger;
             _alerts = alerts;
@@ -115,15 +117,19 @@ namespace FPLV2Core.Jobs
                     //BroadcastAlertMessage("KENBOT TESTING.");
                     _draftFixtures.Matches.ToList().ForEach(df =>
                     {
+                        // we used to just post the text of the teams...:
                         var teamAName = $"*{df.TeamAEntry.TeamName}*:";
                         var teamAFixtureStartingLineup = string.Join("", df.TeamAEntry.Picks.Picks.Take(11).Select(p => $"{Environment.NewLine}{p.Player.position_name_short}: {p.Player.web_name}{(p.IsCaptain ? " (C)" : p.IsViceCaptain ? " (VC)" : string.Empty)}"));
                         var teamAFixtureSubs = $"{Environment.NewLine}_Subs:_{string.Join("", df.TeamAEntry.Picks.Picks.Reverse().Take(4).Select(p => $"{Environment.NewLine}_{p.Player.position_name_short}: {p.Player.web_name}_"))}";
-                        BroadcastAlertImageMessage(teamAName + teamAFixtureStartingLineup + teamAFixtureSubs, df.TeamAEntry.Picks.Picks.First(p => p.IsCaptain).Player.photo_url);
+                        //BroadcastAlertImageMessage(teamAName + teamAFixtureStartingLineup + teamAFixtureSubs, df.TeamAEntry.Picks.Picks.First(p => p.IsCaptain).Player.photo_url);
 
                         var teamBName = $"*{df.TeamBEntry.TeamName}*:";
                         var teamBFixtureStartingLineup = string.Join("", df.TeamBEntry.Picks.Picks.Take(11).Select(p => $"{Environment.NewLine}{p.Player.position_name_short}: {p.Player.web_name}{(p.IsCaptain ? " (C)" : p.IsViceCaptain ? " (VC)" : string.Empty)}"));
                         var teamBFixtureSubs = $"{Environment.NewLine}_Subs:_{string.Join("", df.TeamBEntry.Picks.Picks.Reverse().Take(4).Select(p => $"{Environment.NewLine}_{p.Player.position_name_short}: {p.Player.web_name}_"))}";
-                        BroadcastAlertImageMessage(teamBName + teamBFixtureStartingLineup + teamBFixtureSubs, df.TeamBEntry.Picks.Picks.First(p => p.IsCaptain).Player.photo_url);
+                        //BroadcastAlertImageMessage(teamBName + teamBFixtureStartingLineup + teamBFixtureSubs, df.TeamBEntry.Picks.Picks.First(p => p.IsCaptain).Player.photo_url);
+
+                        // now let's grab the custom image:
+                        saveUrlToImage($"https://wv1draft.azurewebsites.net/livefixturelineups/429551/{_gameweekId}/{df.Id}", df.Id);
                     });
                 }
                 catch (Exception ex) { }
@@ -140,6 +146,14 @@ namespace FPLV2Core.Jobs
                 foreach (Fixture originalFixture in _plFixtures)
                 {
                     var updatedFixture = updatedGameweek.FirstOrDefault(a => a.Code == originalFixture.Code);
+
+                    if (updatedFixture == null)
+                    {
+                        // postponed fixture:
+                        BroadcastAlertMessage($"*POSSIBLE POSTPONEMENT OF FIXTURE:* {originalFixture.TeamH.name} v {originalFixture.TeamA.name}");
+                        continue;
+                    }
+
                     updatedFixture.TeamH = originalFixture.TeamH;
                     updatedFixture.TeamA = originalFixture.TeamA;
 
@@ -425,6 +439,29 @@ namespace FPLV2Core.Jobs
         private void BroadcastAlertImageMessage(string message, string image)
         {
             _alerts.ImageMessageAlert(message, image, _logger);
+        }
+
+        // screen-grab stuff:
+        // won't work...
+        private void saveUrlToImage(string url, int fixtureId)
+        {
+
+            var options = new FirefoxOptions();
+            options.AddArguments("--headless");
+            options.AddArguments("--width=1920");
+            options.AddArguments("--height=850");
+            var driver = new FirefoxDriver(options);
+            driver.Navigate().GoToUrl(url);
+            driver.Manage().Window.Size = new System.Drawing.Size(1290, 940);
+            Screenshot ss = ((ITakesScreenshot)driver).GetScreenshot();
+            ss.SaveAsFile($"C:\\ss\\{fixtureId}.png");
+
+            _alerts.ImageAlert("", _logger);
+            
+
+            System.Threading.Thread.Sleep(2000);
+
+            driver.Close();
         }
     }
 }

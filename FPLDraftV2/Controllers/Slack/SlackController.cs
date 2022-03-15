@@ -193,7 +193,13 @@ namespace FPLDraftV2.Controllers.Slack
                             {
                                 _slackClient.PostThreadMessage($"{draft_manager.slack_id} - you are not eligible to bid on this player (waiver position).", convertedPayload.message.ts, false);
                                 return new StatusCodeResult(200);
-                            }                            
+                            }
+
+                            if (draft_manager.transfers_remaining <= 0)
+                            {
+                                _slackClient.PostThreadMessage($"{draft_manager.slack_id} - you are not eligible to bid on this player (no transfers remaining).", convertedPayload.message.ts, false);
+                                return new StatusCodeResult(200);
+                            }
 
 
                             if (mainAction.value == "click_yes")
@@ -299,16 +305,16 @@ namespace FPLDraftV2.Controllers.Slack
         {
             // get the user -> can they still nominate?
             var draftManagers = _draftController.GetDraftManagers().Value;
-            var nominator = draftManagers.First(dm => dm.name == $"Phil Nicklin"); // manager name
+            var nominator = draftManagers.First(dm => dm.name == $"Phil Prescott"); // manager name
             var waiverManagers = draftManagers.Where(dm => dm.waiver_order <= nominator.waiver_order).OrderBy(dm => dm.waiver_order);
 
             // get the player ->
             var fplBase = _fplController.Get().Value;
-            var club = fplBase.clubs.FirstOrDefault(club => club.name.ToLower() == "everton");
+            var club = fplBase.clubs.FirstOrDefault(club => club.name.ToLower() == "burnley");
             var position = fplBase.positions.FirstOrDefault(pos => pos.singular_name.ToLower() == "forward");
-            var image_url = "https://www.footyrenders.com/render/Salomon-Rondon-2.png";
-            var value = 0;
-            var player = new Element() { first_name = "Solomon", second_name = "Rondondinho", web_name = "Rondondinho", club = club, position = position, now_cost = value, code = 591, id = 591 };
+            var image_url = "https://1vs1-7f65.kxcdn.com/img/players/wout-weghorst_158314_134-ub-800.png";
+            var value = 10002;
+            var player = new Element() { first_name = "Mr", second_name = "Weghorst", web_name = "Mr Weghorst", club = club, position = position, now_cost = value, code = 126184, id = 258 };
 
 
             // if all checks out, create a nomination and inform the user!!!
@@ -615,7 +621,7 @@ namespace FPLDraftV2.Controllers.Slack
             // get the user -> can they still nominate?
             var draftManagers = _draftController.GetDraftManagers().Value;
             var nominator = draftManagers.First(dm => dm.slack_id == $"<@{payload.user.id}>");
-            var waiverManagers = draftManagers.Where(dm => dm.waiver_order <= nominator.waiver_order).OrderBy(dm => dm.waiver_order);
+            var waiverManagers = draftManagers.Where(dm => dm.waiver_order <= nominator.waiver_order && dm.transfers_remaining > 0).OrderBy(dm => dm.waiver_order);
 
             // get the player ->
             var player = _fplController.Get().Value.elements.First(e => e.id == player_id);
