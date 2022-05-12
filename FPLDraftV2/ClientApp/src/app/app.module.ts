@@ -28,6 +28,8 @@ import { TerminalNominationComponent } from './terminal/terminal-nomination/term
 import { TerminalSigningComponent } from './terminal/terminal-signing/terminal-signing.component';
 import { TerminalTimeoutComponent } from './terminal/terminal-timeout/terminal-timeout.component';
 
+import { LeagueTableComponent } from './live/league-table/league-table.component';
+
 // fancast:
 import { FancastDraftComponent } from './fancast/draft/fancast-draft.component';
 import { FancastTerminalComponent } from './fancast/terminal/fancast-terminal.component';
@@ -77,6 +79,7 @@ import { TableComponent } from './live/table/table.component';
     LineupComponent,
     FixtureLineupsComponent,
     TableComponent,
+    LeagueTableComponent,
     TerminalWaitingComponent,
     TerminalNominationComponent,
     TerminalSigningComponent,
@@ -102,6 +105,7 @@ import { TableComponent } from './live/table/table.component';
       { path: 'terminal', component: TerminalComponent },
       { path: 'livefixture/:leagueId/:gameweekId/:id', component: LiveFixtureComponent },
       { path: 'livetable/:leagueId', component: TableComponent },
+      { path: 'leaguetable/:leagueId', component: LeagueTableComponent },
       { path: 'livelineup/:entryId/:gameweekId', component: LineupComponent },
       { path: 'livefixturelineups/:leagueId/:gameweekId/:id', component: FixtureLineupsComponent },
       { path: 'fancast', component: FancastDraftComponent },

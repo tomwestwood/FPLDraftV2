@@ -1,0 +1,39 @@
+mat-table {
+  background-color: transparent;
+
+  mat-header-cell {
+    border: solid #DCD8AD 6px;
+    transform: skew(-20deg);
+    margin-right: 2px;
+    background-color: #0070C0;
+    font-size: x-large;
+
+    &.no-border {
+      border: none;
+      background-color: transparent;
+    }
+  }
+
+  mat-cell {
+    border: solid #DCD8AD 6px;
+    transform: skew(-20deg);
+    margin-right: 2px;
+    background-color: #0070C0;
+    font-size: x-large !important;
+
+    &:first-of-type {
+      padding-left: 0px;
+    }
+  }
+}
+
+.recalibrate {
+  transform: skew(20deg);
+  margin-left: 8px;
+}
+
+
+.mat-column-liveRank {
+  flex: none;
+  width: 80px;
+}

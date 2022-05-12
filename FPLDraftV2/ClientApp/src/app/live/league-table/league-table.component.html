@@ -1,0 +1,30 @@
+<div style="margin-top: 20px;" *ngIf="league">
+  <mat-table [dataSource]="league.standings.entries" matSort>
+    <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
+    <mat-row *matRowDef="let element; columns: displayedColumns"></mat-row>
+    <ng-container matColumnDef="liveRank">
+      <mat-header-cell *matHeaderCellDef mat-sort-header class="no-border"></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div class="recalibrate" style="margin-right: 8px;" [ngClass]="{'winning': element.liveRank < element.rank, 'losing': element.liveRank > element.rank }">{{element.liveRank}}</div>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="entryName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header class="no-border"></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div class="recalibrate" style="margin-right: 8px;">{{element.entryName | uppercase}}</div>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="livePoints">
+      <mat-header-cell *matHeaderCellDef mat-sort-header><span class="recalibrate">PTS</span></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div class="recalibrate" style="margin-right: 8px;">{{element.livePoints}}</div>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="liveGoalDifference">
+      <mat-header-cell *matHeaderCellDef mat-sort-header><span class="recalibrate">GD</span></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div class="recalibrate" style="margin-right: 8px;">{{element.liveGoalDifference}}</div>
+      </mat-cell>
+    </ng-container>
+  </mat-table>
+</div>
