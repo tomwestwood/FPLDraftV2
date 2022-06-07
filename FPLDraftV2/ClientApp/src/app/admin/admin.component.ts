@@ -12,7 +12,7 @@ import { DraftControllerService } from '../draft/services/draft-controller.servi
 })
 export class AdminComponent implements OnInit {
 
-  draftId: number = 13;
+  draftId: number = 15;
   isAuction: boolean = true;
   draft: Draft;
   fplBase: FPLBase;

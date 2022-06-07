@@ -1,20 +1,10 @@
-import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { Club, Player, FPLBase } from '../models/fpl';
-import { FplService } from '../services/fpl.service';
-import { DraftService } from '../services/draft.service';
-import { Draft, DraftManager, DraftManagerFavourite, DraftManagerPick, DraftFunctions, SquadTicker, DraftSquad, RoundPicks, DraftStatuses, SealedBid } from '../models/draft';
-import { SearchFilter } from '../models/searchFilter';
-import { MatTableDataSource } from '@angular/material/table';
-import { TemplateParser } from '@angular/compiler';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SignalRService } from '../services/signalR.service';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { Player, FPLBase } from '../models/fpl';
+import { Draft, DraftManager, DraftManagerPick, DraftFunctions, SquadTicker, DraftStatuses, SealedBid } from '../models/draft';
 import { trigger, transition, style, animate, state } from '@angular/animations';
 import { DraftControllerService } from '../draft/services/draft-controller.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TerminalWaitingComponent } from './terminal-waiting/terminal-waiting.component';
-import { ComponentType } from '@angular/cdk/portal';
 import { TerminalNominationComponent } from './terminal-nomination/terminal-nomination.component';
 import { TerminalSigningComponent } from './terminal-signing/terminal-signing.component';
 import { TerminalTimeoutComponent } from './terminal-timeout/terminal-timeout.component';
@@ -45,17 +35,14 @@ import { TerminalTimeoutComponent } from './terminal-timeout/terminal-timeout.co
   ]
 })
 export class TerminalComponent implements OnInit {
-  draftId: number = 13;
+  draftId: number = 15;
   isDraftAuction: boolean = true;
 
   fplBase: FPLBase;
   draft: Draft;
-  timer: number = 30;
-  timeout: NodeJS.Timeout;
   currentPick: DraftManagerPick;
   announcementPick: DraftManagerPick;
   squadTicker: SquadTicker;
-  picksTicker: DraftManager[];
   displaySquadTicker: boolean;
   statusUpdated: boolean;
   managerUpdated: boolean;
@@ -67,16 +54,11 @@ export class TerminalComponent implements OnInit {
   tickerItems: string[];
 
   newManagerAudio = new Audio('../../assets/mustang.mp3');
-  draftingAudio = new Audio('../../assets/kp_lang_music.wav');
   nominatedAudio = new Audio('../../assets/player_nominated.wav');
-  placeBidsAudio = new Audio('../../assets/place_bids.wav');
-  bidsReceivedAudio = new Audio('../../assets/bloodyhell.mp3');
   timeoutAudio = new Audio('../../assets/Sad-trombone.mp3');
   announceAudio = new Audio('../../assets/player_signed.wav');
 
-
-
-  constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog, private _ngZone: NgZone) {
+  constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog) {
     draftControllerService.getDraft(this.draftId);
   }
 
@@ -105,7 +87,7 @@ export class TerminalComponent implements OnInit {
           this.currentPick = this.draftControllerService.getCurrentPick();
         }
 
-        this.stopTimer();
+        this.draftControllerService.stopDraftingTimer();
 
         // actions:
         switch (this.draft.status_id) {
@@ -128,7 +110,7 @@ export class TerminalComponent implements OnInit {
             break;
 
           case DraftStatuses.Drafting:
-            this.startDraftingTimer();
+            this.draftControllerService.startDraftingTimer();
             break;
 
           case DraftStatuses.Timeout:
@@ -147,8 +129,9 @@ export class TerminalComponent implements OnInit {
             }
 
             setTimeout(() => {
-              this.placeBidsAudio.currentTime = 0;
-              let placeBidsPromise = this.placeBidsAudio.play();
+              let placeBidsAudio = new Audio(''); // to remove:
+              placeBidsAudio.currentTime = 0;
+              let placeBidsPromise = placeBidsAudio.play();
 
               if (placeBidsPromise !== undefined) {
                 placeBidsPromise.then(_ => {
@@ -157,13 +140,14 @@ export class TerminalComponent implements OnInit {
               }
 
               nominationAndBidsDialog.close();
-              this.startSealedBidsTimer();
+              this.draftControllerService.startBidsTimer();
             }, 5000);
             break;
 
           case DraftStatuses.BidsReceived:
-            this.bidsReceivedAudio.currentTime = 0;
-            let bidsReceivedPromise = this.bidsReceivedAudio.play();
+            let bidsReceivedAudio = new Audio(''); // to remove:
+            bidsReceivedAudio.currentTime = 0;
+            let bidsReceivedPromise = bidsReceivedAudio.play();
 
             if (bidsReceivedPromise !== undefined) {
               bidsReceivedPromise.then(_ => {
@@ -189,7 +173,6 @@ export class TerminalComponent implements OnInit {
               newSigningDialog.close();
             }, 6000);            
             break;
-
         }
 
         this.statusUpdated = false;
@@ -199,93 +182,15 @@ export class TerminalComponent implements OnInit {
           this.updateTickerItems();
           this.managerUpdated = false;
           setTimeout(() => { this.managerUpdated = true; }, 50)
-        }
-
-        this.picksTicker = this.draftControllerService.getRoundPickStatus();        
+        }    
       }
     });
 
     this.draftControllerService.pick.subscribe((pick: DraftManagerPick) => {
       this.announcementPick = pick;
-      //this.announcePick(pick); // todo: this is probably where we can flip a nomination and a signing:
     });
   }
 
-  private subscribeToEvents(): void {
-
-    this.draftControllerService.draft.subscribe((draft: Draft) => {
-      this._ngZone.run(() => {
-        // keeping in so I can see if we need _ngZone.run(())...
-      });
-    });
-    this.draftControllerService.pick.subscribe((pick: DraftManagerPick) => {
-      this._ngZone.run(() => {
-        // keeping in so I can see if we need _ngZone.run(())...
-      });
-    });
-  }
-
-  private stopTimer(): void {
-    this.draftingAudio.pause();
-    this.draftingAudio.currentTime = 0;
-    clearInterval(this.timeout);
-  }
-
-  private startDraftingTimer(): void {
-    this.stopTimer();
-    this.timer = 30;
-    this.draftingAudio.currentTime = 0;
-    this.draftingAudio.muted = true;
-    this.draftingAudio.muted = false;
-    var playPromise = this.draftingAudio.play();
-
-    if (playPromise !== undefined) {
-      playPromise.then(_ => {
-      }).catch(error => {
-      });
-    }
-    setTimeout(() => {
-      this.timeout = setInterval(() => {
-        if (this.timer > 0) {
-          this.timer--;
-        } else {
-          this.draftingTimeElapsed();
-        }
-      }, 1000);
-    }, 3000);
-  }
-  private draftingTimeElapsed(): void {
-    this.stopTimer();
-  }
-
-  private startSealedBidsTimer(): void {
-    this.stopTimer();
-    this.timer = 10;
-
-    this.timeout = setInterval(() => {
-      if (this.timer > 0) {
-        this.timer--;
-      } else {
-        this.sealedBidsTimerElapsed();
-      }
-    }, 1000);
-  }
-
-  private sealedBidsTimerElapsed(): void {
-    this.draftControllerService.setDraftStatus(DraftStatuses.CheckingBids);
-    this.stopTimer();
-  }
-
-  getMaxBid(dmp: DraftManagerPick): SealedBid {
-    return this.draftControllerService.getMaxBid(dmp);
-  }
-
-  getMaxBidAmount(dmp: DraftManagerPick): number {
-    return this.draftControllerService.getMaxBidAmount(dmp);
-  }
-
-  // announce nomination:
-  // announce bids
   private announcePick(pick: DraftManagerPick): void {
     if (pick) {
       this.announceAudio.currentTime = 0;

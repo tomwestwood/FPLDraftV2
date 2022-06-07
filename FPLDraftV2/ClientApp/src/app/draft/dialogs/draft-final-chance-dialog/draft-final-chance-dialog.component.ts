@@ -30,7 +30,7 @@ import { DraftControllerService } from '../../services/draft-controller.service'
   ]
 })
 export class DraftFinalChanceDialogComponent implements OnInit {
-  draftId: number = 13;
+  draftId: number = 15;
   draft: Draft;
   currentPick: DraftManagerPick;
   signingManager: DraftManager;

@@ -1,0 +1,35 @@
+<!-- Status: Waiting/PreDraft -->
+<div class="terminal-update-header">
+  <div class="terminal-timer">
+    <mat-progress-spinner class="spinner" color="primary" [diameter]="80" [value]="100"></mat-progress-spinner>
+    <span *ngIf="draft.status_id >= 2" class="status-desc status-icon material-icons timer-text">{{draft.status_id == 2 ? 'person' : 'done'}}</span>
+  </div>
+
+  <div class="terminal-update-heading">
+    <div>{{draft.status_id == 2 ? 'Waiting for player' : 'Signed in'}}</div>
+  </div>
+</div>
+
+<!-- Status: Drafting/DraftingComplete/Timeout -->
+<mat-divider *ngIf="draft.status_id >= 4" [vertical]="true" class="terminal-link"></mat-divider>
+
+<div class="terminal-update" *ngIf="draft.status_id >= 4">
+  <div class="terminal-update-header">
+    <div class="terminal-timer">
+      <mat-progress-spinner class="spinner" color="primary" [diameter]="80" [value]="draft.status_id == 4 ? (timer/30)*100 : 100"></mat-progress-spinner>
+      <div *ngIf="draft.status_id == 4" class="timer-text">{{timer}}</div>
+      <span *ngIf="draft.status_id > 4 && draft.status_id != 6" class="status-desc status-icon material-icons timer-text">done</span>
+      <span *ngIf="draft.status_id == 6" class="status-desc status-icon material-icons timer-text">timer</span>
+    </div>
+    <div class="terminal-update-heading">
+      <div>{{draft.status_id == 4 ? 'Now nominating...' : draft.status_id == 6 ? 'Timeout' : 'Nomination successful'}}</div>
+    </div>
+    <mat-divider *ngIf="draft.status_id >= 7" class="terminal-link-horizontal"></mat-divider>
+  </div>
+</div>
+
+
+
+
+
+

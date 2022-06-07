@@ -19,6 +19,9 @@ import { DraftNewManagerDialogComponent } from './draft/dialogs/draft-new-manage
 import { DraftFinalChanceDialogComponent } from './draft/dialogs/draft-final-chance-dialog/draft-final-chance-dialog.component';
 import { TerminalComponent } from './terminal/terminal.component';
 import { TerminalPlayerComponent } from './controls/terminal-player/terminal-player.component';
+import { TerminalDraftManagersComponent } from './terminal/terminal-elements/terminal-draft-managers/terminal-draft-managers.component';
+import { TerminalDraftingProgressComponent } from './terminal/terminal-elements/terminal-drafting-progress/terminal-drafting-progress.component';
+import { TerminalNominationProgressComponent } from './terminal/terminal-elements/terminal-nomination-progress/terminal-nomination-progress.component';
 import { PreviewSquadComponent } from './controls/preview-squad/preview-squad.component';
 import { LiveFixtureComponent } from './live/fixture/liveFixture.component';
 import { LineupComponent } from './live/lineup/lineup.component';
@@ -74,6 +77,9 @@ import { TableComponent } from './live/table/table.component';
     TerminalPlayerComponent,
     ConfirmPlayerComponent,
     TerminalComponent,
+    TerminalDraftManagersComponent,
+    TerminalDraftingProgressComponent,
+    TerminalNominationProgressComponent,
     PreviewSquadComponent,
     LiveFixtureComponent,
     LineupComponent,

@@ -23,7 +23,7 @@ namespace FPLV2Core.Jobs
         private ICollection<Club> _teams;
         private Event _currentEvent;
 
-        private const int _hard_coded_league_id = 612541;
+        private const int _hard_coded_league_id = 429551;
         private const string var_image_url = "https://pbs.twimg.com/media/EBo9MzKXsAcoO3x.jpg";
         private ICollection<Fixture> _plFixtures;
         private H2hLeagueMatches _draftFixtures;
@@ -179,34 +179,6 @@ namespace FPLV2Core.Jobs
             });
 
             File.WriteAllText(@"C:\Users\tom.westwood\Desktop\DraftFPL\BigReport.json", JsonConvert.SerializeObject(reportRecords));
-
-            //if (!hadAlreadyStarted)
-            //{
-            //    try
-            //    {
-            //        var fixtureMessage = $"*Fixtures for this week:*{Environment.NewLine}{string.Join(Environment.NewLine, _draftFixtures.Matches.Select(x => $"({x.TeamAPoints}) {x.TeamAName} v {x.TeamBName} ({x.TeamBPoints})"))}";
-            //        BroadcastAlertMessage(fixtureMessage);
-            //    }
-            //    catch (Exception ex) { }
-
-            //    try
-            //    {
-            //        BroadcastAlertMessage("KENBOT TESTING.");
-            //        _draftFixtures.Matches.ToList().ForEach(df =>
-            //        {
-            //            var teamAName = $"*{df.TeamAEntry.TeamName}*:";
-            //            var teamAFixtureStartingLineup = string.Join("", df.TeamAEntry.Picks.Picks.Take(11).Select(p => $"{Environment.NewLine}{p.Player.position_name_short}: {p.Player.web_name}{(p.IsCaptain ? " (C)" : p.IsViceCaptain ? " (VC)" : string.Empty)}"));
-            //            var teamAFixtureSubs = $"{Environment.NewLine}_Subs:_{string.Join("", df.TeamAEntry.Picks.Picks.Reverse().Take(4).Select(p => $"{Environment.NewLine}_{p.Player.position_name_short}: {p.Player.web_name}_"))}";
-            //            BroadcastAlertImageMessage(teamAName + teamAFixtureStartingLineup + teamAFixtureSubs, df.TeamAEntry.Picks.Picks.First(p => p.IsCaptain).Player.photo_url);
-
-            //            var teamBName = $"*{df.TeamBEntry.TeamName}*:";
-            //            var teamBFixtureStartingLineup = string.Join("", df.TeamBEntry.Picks.Picks.Take(11).Select(p => $"{Environment.NewLine}{p.Player.position_name_short}: {p.Player.web_name}{(p.IsCaptain ? " (C)" : p.IsViceCaptain ? " (VC)" : string.Empty)}"));
-            //            var teamBFixtureSubs = $"{Environment.NewLine}_Subs:_{string.Join("", df.TeamBEntry.Picks.Picks.Reverse().Take(4).Select(p => $"{Environment.NewLine}_{p.Player.position_name_short}: {p.Player.web_name}_"))}";
-            //            BroadcastAlertImageMessage(teamBName + teamBFixtureStartingLineup + teamBFixtureSubs, df.TeamBEntry.Picks.Picks.First(p => p.IsCaptain).Player.photo_url);
-            //        });
-            //    }
-            //    catch (Exception ex) { }
-            //}
         }
 
         private void UpdatePickPoints()

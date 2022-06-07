@@ -1,0 +1,42 @@
+@import "../../terminal.component.scss";
+
+// override base style:
+.mat-divider-vertical {
+  width: auto;
+}
+
+.nomination-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .nomination-item {
+    border: 5px solid #c2185b;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    &.horizontal {
+      flex-direction: row;
+    }
+
+    &.relative {
+      position: relative;
+    }
+
+    .player-image {
+      height: 200px;
+    }
+
+    .overlay-text-bottom {
+      position: absolute;
+      background-color: #c2185b;
+      border: solid #17252A 3px;
+      padding: 8px;
+      bottom: 8px;
+      width: calc(100% - 16px);
+      text-align: center;
+    }
+  }
+}

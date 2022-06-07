@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -69,6 +69,8 @@
     <None Remove="ClientApp\src\app\services\draft.service.ts" />
     <None Remove="ClientApp\src\app\services\fpl.service.ts" />
     <None Remove="ClientApp\src\app\services\signalR.service.ts" />
+    <None Remove="ClientApp\src\app\terminal\terminal-elements\terminal-draft-managers\terminal-draft-managers.component.ts" />
+    <None Remove="ClientApp\src\app\terminal\terminal-elements\terminal-nomination-progress\terminal-nomination-progress.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-nomination\terminal-nomination.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-signing\terminal-signing.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-timeout\terminal-timeout.component.ts" />
@@ -140,6 +142,15 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\services\fpl.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-elements\terminal-draft-managers\terminal-draft-managers.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-elements\terminal-nomination-progress\terminal-nomination-progress.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-elements\terminal-drafting-progress\terminal-drafting-progress.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-signing\terminal-signing.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

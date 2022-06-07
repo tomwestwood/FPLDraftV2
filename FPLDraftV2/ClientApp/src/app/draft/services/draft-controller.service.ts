@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { DraftManagerFavourite, Draft, DraftManagerPick, DraftFunctions, DraftManager, DraftStatuses, RoundPicks, SealedBid } from '../../models/draft';
@@ -13,6 +13,11 @@ export class DraftControllerService {
   draft: BehaviorSubject<Draft> = new BehaviorSubject<Draft>(undefined);
   pick: BehaviorSubject<DraftManagerPick> = new BehaviorSubject<DraftManagerPick>(undefined);
   fplBase: BehaviorSubject<FPLBase> = new BehaviorSubject<FPLBase>(undefined);
+
+  startDraftTimer = new EventEmitter<boolean>();
+  stopDraftTimer = new EventEmitter<boolean>();
+  startSealedBidsTimer = new EventEmitter<boolean>();
+  stopSealedBidsTimer = new EventEmitter<boolean>();
 
   constructor(private http: HttpClient, private fplService: FplService, private draftService: DraftService, private signalRService: SignalRService) {
     this.subscribeToEvents();
@@ -36,30 +41,15 @@ export class DraftControllerService {
   }
 
   saveDraft(draft: Draft): Observable<Draft> {
-    let updateDraft = this.draftService.updateDraft(draft);
-    //updateDraft.subscribe((draft: Draft) => {
-    //  this.draft.next(draft);
-    //  this.signalRService.updateDraft(draft);
-    //});
-    return updateDraft;
+    return this.draftService.updateDraft(draft);
   }
 
   savePick(pick: DraftManagerPick): Observable<DraftManagerPick> {
-    let savePick = this.draftService.savePick(pick);
-    //savePick.subscribe((pick: DraftManagerPick) => {
-    //  this.pick.next(pick);
-    //  this.signalRService.updatePick(pick);
-    //});
-    return savePick;
+    return this.draftService.savePick(pick);
   }
 
   updatePick(pick: DraftManagerPick): Observable<DraftManagerPick> {
-    let savePick = this.draftService.updatePick(pick);
-    //savePick.subscribe((pick: DraftManagerPick) => {
-    //  this.pick.next(pick);
-    //  this.signalRService.updatePick(pick);
-    //});
-    return savePick;
+    return this.draftService.updatePick(pick);
   }
 
   setDraftStatus(status: DraftStatuses) {
@@ -239,10 +229,26 @@ export class DraftControllerService {
   }
 
   getMaxBidAmount(dmp: DraftManagerPick): number {
-    return dmp.sealed_bids.filter(sb => sb.bid_eligible).reduce((p, c) => p.bid_amount > c.bid_amount ? p : c).bid_amount;
+    return dmp.sealed_bids?.filter(sb => sb.bid_eligible).reduce((p, c) => p.bid_amount > c.bid_amount ? p : c)?.bid_amount ?? dmp.value_price;
   }
 
   getManagerById(id: number): DraftManager {
     return this.draft.value.draft_managers.find(dm => dm.id == id);
+  }
+
+  startDraftingTimer(): void {
+    this.startDraftTimer.emit(true);
+  }
+
+  stopDraftingTimer(): void {
+    this.stopDraftTimer.emit(true);
+  }
+
+  startBidsTimer(): void {
+    this.startSealedBidsTimer.emit(true);
+  }
+
+  stopBidsTimer(): void {
+    this.stopSealedBidsTimer.emit(true);
   }
 }

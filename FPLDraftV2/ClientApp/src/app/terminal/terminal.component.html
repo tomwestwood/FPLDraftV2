@@ -1,41 +1,50 @@
 <div class="terminal-container" *ngIf="draft && squadTicker">
+
+  <div class="round-number">ROUND {{draft.draft_round}}</div>
+
   <div class="terminal-top">
 
+    <!-- Left sidebar: [draft order] -->
     <div class="terminal-left-sidebar">
-
-      <div class="terminal-date-time">
-        <h2>KP LANG DRAFT</h2>
-      </div>
-
-      <mat-divider></mat-divider>
-
       <div class="round-info">
-        <div class="round-number">Round {{draft.draft_round}}</div>
-        <div class="round-picks" *ngIf="picksTicker">
-          <div *ngFor="let roundManager of picksTicker" class="round-pick" [ngClass]="{'no-pick': roundManager.has_picked_this_round || (!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed > draft.draft_manager.draft_seed : roundManager.draft_seed < draft.draft_manager.draft_seed), 'current-pick': roundManager.id == draft.draft_manager.id}">
-            <img class="round-pick-badge" src="{{roundManager.team_image_url}}" />
-            <div class="round-pick-name">{{roundManager.team_name}}</div>
-            <span *ngIf="roundManager.has_picked_this_round" class="status-desc status-icon material-icons">done</span>
-            <span *ngIf="(!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed > draft.draft_manager.draft_seed : roundManager.draft_seed < draft.draft_manager.draft_seed)" class="status-desc status-icon material-icons">block</span>
-            <span *ngIf="roundManager.id == draft.draft_manager.id" class="status-desc status-icon material-icons arrow fill-pink">arrow_downward</span>
-            <mat-spinner (color)="lime" *ngIf="draft.status_id == 7 && (!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed < draft.draft_manager.draft_seed : roundManager.draft_seed > draft.draft_manager.draft_seed)" [diameter]="30" class="status-desc status-icon material-icons arrow fill-pink"><span class="status-desc status-icon material-icons arrow fill-pink">done</span></mat-spinner>
-            <!--<span *ngIf="roundManager.id == draft.draft_manager.id" class="status-desc status-icon material-icons arrow fill-pink">{{draft.direction ? 'arrow_upward' : 'arrow_downward'}}</span>-->
-          </div>
+        <div class="round-picks">
+          <app-terminal-draft-managers [draft]="draft"></app-terminal-draft-managers>
         </div>
       </div>
-
     </div>
 
+    <!-- Main content: -->
     <div class="terminal-top-main">
+      <div class="terminal-main-content">
+
+        <!-- Current picker: -->
+        <div *ngIf="draft.status_id >= 2" class="terminal-update">
+          <div class="terminal-update-header">
+            <img class="terminal-update-image" [ngStyle]="{ 'border-color': draft.draft_manager.team_colour_1 }" src="{{draft.draft_manager.team_image_url}}" />
+          </div>
+          <mat-divider *ngIf="draft.status_id >= 2" class="terminal-link-horizontal"></mat-divider>
+        </div>
+
+        <!-- Drafting: -->
+        <div class="terminal-update vertical" *ngIf="draft.status_id >= 2">
+          <app-terminal-drafting-progress [draft]="draft"></app-terminal-drafting-progress>
+        </div>
+
+        <!-- Nomination: -->
+        <div class="terminal-update vertical" *ngIf="draft.status_id >= 5">
+          <app-terminal-nomination-progress [draft]="draft" [currentPick]="currentPick" [signingManager]="signingManager" *ngIf="draft && currentPick"></app-terminal-nomination-progress>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!--<div class="terminal-top-main" style="display: none;">
       <div class="terminal-main-content">
 
         <div *ngIf="draft.status_id >= 2" class="terminal-update">
           <div class="terminal-update-header">
-            <img class="terminal-update-image" src="{{draft.draft_manager.team_image_url}}" />
-            <div class="terminal-update-heading">
-              <div>{{draft.draft_manager.team_name}}</div>
-              <div>{{draft.draft_manager.name}}</div>
-            </div>
+            <img class="terminal-update-image" [ngStyle]="{ 'border-color': draft.draft_manager.team_colour_1 }" src="{{draft.draft_manager.team_image_url}}" />
           </div>
         </div>
 
@@ -140,10 +149,10 @@
         </div>
 
       </div>
-    </div>
+    </div>-->
 
 
-    <div class="terminal-right-sidebar" *ngIf="draft.status_id == 2 || (draft.status_id == 11 && currentPick?.draft_manager_id == currentPick?.nominator_id)">
+    <!--<div class="terminal-right-sidebar" *ngIf="draft.status_id == 2 || (draft.status_id == 11 && currentPick?.draft_manager_id == currentPick?.nominator_id)">
       <div class="terminal-team-header" [ngClass]="{'hidden': !displaySquadTicker}" *ngIf="squadTicker">
         <img class="terminal-team-image" src="{{draft.draft_manager.team_image_url}}" />
         <div class="terminal-team-info">
@@ -330,11 +339,11 @@
 
       </div>
 
-    </div>
+    </div>-->
 
   </div>
 
-  <div class="terminal-bottom">
+  <!--<div class="terminal-bottom">
     <div id="news_ticker">
       <img class="terminal-logo" src="../../assets/draft_tv.png" />
       <span>Latest News</span>
@@ -342,6 +351,6 @@
         <li *ngFor="let tickerItem of tickerItems"><a href="#">{{tickerItem}}</a></li>
       </ul>
     </div>
-  </div>
+  </div>-->
 
 </div>

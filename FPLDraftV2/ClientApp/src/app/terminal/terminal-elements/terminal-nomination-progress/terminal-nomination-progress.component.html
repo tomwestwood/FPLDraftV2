@@ -1,0 +1,46 @@
+<div class="nomination-container">
+  <div class="nomination-item horizontal relative" style="position: relative;">
+    <div>
+      <div>{{currentPick.player.club.name | uppercase}}</div>
+      <div>{{currentPick.player.position.singular_name | uppercase}}</div>
+      <div>£{{currentPick.player.now_cost / 10}}M</div>
+    </div>
+    <img class="player-image" src="{{currentPick.player.photo_url}}" />
+    <div class="overlay-text-bottom">{{currentPick.player.first_name[0] | uppercase}}. {{currentPick.player.web_name | uppercase}}</div>
+  </div>
+
+  <mat-divider *ngIf="draft.status_id >= 4" [vertical]="true" class="terminal-link"></mat-divider>
+
+  <div class="nomination-item" *ngIf="draft.status_id >= 9 && currentPick?.sealed_bids?.length > 0">
+    <div><b>BIDS RECEIVED</b></div>
+    <div [ngClass]="{ 'max-bid': bid.is_max_bid, 'ineligible_bid': !bid.bid_eligible }" class="bid" *ngFor="let bid of currentPick.sealed_bids">
+      {{bid.draft_manager_name}}: £{{bid.bid_amount}}m <!--<span *ngIf="bid.is_max_bid" class="status-desc status-icon material-icons timer-text">done</span>-->
+    </div>
+  </div>
+
+  <mat-divider *ngIf="draft.status_id >= 10" [vertical]="true" class="terminal-link"></mat-divider>
+
+  <div class="nomination-item" *ngIf="draft.status_id == 10">
+    <div class="terminal-update" *ngIf="draft.status_id == 10">
+      <div class="terminal-update-header">
+        <div class="terminal-timer">
+          <mat-spinner class="spinner" color="primary" [diameter]="80"></mat-spinner>
+          <span class="status-desc status-icon material-icons timer-text">warning_amber</span>
+        </div>
+        <div class="terminal-update-heading">
+          <div>FINAL CHANCE!</div>
+          <div>{{draft.draft_manager.team_name}} have final refusal on {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{getMaxBidAmount(currentPick)}}m</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nomination-item">
+    <div class="terminal-update">
+      <div style="display: flex; text-align: center; flex-direction: column; justify-content: center;">
+        <img src="{{signingManager.team_image_url}}" />
+        <span>sign {{currentPick.player.first_name[0]}}. {{currentPick.player.web_name}} for £{{getMaxBidAmount(currentPick)}}m</span>
+      </div>
+    </div>
+  </div>
+</div>

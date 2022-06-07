@@ -1,0 +1,15 @@
+.round-pick {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .round-pick-badge {
+    margin: 2px;
+    width: 200px;
+    border: 5px solid #c2185b;
+
+    &.current-manager {
+      border: solid 6px #FFC000;
+    }
+  }
+}

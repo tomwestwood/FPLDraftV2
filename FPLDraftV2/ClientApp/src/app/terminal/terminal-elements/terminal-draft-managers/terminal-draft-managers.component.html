@@ -1,0 +1,13 @@
+<div *ngFor="let roundManager of picksTicker"
+     class="round-pick"
+     [ngClass]="{'no-pick': roundManager.has_picked_this_round || (!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed > draft.draft_manager.draft_seed : roundManager.draft_seed < draft.draft_manager.draft_seed), 'current-pick': roundManager.id == draft.draft_manager.id}">
+  <img [ngStyle]="{ 'border-color': roundManager.team_colour_1 }" class="round-pick-badge" [ngClass]="{'current-manager': roundManager.id == draft.draft_manager.id}" src="{{roundManager.team_image_url}}" />
+  <span class="material-icons" *ngIf="roundManager.id == draft.draft_manager.id">arrow_right</span>
+
+  <span *ngIf="roundManager.has_picked_this_round" class="status-desc status-icon material-icons">done</span>
+  <span *ngIf="(!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed > draft.draft_manager.draft_seed : roundManager.draft_seed < draft.draft_manager.draft_seed)" class="status-desc status-icon material-icons">block</span>
+  <!--<span *ngIf="roundManager.id == draft.draft_manager.id" class="status-desc status-icon material-icons arrow fill-pink">arrow_downward</span>-->
+  <mat-spinner (color)="lime" *ngIf="draft.status_id == 7 && (!roundManager.has_picked_this_round) && (draft.direction ? roundManager.draft_seed < draft.draft_manager.draft_seed : roundManager.draft_seed > draft.draft_manager.draft_seed)" [diameter]="30" class="status-desc status-icon material-icons arrow fill-pink">
+    <span class="status-desc status-icon material-icons arrow fill-pink">done</span>
+  </mat-spinner>
+</div>
