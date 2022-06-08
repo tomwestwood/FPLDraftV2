@@ -189,7 +189,6 @@ export class DraftSelectingComponent implements OnInit {
 
       if (!isDraftAuction || dmsLeftInRound.length == 0) {
         this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
-        //this.draftControllerService.setNextDraftManager();
       } else {
         this.draftControllerService.setDraftStatus(DraftStatuses.SealedBids);
       }
@@ -219,7 +218,6 @@ export class DraftSelectingComponent implements OnInit {
 
   private timeElapsed(): void {
     this.stopTimer();
-
     this.draftControllerService.setDraftStatus(DraftStatuses.Timeout);
   }
 

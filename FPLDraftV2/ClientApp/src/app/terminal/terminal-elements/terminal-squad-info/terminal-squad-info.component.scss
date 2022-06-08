@@ -1,0 +1,42 @@
+@import "../../terminal.component.scss";
+
+.terminal-team-header {
+    width: 100%;
+}
+
+.terminal-team-players {
+  padding-inline-start: 8px;
+  flex-grow: 1;
+
+  li {
+    display: block;
+    animation: fadeIn 0.5s linear;
+    animation-fill-mode: both;
+  }
+
+  @for $i from 1 through $total-items {
+    li:nth-child(#{$i}) {
+      animation-delay: .1s * $i;
+    }
+  }
+
+  @-webkit-keyframes fadeIn {
+    0% {
+      opacity: 0;
+      top: 100px;
+    }
+
+    75% {
+      opacity: 0.5;
+      top: 0px;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+.terminal-divider {
+    margin-bottom: 16px;
+}

@@ -1,10 +1,5 @@
 @import "../../terminal.component.scss";
 
-// override base style:
-.mat-divider-vertical {
-  width: auto;
-}
-
 .nomination-container {
   display: flex;
   flex-direction: column;
@@ -39,4 +34,14 @@
       text-align: center;
     }
   }
+}
+
+// override base styles:
+
+.mat-divider-vertical {
+  width: auto;
+}
+
+.terminal-timer {
+    margin-right: 0px !important;
 }

@@ -1,0 +1,60 @@
+<div *ngIf="squadManager">
+
+  <img class="terminal-team-header" src="{{squadManager.team_image_url}}" />
+  <mat-divider class="terminal-divider"></mat-divider>
+
+  <ul class="terminal-team-players">
+    <li><terminal-player [player]="squadManager.draft_squad?.gk_1?.player" [position]="'GK'" [cost]="squadManager.draft_squad?.gk_1?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.gk_2?.player" [position]="'GK'" [cost]="squadManager.draft_squad?.gk_2?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.def_1?.player" [position]="'DEF'" [cost]="squadManager.draft_squad?.def_1?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.def_2?.player" [position]="'DEF'" [cost]="squadManager.draft_squad?.def_2?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.def_3?.player" [position]="'DEF'" [cost]="squadManager.draft_squad?.def_3?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.def_4?.player" [position]="'DEF'" [cost]="squadManager.draft_squad?.def_4?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.def_5?.player" [position]="'DEF'" [cost]="squadManager.draft_squad?.def_5?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.mid_1?.player" [position]="'MID'" [cost]="squadManager.draft_squad?.mid_1?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.mid_2?.player" [position]="'MID'" [cost]="squadManager.draft_squad?.mid_2?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.mid_3?.player" [position]="'MID'" [cost]="squadManager.draft_squad?.mid_3?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.mid_4?.player" [position]="'MID'" [cost]="squadManager.draft_squad?.mid_4?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.mid_5?.player" [position]="'MID'" [cost]="squadManager.draft_squad?.mid_5?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.fw_1?.player" [position]="'FW'" [cost]="squadManager.draft_squad?.fw_1?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.fw_2?.player" [position]="'FW'" [cost]="squadManager.draft_squad?.fw_2?.signed_price"></terminal-player></li>
+    <li><terminal-player [player]="squadManager.draft_squad?.fw_3?.player" [position]="'FW'" [cost]="squadManager.draft_squad?.fw_3?.signed_price"></terminal-player></li>
+  </ul>
+
+  <mat-divider class="terminal-divider"></mat-divider>
+
+  <mat-progress-bar [value]="100-((squadManager.draft_squad?.num_of_picks/15)*100)" [bufferValue]="0" mode="buffer"></mat-progress-bar>
+
+</div>
+
+<!--<div class="squad-summary">
+
+  <div class="summary-item" [@fadeInOut]>
+    <div class="summary-item-header">Picked</div>
+    <div class="summary-item-main">
+      <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((squadManager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+      <div class="spinner-text">{{squadManager.draft_squad?.num_of_picks}}/15</div>
+    </div>
+  </div>
+
+  <div class="summary-item" [@fadeInOut]>
+    <div class="summary-item-header">Budget</div>
+    <div class="summary-item-main">
+      <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((squadManager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+      <div class="spinner-text">
+        <div>{{squadManager.draft_squad?.budget_remaining}}m</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-item" [@fadeInOut]>
+    <div class="summary-item-header">Per man</div>
+    <div class="summary-item-main">
+      <mat-progress-spinner class="spinner" [diameter]="50" [value]="100-((squadManager.draft_squad?.num_of_picks/15)*100)"></mat-progress-spinner>
+      <div class="spinner-text">
+        <div>{{squadManager.draft_squad?.budget_per_player | number : '1.1-1'}}m</div>
+      </div>
+    </div>
+  </div>
+
+</div>-->

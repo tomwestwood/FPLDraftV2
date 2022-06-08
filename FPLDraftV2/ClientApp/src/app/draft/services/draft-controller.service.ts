@@ -229,7 +229,10 @@ export class DraftControllerService {
   }
 
   getMaxBidAmount(dmp: DraftManagerPick): number {
-    return dmp.sealed_bids?.filter(sb => sb.bid_eligible).reduce((p, c) => p.bid_amount > c.bid_amount ? p : c)?.bid_amount ?? dmp.value_price;
+    if (dmp.sealed_bids?.length > 1)
+      return dmp.sealed_bids?.filter(sb => sb.bid_eligible)?.reduce((p, c) => p.bid_amount > c.bid_amount ? p : c)?.bid_amount ?? dmp.value_price;
+    else
+      return dmp.value_price;
   }
 
   getManagerById(id: number): DraftManager {

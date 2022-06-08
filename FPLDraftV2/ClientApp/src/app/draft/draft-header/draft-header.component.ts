@@ -43,10 +43,10 @@ export class DraftHeaderComponent {
 
   draftNextStatus(): void {
     switch (this.draft.status_id) {
-      case 1:
-      case 6:
-      case 11:
-      case 12:
+      case DraftStatuses.NotStarted:
+      case DraftStatuses.Timeout:
+      case DraftStatuses.SigningComplete:
+      case DraftStatuses.SigningFailed:
         this.draftControllerService.setDraftStatus(DraftStatuses.Waiting);
         break;
       case 2:

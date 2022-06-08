@@ -11,6 +11,24 @@
 
   <mat-divider *ngIf="draft.status_id >= 4" [vertical]="true" class="terminal-link"></mat-divider>
 
+  <div class="terminal-update" *ngIf="draft.status_id == 7">
+    <div class="terminal-update-header">
+      <div class="terminal-timer">
+        <mat-progress-spinner class="spinner" color="primary" [diameter]="80" [value]="draft.status_id == 7 ? (timer/10)*100 : 100"></mat-progress-spinner>
+        <div class="timer-text">{{timer}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="terminal-update" *ngIf="draft.status_id == 8">
+    <div class="terminal-update-header">
+      <div class="terminal-timer">
+        <mat-spinner class="spinner" color="primary" [diameter]="80"></mat-spinner>
+        <span class="status-desc status-icon material-icons timer-text">savings</span>
+      </div>
+    </div>
+  </div>
+
   <div class="nomination-item" *ngIf="draft.status_id >= 9 && currentPick?.sealed_bids?.length > 0">
     <div><b>BIDS RECEIVED</b></div>
     <div [ngClass]="{ 'max-bid': bid.is_max_bid, 'ineligible_bid': !bid.bid_eligible }" class="bid" *ngFor="let bid of currentPick.sealed_bids">
@@ -35,12 +53,13 @@
     </div>
   </div>
 
-  <div class="nomination-item">
+  <div class="nomination-item" *ngIf="draft.status_id == 11 && signingManager && currentPick">
     <div class="terminal-update">
       <div style="display: flex; text-align: center; flex-direction: column; justify-content: center;">
         <img src="{{signingManager.team_image_url}}" />
-        <span>sign {{currentPick.player.first_name[0]}}. {{currentPick.player.web_name}} for £{{getMaxBidAmount(currentPick)}}m</span>
+        <span>SIGN {{currentPick.player.first_name[0] | uppercase}}. {{currentPick.player.web_name | uppercase}} FOR £{{getMaxBidAmount(currentPick)}}M</span>
       </div>
     </div>
   </div>
+
 </div>

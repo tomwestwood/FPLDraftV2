@@ -38,6 +38,18 @@
       </div>
     </div>
 
+    <!-- Right sidebar: -->
+    <div class="terminal-right-sidebar" *ngIf="draft.status_id == 2 || draft.status_id == 11">
+      <app-terminal-squad-info [squadManager]="draft.status_id == 11 ? signingManager : draft.draft_manager"></app-terminal-squad-info>
+
+      <!--<div *ngIf="draft.status_id == 2">
+        {{draft.draft_manager.name}}
+      </div>
+      <div *ngIf="draft.status_id == 11">
+        {{signingManager.name}}
+      </div>-->
+    </div>
+
 
     <!--<div class="terminal-top-main" style="display: none;">
       <div class="terminal-main-content">
@@ -150,6 +162,7 @@
 
       </div>
     </div>-->
+
 
 
     <!--<div class="terminal-right-sidebar" *ngIf="draft.status_id == 2 || (draft.status_id == 11 && currentPick?.draft_manager_id == currentPick?.nominator_id)">

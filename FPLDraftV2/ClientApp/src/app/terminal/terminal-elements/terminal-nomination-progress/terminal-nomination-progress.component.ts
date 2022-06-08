@@ -43,11 +43,11 @@ export class TerminalNominationProgressComponent {
   }
 
   ngOnInit(): void {
-    this.draftControllerService.startDraftTimer.subscribe(() => {
+    this.draftControllerService.startSealedBidsTimer.subscribe(() => {
       this.startTimer();
     })
 
-    this.draftControllerService.stopDraftTimer.subscribe(() => {
+    this.draftControllerService.stopSealedBidsTimer.subscribe(() => {
       this.stopTimer();
     })
   }
