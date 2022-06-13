@@ -32,7 +32,6 @@ import { DraftControllerService } from '../services/draft-controller.service';
 })
 export class DraftHeaderComponent {
   @Input() draft: Draft;
-  draftControllerService: DraftControllerService;
 
   constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog) { }
 
