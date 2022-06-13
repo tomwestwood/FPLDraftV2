@@ -11,8 +11,9 @@ import { stat } from 'fs';
 @Injectable({ providedIn: 'root' })
 export class DraftControllerService {
   draft: BehaviorSubject<Draft> = new BehaviorSubject<Draft>(undefined);
-  pick: BehaviorSubject<DraftManagerPick> = new BehaviorSubject<DraftManagerPick>(undefined);
   fplBase: BehaviorSubject<FPLBase> = new BehaviorSubject<FPLBase>(undefined);
+  pick: BehaviorSubject<DraftManagerPick> = new BehaviorSubject<DraftManagerPick>(undefined);
+  status: BehaviorSubject<DraftStatuses> = new BehaviorSubject<DraftStatuses>(undefined); 
 
   startDraftTimer = new EventEmitter<boolean>();
   stopDraftTimer = new EventEmitter<boolean>();
@@ -54,9 +55,10 @@ export class DraftControllerService {
 
   setDraftStatus(status: DraftStatuses) {
     this.draft.value.status_id = status;
+    this.status.next(status);
+
     this.saveDraft(this.draft.value).subscribe((draft: Draft) => {
-      this.draft.next(this.draft.value);
-      this.updateDraftNotification(this.draft.value);
+      this.updateDraftStatusNotification(status);
     });
   }
 
@@ -185,7 +187,7 @@ export class DraftControllerService {
     return managers_with_pick_left_this_round;
   }
 
-  subscribeToEvents(): void {
+  private subscribeToEvents(): void {
     this.signalRService.connectionEstablished.subscribe(() => {
       // we could send a message out.
     });
@@ -194,9 +196,20 @@ export class DraftControllerService {
       this.draft.next(draft);
     });
 
+    this.signalRService.statusReceived.subscribe((status: DraftStatuses) => {
+      if (this.draft.value.status_id != status) {
+        this.draft.value.status_id = status;
+        this.draft.next(this.draft.value);
+      }
+    });
+
     this.signalRService.pickReceived.subscribe((pick: DraftManagerPick) => {
       this.pick.next(pick);
     });
+  }
+
+  updateDraftStatusNotification(draftStatus: DraftStatuses) : void {
+    this.signalRService.updateStatus(draftStatus);
   }
 
   updateDraftNotification(draft: Draft): void {

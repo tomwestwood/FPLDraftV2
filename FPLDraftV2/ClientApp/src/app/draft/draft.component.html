@@ -1,7 +1,7 @@
-<div class="draft" *ngIf="draft">
-  <draft-header-component *ngIf="isLatop || draft.status_id != 4"></draft-header-component>
+<div class="draft" *ngIf="draft && fplBase">
+  <draft-header-component *ngIf="isLatop || draft.status_id != 4" [draft]="draft"></draft-header-component>
 
-  <draft-selecting-component *ngIf="draft.status_id == 4"></draft-selecting-component>
+  <draft-selecting-component *ngIf="draft.status_id == 4 && fplBase" [draft]="draft" [fplBase]="fplBase"></draft-selecting-component>
   <div *ngIf="draft.status_id == 7 || draft.status_id == 8 || draft.status_id == 9" class="basic-content">
     <div *ngIf="draft.status_id == 7">Awaiting sealed bids</div>
     <div *ngIf="draft.status_id == 8">Checking bids</div>
@@ -10,68 +10,3 @@
     <mat-progress-bar class="basic-progress-bar" mode="indeterminate"></mat-progress-bar>
   </div>
 </div>
-
-<!--<div *ngIf="draft">
-  <div *ngIf="draft.status_id == 1 || draft.status_id == 2" style="display: flex; flex-direction: row;">
-    <div style="display: flex; flex-direction: column; margin-top:16px; margin-bottom: 16px;" [@flyInOut]>
-      <div *ngFor="let manager of draft.draft_managers" style="display: flex; flex-direction: row; align-items: center;">
-        <div style="width: 28px;">
-          <span class="material-icons" style="color: deeppink; margin-right: 2px;" *ngIf="draft.draft_manager_id == manager.id">{{draft.direction == 0 ? 'arrow_downward' : 'arrow_upward'}}</span>
-        </div>
-        <button mat-stroked-button color="{{draft.draft_manager_id == manager.id ? 'primary' : 'accent'}}">{{manager.draft_seed}}</button>
-        <img src="{{manager.team_image_url}}" style="width: 30px; height: 30px;" />
-        <div>{{manager.team_name}}</div>
-        <div>{{manager.name}}</div>
-      </div>
-    </div>
-    <div style="flex-grow: 1;"></div>
-  </div>
-  <div *ngIf="draft.status_id == 3 || draft.status_id == 5 || draft.status_id == 6">
-    <div class="pre-draft-container">
-      <mat-card class="team-container">
-        <div class="team-info-container">
-          <img class="team-logo" src="{{draft.draft_manager.team_image_url}}" />
-          <div src="team-info">
-            <div><b>{{draft.draft_manager.team_name}}</b></div>
-            <div>{{draft.draft_manager.name}}</div>
-          </div>
-        </div>
-        <mat-divider class="divider"></mat-divider>
-        <div class="info-row">
-          <span class="material-icons icon">attach_money</span>
-          <div class="value">£{{getRemainingBudget(draft.draft_manager)}}m remaining</div>
-        </div>
-        <div class="info-row">
-          <span class="material-icons icon">format_indent_increase</span>
-          <div class="value">Pick {{getPickNumber(draft.draft_manager)}} (of 15)</div>
-        </div>
-      </mat-card>
-      <div style="flex-grow: 1;"></div>
-      <ul class="squad-list">
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_1" [position]="'GK'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.gk_2" [position]="'GK'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_1" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_2" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_3" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_4" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.def_5" [position]="'DEF'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_1" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_2" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_3" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_4" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.mid_5" [position]="'MID'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_1" [position]="'FW'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_2" [position]="'FW'" [@fadeInOut]></terminal-player></li>
-        <li><terminal-player [player]="draft.draft_manager.draft_squad.fw_3" [position]="'FW'" [@fadeInOut]></terminal-player></li>
-      </ul>
-    </div>
-  </div>
-  
-  <div *ngIf="draft && draft.status_id != 4">
-    <mat-divider></mat-divider>
-    <div style="text-align: right;">
-      <button mat-button (click)="draftNextStatus()">Continue <span class="material-icons" style="color: mediumspringgreen; margin-right: 2px;">arrow_forward</span></button>
-    </div>
-    <mat-divider style="margin-bottom: 4px;"></mat-divider>
-  </div>
-</div>-->

@@ -1,5 +1,5 @@
 import { trigger, transition, style, animate, state } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { stat } from 'fs';
 import { Draft, DraftFunctions, DraftStatuses } from '../../models/draft';
@@ -31,15 +31,10 @@ import { DraftControllerService } from '../services/draft-controller.service';
   ]
 })
 export class DraftHeaderComponent {
-  draft: Draft;
+  @Input() draft: Draft;
   draftControllerService: DraftControllerService;
 
-  constructor(draftControllerService: DraftControllerService, public dialog: MatDialog) {
-    this.draftControllerService = draftControllerService;
-    draftControllerService.draft.subscribe((draft: Draft) => {
-      this.draft = draft;
-    });
-  }
+  constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog) { }
 
   draftNextStatus(): void {
     switch (this.draft.status_id) {
@@ -66,10 +61,5 @@ export class DraftHeaderComponent {
   }
   convertStatusToIcon(status: number): string {
     return DraftFunctions.convertStatusToIcon(status);
-  }
-  private viewSquad(): void {
-    //const dialogRef = this.dialog.open(PreviewSquadComponent, {
-    //  data: { draftManager: this.draft.draft_manager }
-    //});
   }
 }

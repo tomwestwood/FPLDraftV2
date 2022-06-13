@@ -1,10 +1,11 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
-import { Draft, DraftManager, DraftManagerPick, DraftFunctions } from '../models/draft';
+import { Draft, DraftManager, DraftManagerPick, DraftFunctions, DraftStatuses } from '../models/draft';
 import { Player, Club } from '../models/fpl';
 @Injectable({ providedIn: 'root' })
 export class SignalRService {
   updateReceived = new EventEmitter<Draft>();
+  statusReceived = new EventEmitter<DraftStatuses>();
   pickReceived = new EventEmitter<DraftManagerPick>();
   connectionEstablished = new EventEmitter<boolean>();
   private _hubConnection: HubConnection;
@@ -15,6 +16,9 @@ export class SignalRService {
   }
   updateDraft(draft: Draft): void {
     this._hubConnection.invoke('updateDraft', DraftFunctions.getBasicDraftObject(draft));
+  }
+  updateStatus(draftStatus: DraftStatuses): void {
+    this._hubConnection.invoke('updateDraftStatus', draftStatus);
   }
   updatePick(pick: DraftManagerPick): void {
     this._hubConnection.invoke('updatePick', pick);
@@ -40,6 +44,10 @@ export class SignalRService {
     this._hubConnection.on('UpdateDraft', (data: Draft) => {
       this.updateReceived.emit(data);
       console.log('Draft listener configured');
+    });
+    this._hubConnection.on('updateDraftStatus', (data: DraftStatuses) => {
+      this.statusReceived.emit(data);
+      console.log('Status listener configured');
     });
     this._hubConnection.on('UpdatePick', (data: DraftManagerPick) => {
       this.pickReceived.emit(data);

@@ -78,10 +78,10 @@ export class TerminalComponent implements OnInit {
         var updateManager = this.draft?.draft_manager.id != draft.draft_manager.id;
         this.draft = draft;
 
-        if (draft_unset) {
-          this.initialiseSquadTicker();
-          this.updateTickerItems();
-        }
+        //if (draft_unset) {
+        //  this.initialiseSquadTicker();
+        //  this.updateTickerItems();
+        //}
 
         if (this.draft.status_id >= DraftStatuses.SealedBids) {
           this.currentPick = this.draftControllerService.getCurrentPick();
@@ -177,12 +177,6 @@ export class TerminalComponent implements OnInit {
 
         this.statusUpdated = false;
         setTimeout(() => { this.statusUpdated = true; }, 50);
-
-        if (updateManager) {
-          this.updateTickerItems();
-          this.managerUpdated = false;
-          setTimeout(() => { this.managerUpdated = true; }, 50)
-        }    
       }
     });
 

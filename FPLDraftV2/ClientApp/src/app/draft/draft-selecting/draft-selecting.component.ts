@@ -1,5 +1,5 @@
 import { trigger, transition, style, animate, state } from '@angular/animations';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { stat } from 'fs';
@@ -39,8 +39,8 @@ import { MatSort } from '@angular/material/sort';
   ]
 })
 export class DraftSelectingComponent implements OnInit {
-  draft: Draft;
-  fplBase: FPLBase;
+  @Input() draft: Draft;
+  @Input() fplBase: FPLBase;
   draftStatuses: DraftStatuses;
   showDraftSelecting: boolean = false;
   draftCountdown: number = 3;
@@ -64,25 +64,18 @@ export class DraftSelectingComponent implements OnInit {
   }
 
   constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog, private _snackBar: MatSnackBar) {
-    draftControllerService.draft.subscribe((draft: Draft) => {
-      this.draft = draft;
-    });
     draftControllerService.fplBase.subscribe((fplBase: FPLBase) => {
-      this.fplBase = fplBase;
-      this.updateFilter();
+      if (this.fplBase) {
+        this.updateFilter();
+      }
     });
-
-    if (draftControllerService.draft.value) {
-      this.draft = draftControllerService.draft.value;
-    }
-
-    if (draftControllerService.fplBase.value) {
-      this.fplBase = draftControllerService.fplBase.value;
-      this.updateFilter();
-    }
   }
 
   ngOnInit(): void {
+    if (this.fplBase) {
+      this.updateFilter();
+    }
+
     this.searchFilter = new SearchFilter();
     this.showDraftSelecting = false;
     this.draftCountdown = 3;

@@ -14,6 +14,11 @@ namespace FPLDraftV2.Hubs
             await Clients.Others.SendAsync("updateDraft", draft);
         }
 
+        public async Task UpdateDraftStatus(DraftStatus status)
+        {
+            await Clients.Others.SendAsync("updateDraftStatus", status);
+        }
+
         public async Task UpdatePick(DraftManagerPick pick)
         {
             await Clients.Others.SendAsync("updatePick", pick);
