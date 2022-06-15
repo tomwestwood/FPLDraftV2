@@ -259,3 +259,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/FPLDraftV2/ClientApp/.angular/cache/14.0.1
