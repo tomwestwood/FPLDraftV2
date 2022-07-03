@@ -11,7 +11,7 @@ namespace FPLV2Core.Database.DraftDB
 {
     public static class DraftDB
     {
-        private static string db_connection_string = "Data Source=fplplus.database.windows.net;Initial Catalog=FPLPlus;User id=tomwestwood;Password=Smithy123;";
+        private static string db_connection_string = "Data Source=mssql8.websitelive.net;Integrated Security=False;User ID=8031_tomwestwood;Password=Smithy12345*;Connect Timeout=15;Encrypt=False;Packet Size=4096;";
         private static SqlConnection connection => new SqlConnection(db_connection_string);
 
         public static Draft GetDraft()
@@ -247,7 +247,7 @@ namespace FPLV2Core.Database.DraftDB
             }
         }
 
-        public static void UpdateDraft(Draft draft)
+        public static Draft UpdateDraft(Draft draft)
         {
             var sp = "dbo.update_Draft";
 
@@ -273,6 +273,7 @@ namespace FPLV2Core.Database.DraftDB
                     //}
                 }
             }
+            return draft;
         }
 
         public static void SetFavourite(DraftManagerFavourite favourite)

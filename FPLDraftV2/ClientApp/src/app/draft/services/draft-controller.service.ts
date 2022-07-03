@@ -7,6 +7,7 @@ import { SignalRService } from '../../services/signalR.service';
 import { FPLBase } from '../../models/fpl';
 import { DraftService } from '../../services/draft.service';
 import { stat } from 'fs';
+import { debug } from 'console';
 
 @Injectable({ providedIn: 'root' })
 export class DraftControllerService {
@@ -54,12 +55,14 @@ export class DraftControllerService {
   }
 
   setDraftStatus(status: DraftStatuses) {
-    this.draft.value.status_id = status;
-    this.status.next(status);
+    if (this.draft.value) {
+      this.draft.value.status_id = status;
+      this.status.next(status);
 
-    this.saveDraft(this.draft.value).subscribe((draft: Draft) => {
-      this.updateDraftStatusNotification(status);
-    });
+      this.saveDraft(this.draft.value).subscribe((draft: Draft) => {
+        this.updateDraftStatusNotification(status);
+      });
+    }
   }
 
   setNextDraftManager(): void {
@@ -94,14 +97,25 @@ export class DraftControllerService {
       this.draft.value.draft_manager_id = next_manager.id;
     }
 
+    this.draft.value.status_id = DraftStatuses.Waiting;
     this.draft.value.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.value.draft_manager);
-    this.saveDraft(this.draft.value).subscribe((draft: Draft) => {
-      this.updateDraftNotification(this.draft.value);
+    this.saveDraft(DraftFunctions.getBasicDraftObject(this.draft.value)).subscribe((draft: Draft) => {
+      this.draft.next(draft);
+      this.signalRService.updateDraftManager(this.draft.value.draft_manager);
+      this.signalRService.updateDraftRound(this.draft.value.draft_round);
+      this.signalRService.updateDraftDirection(this.draft.value.direction);
+      this.signalRService.updateStatus(this.draft.value.status_id);
     });
   }
 
   getCurrentPick(): DraftManagerPick {
-    let current_pick = this.draft.value.draft_manager_picks.filter(dmp => dmp.nominator_id == this.draft.value.draft_manager_id && dmp.pick_order == this.draft.value.draft_round).reduce((p, c) => p.id > c.id ? p : c);
+    let current_picks = this.draft.value.draft_manager_picks
+      .filter(dmp => dmp.nominator_id == this.draft.value.draft_manager_id &&
+        dmp.pick_order == this.draft.value.draft_round &&
+        (dmp.draft_manager_id == 0 || this.draft.value.status_id >= DraftStatuses.DraftingComplete))
+
+    let current_pick = current_picks.length > 0 ? current_picks?.reduce((p, c) => p.id > c.id ? p : c) : undefined;
+
     if (current_pick) {
       current_pick.player = this.fplBase.value.elements.find(p => p.id == current_pick.player_id);
 
@@ -187,6 +201,27 @@ export class DraftControllerService {
     return managers_with_pick_left_this_round;
   }
 
+  private pickReceived(pick: DraftManagerPick) {
+    if (this.draft.value.draft_manager_picks.some(dmp => dmp.id == pick.id)) {
+      let i = this.draft.value.draft_manager_picks.findIndex(dmp => dmp.id == pick.id);
+      this.draft.value.draft_manager_picks[i] = pick;
+    }
+    else
+      this.draft.value.draft_manager_picks.push(pick);
+
+    if (this.pick?.value?.draft_manager_id == this.draft?.value?.draft_manager?.id) {
+      if (this.draft.value.draft_manager.draft_manager_picks.some(dmp => dmp.id == pick.id)) {
+        let i = this.draft.value.draft_manager.draft_manager_picks.findIndex(dmp => dmp.id == pick.id);
+        this.draft.value.draft_manager.draft_manager_picks[i] = pick;
+      }
+      else
+        this.draft.value.draft_manager.draft_manager_picks.push(pick);
+    }
+
+
+    this.draft.next(this.draft.value);
+  }
+
   private subscribeToEvents(): void {
     this.signalRService.connectionEstablished.subscribe(() => {
       // we could send a message out.
@@ -203,8 +238,30 @@ export class DraftControllerService {
       }
     });
 
+    this.signalRService.roundReceived.subscribe((round: number) => {
+      if (this.draft.value.draft_round != round) {
+        this.draft.value.draft_round = round;
+        this.draft.next(this.draft.value);
+      }
+    });
+
+    this.signalRService.directionReceived.subscribe((direction: boolean) => {
+      if (this.draft.value.direction != direction) {
+        this.draft.value.direction = direction;
+        this.draft.next(this.draft.value);
+      }
+    });
+
+    this.signalRService.managerReceived.subscribe((manager: DraftManager) => {
+      if (this.draft.value.draft_manager_id != manager.id) {
+        this.draft.value.draft_manager_id = manager.id;
+        this.draft.value.draft_manager = manager;
+        this.draft.next(this.draft.value);
+      }
+    });
+
     this.signalRService.pickReceived.subscribe((pick: DraftManagerPick) => {
-      this.pick.next(pick);
+      this.pickReceived(pick);
     });
   }
 
@@ -242,8 +299,10 @@ export class DraftControllerService {
   }
 
   getMaxBidAmount(dmp: DraftManagerPick): number {
-    if (dmp.sealed_bids?.length > 1)
-      return dmp.sealed_bids?.filter(sb => sb.bid_eligible)?.reduce((p, c) => p.bid_amount > c.bid_amount ? p : c)?.bid_amount ?? dmp.value_price;
+    let bids = dmp.sealed_bids;
+
+    if (bids.length >= 1 && bids.some(sb => sb.bid_eligible))
+      return bids?.filter(sb => sb.bid_eligible)?.reduce((p, c) => p.bid_amount > c.bid_amount ? p : c)?.bid_amount ?? dmp.value_price;
     else
       return dmp.value_price;
   }

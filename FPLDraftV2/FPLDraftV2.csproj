@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\abstract\draft-base.ts" />
     <None Remove="ClientApp\src\app\admin\admin.component.ts" />
     <None Remove="ClientApp\src\app\controls\confirm-player\confirm-player.component.ts" />
     <None Remove="ClientApp\src\app\controls\preview-squad\preview-squad.component.ts" />
@@ -84,6 +85,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\abstract\draft-base.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\admin\admin.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

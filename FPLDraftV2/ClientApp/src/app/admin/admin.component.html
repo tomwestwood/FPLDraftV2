@@ -28,25 +28,25 @@
     <mat-form-field appearance="fill">
       <mat-label>Status:</mat-label>
       <select matNativeControl [(ngModel)]="draft.status_id">
-        <option [ngValue]="1">{{getStatusDescriptionFromId(1)}}</option>
-        <option [ngValue]="2">{{getStatusDescriptionFromId(2)}}</option>
-        <option [ngValue]="3">{{getStatusDescriptionFromId(3)}}</option>
-        <option [ngValue]="4">{{getStatusDescriptionFromId(4)}}</option>
-        <option [ngValue]="5">{{getStatusDescriptionFromId(5)}}</option>
-        <option [ngValue]="6">{{getStatusDescriptionFromId(6)}}</option>
-        <option [ngValue]="7">{{getStatusDescriptionFromId(7)}}</option>
-        <option [ngValue]="8">{{getStatusDescriptionFromId(8)}}</option>
-        <option [ngValue]="9">{{getStatusDescriptionFromId(9)}}</option>
-        <option [ngValue]="10">{{getStatusDescriptionFromId(10)}}</option>
-        <option [ngValue]="11">{{getStatusDescriptionFromId(11)}}</option>
+        <option [ngValue]="1">{{convertStatusToString(1)}}</option>
+        <option [ngValue]="2">{{convertStatusToString(2)}}</option>
+        <option [ngValue]="3">{{convertStatusToString(3)}}</option>
+        <option [ngValue]="4">{{convertStatusToString(4)}}</option>
+        <option [ngValue]="5">{{convertStatusToString(5)}}</option>
+        <option [ngValue]="6">{{convertStatusToString(6)}}</option>
+        <option [ngValue]="7">{{convertStatusToString(7)}}</option>
+        <option [ngValue]="8">{{convertStatusToString(8)}}</option>
+        <option [ngValue]="9">{{convertStatusToString(9)}}</option>
+        <option [ngValue]="10">{{convertStatusToString(10)}}</option>
+        <option [ngValue]="11">{{convertStatusToString(11)}}</option>
       </select>
     </mat-form-field>
 
     <button mat-raised-button color="primary" class="header-option-button" (click)="updateDraft()">Update draft <span class="material-icons">thumb_up_alt</span></button>
   </div>
 
-  <div *ngIf="draft.status_id == 8 || draft.status_id == 9" class="more-info-panel">
-    <h4>{{current_pick.player.web_name}} -> Pick ID: {{current_pick.id}}</h4>
+  <div *ngIf="currentPick && (draft.status_id == 8 || draft.status_id == 9)" class="more-info-panel">
+    <h4>{{currentPick.player.web_name}} -> Pick ID: {{currentPick.id}}</h4>
     <div>
       <p>Enter bids:</p>
       <div class="bids">

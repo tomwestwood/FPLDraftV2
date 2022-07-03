@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { trigger, transition, style, animate, state } from '@angular/animations';
-import { Draft, DraftManager, DraftManagerPick, DraftStatuses, SealedBid } from '../../../models/draft';
+import { Draft, DraftFunctions, DraftManager, DraftManagerPick, DraftStatuses, SealedBid } from '../../../models/draft';
 import { DraftControllerService } from '../../../draft/services/draft-controller.service';
 @Component({
   selector: 'app-terminal-squad-info',
@@ -28,6 +28,30 @@ import { DraftControllerService } from '../../../draft/services/draft-controller
     ])
   ]
 })
-export class TerminalSquadInfoComponent {
+export class TerminalSquadInfoComponent implements OnInit, OnChanges {
   @Input() squadManager: DraftManager;
+
+  constructor(private draftControllerService: DraftControllerService) { }
+
+  ngOnInit() {
+    this.updateManagerSquad();
+
+    this.draftControllerService.draft.subscribe(() => {
+      this.updateManagerSquad();
+    })
+
+    this.draftControllerService.pick.subscribe(() => {
+      this.updateManagerSquad();
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.updateManagerSquad();
+  }
+
+  private updateManagerSquad(): void {
+    if (this.squadManager) {
+      this.squadManager.draft_squad = DraftFunctions.getDraftSquadForManager(this.squadManager);
+    }
+  }
 }

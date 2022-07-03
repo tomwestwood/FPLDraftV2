@@ -1,6 +1,6 @@
 import { trigger, transition, style, animate, state } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Draft, DraftFunctions, DraftManager, DraftManagerPick, DraftStatuses } from '../../../models/draft';
 import { DraftControllerService } from '../../services/draft-controller.service';
 @Component({
@@ -30,23 +30,14 @@ import { DraftControllerService } from '../../services/draft-controller.service'
   ]
 })
 export class DraftNextManagerDialogComponent implements OnInit {
-  draftId: number = 15;
   draft: Draft;
   currentPick: DraftManagerPick;
   signingManager: DraftManager;
-  draftControllerService: DraftControllerService;
 
-  constructor(draftControllerService: DraftControllerService, public dialog: MatDialog) {
-    this.draftControllerService = draftControllerService;
-    draftControllerService.draft.subscribe((draft: Draft) => {
-      this.draft = draft;
-      if (this.draft.status_id == DraftStatuses.SigningComplete) {
-        this.currentPick = this.draftControllerService.getCurrentPick();
-        this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
-      }
-    });
-
-    //this.draftControllerService.getDraft(this.draftId);
+  constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.draft = data.draft;
+    this.currentPick = data.currentPick;
+    this.signingManager = data.signingManager;
   }
 
   ngOnInit(): void {
@@ -54,9 +45,8 @@ export class DraftNextManagerDialogComponent implements OnInit {
   }
 
   completePick(): void {
-    this.dialog.closeAll();
     this.draftControllerService.setNextDraftManager();
-    this.draftControllerService.setDraftStatus(DraftStatuses.Waiting);
+    this.dialog.closeAll();
   }
 
   replacePlayerImageNotFound(event, player) {

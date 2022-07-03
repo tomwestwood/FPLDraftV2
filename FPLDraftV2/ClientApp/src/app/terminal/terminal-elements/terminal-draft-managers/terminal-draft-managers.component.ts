@@ -32,7 +32,13 @@ export class TerminalDraftManagersComponent implements OnInit {
   picksTicker: DraftManager[];
   @Input() draft: Draft;
 
-  constructor(private draftControllerService: DraftControllerService) { }
+  constructor(private draftControllerService: DraftControllerService) {
+    this.draftControllerService.draft.subscribe((draft: Draft) => {
+      if (this.draft) {
+        this.picksTicker = this.draftControllerService.getRoundPickStatus();
+      }
+    });
+  }
 
   ngOnInit() {
     this.picksTicker = this.draftControllerService.getRoundPickStatus();

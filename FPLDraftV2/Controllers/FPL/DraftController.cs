@@ -49,9 +49,9 @@ namespace FPLDraftV2.Controllers.FPL
             return DraftDB.UpdatePick(pick);
         }
         [HttpPost("updateDraft")]
-        public void UpdateDraft([FromBody] Draft draft)
+        public Draft UpdateDraft([FromBody] Draft draft)
         {
-            DraftDB.UpdateDraft(draft);
+            return DraftDB.UpdateDraft(draft);
         }
         [HttpPost("setFavourite")]
         public void SetFavourite([FromBody] DraftManagerFavourite favourite)

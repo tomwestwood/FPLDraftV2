@@ -58,8 +58,10 @@ export class DraftFinalChanceDialogComponent implements OnInit {
     dmp.draft_manager_id = this.draft.draft_manager_id;
     dmp.signed_price = highest_bid.bid_amount;
 
+    this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
     this.draftControllerService.updatePick(dmp).subscribe((savedPick: DraftManagerPick) => {
-      this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
+      this.draftControllerService.updatePickNotification(savedPick);
+      this.dialog.closeAll();
     });
   }
 
@@ -70,8 +72,10 @@ export class DraftFinalChanceDialogComponent implements OnInit {
     dmp.draft_manager_id = highest_bidder.id;
     dmp.signed_price = highest_bid.bid_amount;
 
+    this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
     this.draftControllerService.updatePick(dmp).subscribe((savedPick: DraftManagerPick) => {
-      this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
+      this.draftControllerService.updatePickNotification(savedPick);
+      this.dialog.closeAll();
     });
   }
 

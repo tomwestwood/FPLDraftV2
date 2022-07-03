@@ -4,46 +4,21 @@ import { FplService } from '../services/fpl.service';
 import { Draft, DraftFunctions, DraftManagerPick, DraftStatuses, SealedBid } from '../models/draft';
 import { DraftService } from '../services/draft.service';
 import { DraftControllerService } from '../draft/services/draft-controller.service';
+import { DraftBaseComponent } from '../abstract/draft-base';
 
 @Component({
   selector: 'app-admin-component',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent extends DraftBaseComponent {
 
-  draftId: number = 15;
-  isAuction: boolean = true;
-  draft: Draft;
-  fplBase: FPLBase;
-  current_pick: DraftManagerPick;
-
-  constructor(fplService: FplService, private draftControllerService: DraftControllerService, private draftService: DraftService) {
-    this.draftControllerService.fplBase.subscribe((fplBase: FPLBase) => {
-      this.fplBase = fplBase;
-    });
-
-    this.draftControllerService.draft.subscribe((draft: Draft) => {
-      if (draft) {
-        let unset = !this.draft;
-        this.draft = draft;
-        this.draft.draft_manager = this.draft.draft_managers.find(dm => dm.id == this.draft.draft_manager_id);
-
-        if (unset) {
-          if (draft.status_id == DraftStatuses.SealedBids || draft.status_id == DraftStatuses.CheckingBids || draft.status_id == DraftStatuses.BidsReceived) {
-            this.current_pick = this.draftControllerService.getCurrentPick();
-          }
-        }
-      }
-    });
-
-    this.draftControllerService.pick.subscribe((pick: DraftManagerPick) => {
-      this.current_pick = pick;
-    })
+  constructor(fplService: FplService, public draftControllerService: DraftControllerService, private draftService: DraftService) {
+    super(draftControllerService);
   }
 
-  ngOnInit() {
-    this.draftControllerService.getDraft(this.draftId);    
+  setDraft(draft: Draft): void {
+    this.draft = draft;
   }
 
   updateDraft(): void {
@@ -62,27 +37,29 @@ export class AdminComponent implements OnInit {
           bid_amount: dm.bid,
           draft_manager_id: dm.id,
           draft_manager_name: dm.name,
-          player_id: this.current_pick.player_id,
-          player_name: this.current_pick.player.name,
+          player_id: this.currentPick.player_id,
+          player_name: this.currentPick.player.name,
           bid_eligible: true,
           is_max_bid: false
         };
         sealed_bid.bid_eligible = this.assessEligibility(sealed_bid);
         sealed_bids.push(sealed_bid);
       });
-      this.current_pick.sealed_bids = sealed_bids;
-      this.draft.draft_manager_picks.push(this.current_pick);
-      this.draftControllerService.updatePick(this.current_pick).subscribe((dmp: DraftManagerPick) => {
+      this.currentPick.sealed_bids = sealed_bids;
+      this.draft.draft_manager_picks.push(this.currentPick);
+      this.draftControllerService.updatePick(this.currentPick).subscribe((dmp: DraftManagerPick) => {
         this.draftControllerService.setDraftStatus(DraftStatuses.BidsReceived);
+        this.draftControllerService.updatePickNotification(dmp);
         setTimeout(() => {
-          if (this.current_pick.sealed_bids.some(b => b.bid_eligible)) {
+          if (this.currentPick.sealed_bids.some(b => b.bid_eligible)) {
             this.draftControllerService.setDraftStatus(DraftStatuses.FinalChance)
           } else {
-            this.current_pick.signed_price = this.current_pick.value_price;
-            this.current_pick.draft_manager_id = this.current_pick.nominator_id;
-            this.current_pick.pick_order = this.draft.draft_round;
-            this.draftControllerService.updatePick(this.current_pick).subscribe((savedPick: DraftManagerPick) => {
+            this.currentPick.signed_price = this.currentPick.value_price;
+            this.currentPick.draft_manager_id = this.currentPick.nominator_id;
+            this.currentPick.pick_order = this.draft.draft_round;
+            this.draftControllerService.updatePick(this.currentPick).subscribe((savedPick: DraftManagerPick) => {
               this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
+              this.draftControllerService.updatePickNotification(savedPick);
             });
           }
         }, 10000);
@@ -91,14 +68,15 @@ export class AdminComponent implements OnInit {
   }
 
   noBids(): void {
-    this.current_pick.pick_order = this.draft.draft_round;
-    this.current_pick.draft_manager_id = this.draft.draft_manager_id;
-    this.current_pick.signed_price = this.current_pick.player.now_cost / 10;
-    this.draft.draft_manager_picks.push(this.current_pick);
-    this.draft.draft_manager.draft_manager_picks.push(this.current_pick);
+    this.currentPick.pick_order = this.draft.draft_round;
+    this.currentPick.draft_manager_id = this.draft.draft_manager_id;
+    this.currentPick.signed_price = this.currentPick.player.now_cost / 10;
+    this.draft.draft_manager_picks.push(this.currentPick);
+    this.draft.draft_manager.draft_manager_picks.push(this.currentPick);
     this.draft.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.draft_manager);
 
-    this.draftControllerService.updatePick(this.current_pick).subscribe((savedPick: DraftManagerPick) => {
+    this.draftControllerService.updatePick(this.currentPick).subscribe((savedPick: DraftManagerPick) => {
+      this.draftControllerService.updatePickNotification(savedPick);
       this.draftControllerService.saveDraft(this.draft).subscribe((draft: Draft) => {
         this.draftControllerService.setDraftStatus(DraftStatuses.SigningComplete);
       });
@@ -109,18 +87,10 @@ export class AdminComponent implements OnInit {
     this.draft.direction = !this.draft.direction;
   }
 
-  getStatusDescriptionFromId(status_id: number): string {
-    return DraftFunctions.convertStatusToString(status_id);
-  }
-
-  getDraftDirectionDescription(): string {
-    return this.draft.direction ? 'going back up' : 'going down';
-  }
-
   private assessEligibility(bid: SealedBid): boolean {
     let isRemainingManager = this.draftControllerService.getRemainingDraftManagersInRound(this.draft.draft_managers, this.draft.draft_round, this.draft.draft_manager.draft_seed, this.draft.direction).some(dm => dm.id == bid.draft_manager_id);
-    let minBid = this.current_pick.value_price + 0.5;
-    let maxBid = this.current_pick.value_price * 2;
+    let minBid = this.currentPick.value_price + 0.5;
+    let maxBid = this.currentPick.value_price * 2;
     let isHalfMilVariant = bid.bid_amount % 0.5 == 0;
 
     return isRemainingManager && bid.bid_amount >= minBid && bid.bid_amount <= maxBid && isHalfMilVariant;

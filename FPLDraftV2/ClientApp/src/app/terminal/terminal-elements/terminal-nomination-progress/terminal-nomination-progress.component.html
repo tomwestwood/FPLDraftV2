@@ -1,4 +1,4 @@
-<div class="nomination-container">
+<div class="nomination-container" *ngIf="currentPick">
   <div class="nomination-item horizontal relative" style="position: relative;">
     <div>
       <div>{{currentPick.player.club.name | uppercase}}</div>

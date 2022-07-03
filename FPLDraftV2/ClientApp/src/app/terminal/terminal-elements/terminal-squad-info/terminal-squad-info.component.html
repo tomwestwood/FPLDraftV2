@@ -3,7 +3,7 @@
   <img class="terminal-team-header" src="{{squadManager.team_image_url}}" />
   <mat-divider class="terminal-divider"></mat-divider>
 
-  <ul class="terminal-team-players">
+  <ul class="terminal-team-players" *ngIf="squadManager.draft_squad">
     <li><terminal-player [player]="squadManager.draft_squad?.gk_1?.player" [position]="'GK'" [cost]="squadManager.draft_squad?.gk_1?.signed_price"></terminal-player></li>
     <li><terminal-player [player]="squadManager.draft_squad?.gk_2?.player" [position]="'GK'" [cost]="squadManager.draft_squad?.gk_2?.signed_price"></terminal-player></li>
     <li><terminal-player [player]="squadManager.draft_squad?.def_1?.player" [position]="'DEF'" [cost]="squadManager.draft_squad?.def_1?.signed_price"></terminal-player></li>

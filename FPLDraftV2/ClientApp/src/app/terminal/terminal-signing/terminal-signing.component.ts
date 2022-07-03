@@ -52,8 +52,10 @@ export class TerminalSigningComponent implements OnInit {
       if (draft) {
         this.draft = draft;
         this.currentPick = this.draftControllerService.getCurrentPick();
-        this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
-        this.nominatingManager = this.draftControllerService.getManagerById(this.currentPick.nominator_id);
+        if (this.currentPick) {
+          this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
+          this.nominatingManager = this.draftControllerService.getManagerById(this.currentPick.nominator_id);
+        }
       }
     });
   }

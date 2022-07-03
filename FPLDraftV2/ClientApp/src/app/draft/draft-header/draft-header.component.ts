@@ -52,7 +52,10 @@ export class DraftHeaderComponent {
   }
 
   enableContinueButton(): boolean {
-    return this.draft.status_id == 1 || this.draft.status_id == 2;
+    return this.draft.status_id == DraftStatuses.NotStarted
+      || this.draft.status_id == DraftStatuses.Waiting
+      || this.draft.status_id == DraftStatuses.Timeout
+      || this.draft.status_id == DraftStatuses.SigningComplete;
   }
 
   convertStatusToString(status: number): string {

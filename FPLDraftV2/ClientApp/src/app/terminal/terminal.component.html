@@ -40,7 +40,7 @@
 
     <!-- Right sidebar: -->
     <div class="terminal-right-sidebar" *ngIf="draft.status_id == 2 || draft.status_id == 11">
-      <app-terminal-squad-info [squadManager]="draft.status_id == 11 ? signingManager : draft.draft_manager"></app-terminal-squad-info>
+      <app-terminal-squad-info [squadManager]="signingManager ?? draft.draft_manager"></app-terminal-squad-info>
 
       <!--<div *ngIf="draft.status_id == 2">
         {{draft.draft_manager.name}}

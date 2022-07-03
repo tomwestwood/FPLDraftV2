@@ -8,6 +8,7 @@ import { TerminalWaitingComponent } from './terminal-waiting/terminal-waiting.co
 import { TerminalNominationComponent } from './terminal-nomination/terminal-nomination.component';
 import { TerminalSigningComponent } from './terminal-signing/terminal-signing.component';
 import { TerminalTimeoutComponent } from './terminal-timeout/terminal-timeout.component';
+import { DraftBaseComponent } from '../abstract/draft-base';
 @Component({
   selector: 'app-terminal-component',
   templateUrl: './terminal.component.html',
@@ -34,13 +35,8 @@ import { TerminalTimeoutComponent } from './terminal-timeout/terminal-timeout.co
     ])
   ]
 })
-export class TerminalComponent implements OnInit {
-  draftId: number = 15;
-  isDraftAuction: boolean = true;
+export class TerminalComponent extends DraftBaseComponent implements OnInit {  
 
-  fplBase: FPLBase;
-  draft: Draft;
-  currentPick: DraftManagerPick;
   announcementPick: DraftManagerPick;
   squadTicker: SquadTicker;
   displaySquadTicker: boolean;
@@ -49,8 +45,6 @@ export class TerminalComponent implements OnInit {
   breakingNews: boolean;
   announcingPick: boolean;
 
-  signingManager: DraftManager;
-
   tickerItems: string[];
 
   newManagerAudio = new Audio('../../assets/mustang.mp3');
@@ -58,8 +52,8 @@ export class TerminalComponent implements OnInit {
   timeoutAudio = new Audio('../../assets/Sad-trombone.mp3');
   announceAudio = new Audio('../../assets/player_signed.wav');
 
-  constructor(private draftControllerService: DraftControllerService, public dialog: MatDialog) {
-    draftControllerService.getDraft(this.draftId);
+  constructor(public draftControllerService: DraftControllerService, public dialog: MatDialog) {
+    super(draftControllerService);
   }
 
   ngOnInit() {
@@ -67,122 +61,79 @@ export class TerminalComponent implements OnInit {
     this.statusUpdated = true;
     this.managerUpdated = true;
     this.breakingNews = false;
+  }
 
-    this.draftControllerService.fplBase.subscribe((fplBase: FPLBase) => {
-      this.fplBase = fplBase;
-    });
+  public setDraft(draft: Draft): void {
+    if (draft) {
+      this.draft = draft;
 
-    this.draftControllerService.draft.subscribe((draft: Draft) => {
-      if (draft) {
-        let draft_unset = !this.draft;
-        var updateManager = this.draft?.draft_manager.id != draft.draft_manager.id;
-        this.draft = draft;
+      //this.initialiseSquadTicker();
+      //this.updateTickerItems();
 
-        //if (draft_unset) {
-        //  this.initialiseSquadTicker();
-        //  this.updateTickerItems();
-        //}
+      this.draftControllerService.stopDraftingTimer();
+      this.draftControllerService.stopBidsTimer();
 
-        if (this.draft.status_id >= DraftStatuses.SealedBids) {
-          this.currentPick = this.draftControllerService.getCurrentPick();
-        }
+      // actions:
+      switch (this.draft.status_id) {
 
-        this.draftControllerService.stopDraftingTimer();
+        case DraftStatuses.Waiting:
+          this.announce(TerminalWaitingComponent, 4000, this.newManagerAudio);
+          this.draft.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.draft_manager);
+          this.draftControllerService.getRoundPickStatus();
+          break;
 
-        // actions:
-        switch (this.draft.status_id) {
+        case DraftStatuses.Drafting:
+          this.draftControllerService.startDraftingTimer();
+          break;
 
-          case DraftStatuses.Waiting:
-            let waitingDialog = this.dialog.open(TerminalWaitingComponent);
+        case DraftStatuses.Timeout:
+          this.announceTimeout();
+          break;
 
-            this.newManagerAudio.currentTime = 0;
-            let newManagerPromise = this.newManagerAudio.play();
+        case DraftStatuses.SealedBids:
+          let nominationAndBidsDialog = this.dialog.open(TerminalNominationComponent);
+          this.nominatedAudio.currentTime = 0;
+          let nominatePromise = this.nominatedAudio.play();
 
-            if (newManagerPromise !== undefined) {
-              newManagerPromise.then(_ => {
+          if (nominatePromise !== undefined) {
+            nominatePromise.then(_ => {
+            }).catch(error => {
+            });
+          }
+
+          setTimeout(() => {
+            let placeBidsAudio = new Audio(''); // to remove:
+            placeBidsAudio.currentTime = 0;
+            let placeBidsPromise = placeBidsAudio.play();
+
+            if (placeBidsPromise !== undefined) {
+              placeBidsPromise.then(_ => {
               }).catch(error => {
               });
             }
 
-            setTimeout(() => {
-              waitingDialog.close();
-            }, 4000);
-            break;
+            nominationAndBidsDialog.close();
+            this.draftControllerService.startBidsTimer();
+          }, 5000);
+          break;
 
-          case DraftStatuses.Drafting:
-            this.draftControllerService.startDraftingTimer();
-            break;
+        case DraftStatuses.BidsReceived:          
+          // to remove?:
+          this.playAudio(new Audio(''));
+          break;
 
-          case DraftStatuses.Timeout:
-            this.announceTimeout();
-            break;
-
-          case DraftStatuses.SealedBids:
-            let nominationAndBidsDialog = this.dialog.open(TerminalNominationComponent);
-            this.nominatedAudio.currentTime = 0;
-            let nominatePromise = this.nominatedAudio.play();
-
-            if (nominatePromise !== undefined) {
-              nominatePromise.then(_ => {
-              }).catch(error => {
-              });
-            }
-
-            setTimeout(() => {
-              let placeBidsAudio = new Audio(''); // to remove:
-              placeBidsAudio.currentTime = 0;
-              let placeBidsPromise = placeBidsAudio.play();
-
-              if (placeBidsPromise !== undefined) {
-                placeBidsPromise.then(_ => {
-                }).catch(error => {
-                });
-              }
-
-              nominationAndBidsDialog.close();
-              this.draftControllerService.startBidsTimer();
-            }, 5000);
-            break;
-
-          case DraftStatuses.BidsReceived:
-            let bidsReceivedAudio = new Audio(''); // to remove:
-            bidsReceivedAudio.currentTime = 0;
-            let bidsReceivedPromise = bidsReceivedAudio.play();
-
-            if (bidsReceivedPromise !== undefined) {
-              bidsReceivedPromise.then(_ => {
-              }).catch(error => {
-              });
-            }
-            break;
-
-          case DraftStatuses.SigningComplete:
-            this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
+        case DraftStatuses.SigningComplete:
+          if (this.signingManager) {
+            this.signingManager.draft_manager_picks = this.draft.draft_manager_picks.filter(dmp => dmp.draft_manager_id == this.signingManager.id);
+            this.draft.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.draft_manager);
             this.signingManager.draft_squad = DraftFunctions.getDraftSquadForManager(this.signingManager);
-            let newSigningDialog = this.dialog.open(TerminalSigningComponent);
-            this.announceAudio.currentTime = 0;
-            let announcePromise = this.announceAudio.play();
-
-            if (announcePromise !== undefined) {
-              announcePromise.then(_ => {
-              }).catch(error => {
-              });
-            }
-
-            setTimeout(() => {
-              newSigningDialog.close();
-            }, 6000);            
-            break;
-        }
-
-        this.statusUpdated = false;
-        setTimeout(() => { this.statusUpdated = true; }, 50);
+          }
+          break;
       }
-    });
 
-    this.draftControllerService.pick.subscribe((pick: DraftManagerPick) => {
-      this.announcementPick = pick;
-    });
+      this.statusUpdated = false;
+      setTimeout(() => { this.statusUpdated = true; }, 50);
+    }
   }
 
   private announcePick(pick: DraftManagerPick): void {
@@ -208,21 +159,39 @@ export class TerminalComponent implements OnInit {
     }
   }
 
+  private announceSigningComplete(): void {
+    this.announce(TerminalSigningComponent, 6000, this.announceAudio);
+  }
+
   private announceTimeout(): void {
-    let timeoutDialog = this.dialog.open(TerminalTimeoutComponent);
+    this.announce(TerminalTimeoutComponent, 8000, this.timeoutAudio)
+  }
+
+  private announce(component: any, timeout: number, audioElement: HTMLAudioElement): void {
+    let dialog = this.dialog.open(component);
     setTimeout(() => {
-      timeoutDialog.close();
-    }, 8000);
+      dialog.close();
+    }, timeout);
 
-    this.timeoutAudio.currentTime = 0;
-    var playPromise = this.timeoutAudio.play();
+    if (audioElement)
+      this.playAudio(audioElement);
+  }
 
-    if (playPromise !== undefined) {
-      playPromise.then(_ => {
-      }).catch(error => {
-      });
+  private playAudio(audioElement: HTMLAudioElement) {
+    if (audioElement) {
+      audioElement.currentTime = 0;
+      var playPromise = audioElement.play();
+
+      if (playPromise !== undefined) {
+        playPromise.then(_ => {
+        }).catch(error => {
+        });
+      }
     }
   }
+
+
+  // squad ticker stuff:
   private initialiseSquadTicker(): void {
     this.squadTicker = new SquadTicker();
     this.squadTicker.ticker_index = 1;
@@ -231,6 +200,7 @@ export class TerminalComponent implements OnInit {
     this.squadTicker.ticker_squad = DraftFunctions.getDraftSquadForManager(this.squadTicker.ticker_manager);
     this.squadTickerTimer();
   }
+
   private squadTickerTimer(): void {
     this.squadTicker.ticker_timeout = setInterval(() => {
       this.displaySquadTicker = false;
@@ -251,7 +221,6 @@ export class TerminalComponent implements OnInit {
     }, 10000);
   }
 
-  // ticker stuff:
   private updateTickerItems(): void {
     this.tickerItems = [] = [];
     this.tickerItems.push(this.generateRandomTickerItem());
@@ -277,10 +246,6 @@ export class TerminalComponent implements OnInit {
       player = this.fplBase.elements.filter(e => e.draft_manager_id == undefined)[Math.floor(Math.random() * this.fplBase.elements.filter(e => e.draft_manager_id == undefined).length)];
 
     return this.getRandomTickerItem(manager, manager2, player);
-  }
-
-  convertStatusToString(status: number): string {
-    return DraftFunctions.convertStatusToString(status);
   }
 
   private getRandomTickerItem(manager: DraftManager, manager2: DraftManager, player: Player): string {
@@ -364,9 +329,5 @@ export class TerminalComponent implements OnInit {
     randomStatements.push(`Lee Woodall looking to secure first proper draft title this season`);
 
     return randomStatements[Math.floor(Math.random() * randomStatements.length)];
-  }
-
-  replacePlayerImageNotFound(event, player) {
-    event.target.src = `https://fantasy.premierleague.com/dist/img/shirts/standard/shirt_${player.club.code}-66.png`;
   }
 }

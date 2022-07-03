@@ -38,9 +38,7 @@ export class TerminalNominationProgressComponent {
   bidsAudio = new Audio('../../assets/place_bids.wav');
   bidsReceivedAudio = new Audio('../../assets/bloodyhell.mp3');
 
-  constructor(private draftControllerService: DraftControllerService) {
-
-  }
+  constructor(private draftControllerService: DraftControllerService) { }
 
   ngOnInit(): void {
     this.draftControllerService.startSealedBidsTimer.subscribe(() => {

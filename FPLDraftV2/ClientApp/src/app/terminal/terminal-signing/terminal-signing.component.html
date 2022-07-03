@@ -1,4 +1,4 @@
-<div class="nomination-container">
+<div class="nomination-container" *ngIf="signingManager && currentPick">
   <h2 class="nomination-container-header">NEW SIGNING:</h2>
   <div class="signing-header">{{signingManager.team_name}} have agreed to sign:</div>
   <div class="nomination-player-container">

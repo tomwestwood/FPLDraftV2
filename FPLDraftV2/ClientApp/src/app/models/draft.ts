@@ -1,3 +1,4 @@
+import { debug } from "console";
 import { FancastPlayer } from "../fancast/models/fancast-player";
 import { FancastDraftSquad } from "../FANCAST/models/fancast_draft_squad";
 import { Player, Club, FPLBase } from "./fpl";
@@ -200,6 +201,7 @@ export class DraftFunctions {
     basicPick.draft_id = pick.draft_id;
     basicPick.value_price = pick.value_price;
     basicPick.signed_price = pick.signed_price;
+    basicPick.player_name = pick.player_name;
 
     basicPick.sealed_bids = [];
     pick.sealed_bids?.forEach(sb => {
@@ -237,7 +239,10 @@ export class DraftFunctions {
   }
   static getDraftSquadForManager(manager: DraftManager): DraftSquad {
     var squad = new DraftSquad();
-    if (manager.draft_manager_picks) {
+    if (!manager)
+      debugger;
+
+    if (manager?.draft_manager_picks) {
       squad.gk_1 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 1)[0] ?? undefined;
       squad.gk_2 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 1)[1] ?? undefined;
       squad.def_1 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 2)[0] ?? undefined;
