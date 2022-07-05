@@ -1,12 +1,19 @@
 <div class="nomination-container" *ngIf="currentPick">
-  <div class="nomination-item horizontal relative" style="position: relative;">
-    <div>
-      <div>{{currentPick.player.club.name | uppercase}}</div>
-      <div>{{currentPick.player.position.singular_name | uppercase}}</div>
-      <div>£{{currentPick.player.now_cost / 10}}M</div>
-    </div>
+  <div class="nomination-item player">
+    <!--<div>
+    <div>{{currentPick.player.club.name | uppercase}}</div>
+    <div>{{currentPick.player.position.singular_name | uppercase}}</div>
+    <div>£{{currentPick.player.now_cost / 10}}M</div>
+  </div>-->
     <img class="player-image" src="{{currentPick.player.photo_url}}" />
-    <div class="overlay-text-bottom">{{currentPick.player.first_name[0] | uppercase}}. {{currentPick.player.web_name | uppercase}}</div>
+    <img class="club-badge-image" src="{{currentPick.player.club.badge_url}}" />
+    <div class="overlay-text-top-right">
+      <div>{{currentPick.player.position.singular_name_short | uppercase}}</div>
+    </div>
+    <div class="overlay-text-bottom">
+      <div>{{currentPick.player.first_name[0] | uppercase}}. {{currentPick.player.web_name | uppercase}}</div>
+      <div style="background-color: #17252A; border-radius: 4px; padding: 4px;">£{{currentPick.player.now_cost / 10}}M</div>
+    </div>
   </div>
 
   <mat-divider *ngIf="draft.status_id >= 4" [vertical]="true" class="terminal-link"></mat-divider>

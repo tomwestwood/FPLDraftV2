@@ -78,6 +78,11 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
 
         case DraftStatuses.Waiting:
           this.announce(TerminalWaitingComponent, 4000, this.newManagerAudio);
+
+          if (this.draft.draft_manager_picks.filter(dmp => dmp.draft_manager_id == this.draft.draft_manager_id).length != this.draft.draft_manager.draft_manager_picks.length) {
+            this.draft.draft_manager.draft_manager_picks = this.draft.draft_manager_picks.filter(dmp => dmp.draft_manager_id == this.draft.draft_manager_id);
+          }
+
           this.draft.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.draft_manager);
           this.draftControllerService.getRoundPickStatus();
           break;
