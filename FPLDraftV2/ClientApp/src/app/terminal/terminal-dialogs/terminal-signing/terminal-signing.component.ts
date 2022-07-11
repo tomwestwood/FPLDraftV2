@@ -1,13 +1,12 @@
-import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { Club, Player, FPLBase } from '../../models/fpl';
-import { Draft, DraftManager, DraftManagerFavourite, DraftManagerPick, DraftFunctions, SquadTicker, DraftSquad, RoundPicks, DraftStatuses, SealedBid } from '../../models/draft';
+import { Component, OnInit } from '@angular/core';
+import { FPLBase } from '../../../models/fpl';
+import { Draft, DraftManager, DraftManagerPick } from '../../../models/draft';
 import { trigger, transition, style, animate, state } from '@angular/animations';
-import { DraftControllerService } from '../../draft/services/draft-controller.service';
-import { MatDialog } from '@angular/material/dialog';
+import { DraftControllerService } from '../../../draft/services/draft-controller.service';
 @Component({
-  selector: 'app-terminal-nomination-component',
-  templateUrl: './terminal-nomination.component.html',
-  styleUrls: ['./terminal-nomination.component.scss'],
+  selector: 'app-terminal-signing-component',
+  templateUrl: './terminal-signing.component.html',
+  styleUrls: ['./terminal-signing.component.scss'],
   animations: [
     trigger('flyInOut', [
       state('in', style({ transform: 'translateX(0)' })),
@@ -30,18 +29,18 @@ import { MatDialog } from '@angular/material/dialog';
     ])
   ]
 })
-export class TerminalNominationComponent implements OnInit {
+export class TerminalSigningComponent implements OnInit {
 
   draft: Draft;
   fplBase: FPLBase;
   currentPick: DraftManagerPick;
+  nominatingManager: DraftManager;
+  signingManager: DraftManager;
 
   constructor(private draftControllerService: DraftControllerService) {
   }
 
   ngOnInit() {
-    
-
     this.draftControllerService.fplBase.subscribe((fplBase: FPLBase) => {
       this.fplBase = fplBase;
     });
@@ -50,6 +49,10 @@ export class TerminalNominationComponent implements OnInit {
       if (draft) {
         this.draft = draft;
         this.currentPick = this.draftControllerService.getCurrentPick();
+        if (this.currentPick) {
+          this.signingManager = this.draftControllerService.getManagerById(this.currentPick.draft_manager_id);
+          this.nominatingManager = this.draftControllerService.getManagerById(this.currentPick.nominator_id);
+        }
       }
     });
   }

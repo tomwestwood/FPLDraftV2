@@ -1,0 +1,21 @@
+.waiting-container {
+  display: flex;
+  flex-direction: column;
+  width: 460px;
+
+  .waiting-container-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .waiting-manager-badge {
+    display: flex;
+    flex-direction: row;
+    width: 75%;
+    align-self: center;
+  }
+
+  .squad {
+      margin-top: 32px;
+  }
+}

@@ -81,4 +81,8 @@ export class TerminalNominationProgressComponent {
     this.bidsAudio.currentTime = 0;
     clearInterval(this.timeout);
   }
+
+  replacePlayerImageNotFound(event, player) {
+    event.target.src = `https://www.nufc.co.uk/img/DefaultPlayerProfileImage.png?mode=crop&width=350&height=460&quality=75`;
+  }
 }

@@ -1,0 +1,72 @@
+:host-context(.large) {
+  font-size: xx-large;
+
+  .club-badge-image {
+      height: 160px;
+  }
+}
+
+.player {
+  position: relative;
+  margin-top: 25%;
+  border-start-start-radius: 16px;
+  border-start-end-radius: 16px;
+  border: 5px solid #c2185b;
+}
+
+.player-image {
+  width: 100%;
+  margin-top: -25%;
+  margin-bottom: 8px;
+  z-index: 2;
+  position: relative;
+}
+
+.club-badge-image {
+  left: 0;
+  opacity: 0.4;
+  position: absolute;
+  height: 90px;
+  margin: 4px;
+}
+
+.overlay-text-top-right {
+  position: absolute;
+  background-color: #c2185b;
+  border: solid #17252A 3px;
+  padding: 8px;
+  bottom: 4px;
+  width: calc(100% - 8px);
+  text-align: center;
+  top: 0;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  height: auto;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  align-items: flex-start;
+  align-self: start;
+  justify-content: flex-end;
+  width: auto;
+  text-align: right;
+  right: 0;
+  margin: 4px;
+  height: fit-content;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.overlay-text-bottom {
+  position: absolute;
+  background-color: #c2185b;
+  border: solid #17252A 3px;
+  padding: 8px;
+  bottom: 4px;
+  width: calc(100% - 8px);
+  text-align: center;
+  z-index: 3;
+  margin-left: 4px;
+  margin-right: 4px;
+}

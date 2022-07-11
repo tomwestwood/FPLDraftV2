@@ -1,0 +1,11 @@
+<div class="player" *ngIf="player">
+  <img class="player-image" src="{{player.photo_url}}" (error)="replacePlayerImageNotFound($event, player)" />
+  <img class="club-badge-image" src="{{player.club.badge_url}}" />
+  <div class="overlay-text-top-right">
+    <div>{{player.position.singular_name_short | uppercase}}</div>
+  </div>
+  <div class="overlay-text-bottom">
+    <div>{{player.first_name[0] | uppercase}}. {{player.web_name | uppercase}}</div>
+    <div style="background-color: #17252A; border-radius: 4px; padding: 4px;">£{{player.now_cost / 10}}M</div>
+  </div>
+</div>

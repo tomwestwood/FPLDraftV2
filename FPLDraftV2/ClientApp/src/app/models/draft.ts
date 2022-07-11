@@ -239,8 +239,6 @@ export class DraftFunctions {
   }
   static getDraftSquadForManager(manager: DraftManager): DraftSquad {
     var squad = new DraftSquad();
-    if (!manager)
-      debugger;
 
     if (manager?.draft_manager_picks) {
       squad.gk_1 = manager.draft_manager_picks.filter(pick => pick.player.position.id == 1)[0] ?? undefined;

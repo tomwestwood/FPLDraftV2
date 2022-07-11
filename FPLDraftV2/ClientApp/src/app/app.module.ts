@@ -9,6 +9,10 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { AdminComponent } from './admin/admin.component';
 import { HomeComponent } from './home/home.component';
+
+import { SquadComponent } from './controls/squad/squad.component';
+import { PlayerComponent } from './controls/player/player.component';
+
 import { FavouritelistComponent } from './favouritelist/favouritelist.component';
 import { DraftComponent } from './draft/draft.component';
 import { DraftHeaderComponent } from './draft/draft-header/draft-header.component';
@@ -27,10 +31,10 @@ import { PreviewSquadComponent } from './controls/preview-squad/preview-squad.co
 import { LiveFixtureComponent } from './live/fixture/liveFixture.component';
 import { LineupComponent } from './live/lineup/lineup.component';
 import { FixtureLineupsComponent } from './live/fixture-lineups/fixture-lineups.component';
-import { TerminalWaitingComponent } from './terminal/terminal-waiting/terminal-waiting.component';
-import { TerminalNominationComponent } from './terminal/terminal-nomination/terminal-nomination.component';
-import { TerminalSigningComponent } from './terminal/terminal-signing/terminal-signing.component';
-import { TerminalTimeoutComponent } from './terminal/terminal-timeout/terminal-timeout.component';
+import { TerminalWaitingComponent } from './terminal/terminal-dialogs/terminal-waiting/terminal-waiting.component';
+import { TerminalNominationComponent } from './terminal/terminal-dialogs/terminal-nomination/terminal-nomination.component';
+import { TerminalSigningComponent } from './terminal/terminal-dialogs/terminal-signing/terminal-signing.component';
+import { TerminalTimeoutComponent } from './terminal/terminal-dialogs/terminal-timeout/terminal-timeout.component';
 
 import { LeagueTableComponent } from './live/league-table/league-table.component';
 
@@ -68,6 +72,10 @@ import { TableComponent } from './live/table/table.component';
     AdminComponent,
     NavMenuComponent,
     HomeComponent,
+
+    SquadComponent,
+    PlayerComponent,
+
     FavouritelistComponent,
     DraftComponent,
     DraftHeaderComponent,

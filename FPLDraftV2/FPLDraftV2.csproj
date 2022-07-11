@@ -38,7 +38,9 @@
     <None Remove="ClientApp\src\app\abstract\draft-base.ts" />
     <None Remove="ClientApp\src\app\admin\admin.component.ts" />
     <None Remove="ClientApp\src\app\controls\confirm-player\confirm-player.component.ts" />
+    <None Remove="ClientApp\src\app\controls\player\player.component.ts" />
     <None Remove="ClientApp\src\app\controls\preview-squad\preview-squad.component.ts" />
+    <None Remove="ClientApp\src\app\controls\squad\squad.component.ts" />
     <None Remove="ClientApp\src\app\controls\terminal-player\terminal-player.component.ts" />
     <None Remove="ClientApp\src\app\draft\dialogs\draft-final-chance-dialog\draft-final-chance-dialog.component.ts" />
     <None Remove="ClientApp\src\app\draft\dialogs\draft-new-manager-dialog\draft-new-manager-dialog.component.ts" />
@@ -73,10 +75,10 @@
     <None Remove="ClientApp\src\app\terminal\terminal-elements\terminal-draft-managers\terminal-draft-managers.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-elements\terminal-nomination-progress\terminal-nomination-progress.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-elements\terminal-squad-info\terminal-squad-info.component.ts" />
-    <None Remove="ClientApp\src\app\terminal\terminal-nomination\terminal-nomination.component.ts" />
-    <None Remove="ClientApp\src\app\terminal\terminal-signing\terminal-signing.component.ts" />
-    <None Remove="ClientApp\src\app\terminal\terminal-timeout\terminal-timeout.component.ts" />
-    <None Remove="ClientApp\src\app\terminal\terminal-waiting\terminal-waiting.component.ts" />
+    <None Remove="ClientApp\src\app\terminal\terminal-dialogs\terminal-nomination\terminal-nomination.component.ts" />
+    <None Remove="ClientApp\src\app\terminal\terminal-dialogs\terminal-signing\terminal-signing.component.ts" />
+    <None Remove="ClientApp\src\app\terminal\terminal-dialogs\terminal-timeout\terminal-timeout.component.ts" />
+    <None Remove="ClientApp\src\app\terminal\terminal-dialogs\terminal-waiting\terminal-waiting.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal.component.ts" />
   </ItemGroup>
 
@@ -89,6 +91,12 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\admin\admin.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\controls\player\player.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\controls\squad\squad.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\controls\preview-squad\preview-squad.component.ts">
@@ -159,16 +167,16 @@
     <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-elements\terminal-drafting-progress\terminal-drafting-progress.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-signing\terminal-signing.component.ts">
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-dialogs\terminal-signing\terminal-signing.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-nomination\terminal-nomination.component.ts">
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-dialogs\terminal-nomination\terminal-nomination.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-timeout\terminal-timeout.component.ts">
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-dialogs\terminal-timeout\terminal-timeout.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-waiting\terminal-waiting.component.ts">
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-dialogs\terminal-waiting\terminal-waiting.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal.component.ts">

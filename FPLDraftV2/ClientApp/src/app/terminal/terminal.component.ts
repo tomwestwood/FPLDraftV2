@@ -4,10 +4,10 @@ import { Draft, DraftManager, DraftManagerPick, DraftFunctions, SquadTicker, Dra
 import { trigger, transition, style, animate, state } from '@angular/animations';
 import { DraftControllerService } from '../draft/services/draft-controller.service';
 import { MatDialog } from '@angular/material/dialog';
-import { TerminalWaitingComponent } from './terminal-waiting/terminal-waiting.component';
-import { TerminalNominationComponent } from './terminal-nomination/terminal-nomination.component';
-import { TerminalSigningComponent } from './terminal-signing/terminal-signing.component';
-import { TerminalTimeoutComponent } from './terminal-timeout/terminal-timeout.component';
+import { TerminalWaitingComponent } from './terminal-dialogs/terminal-waiting/terminal-waiting.component';
+import { TerminalNominationComponent } from './terminal-dialogs/terminal-nomination/terminal-nomination.component';
+import { TerminalSigningComponent } from './terminal-dialogs/terminal-signing/terminal-signing.component';
+import { TerminalTimeoutComponent } from './terminal-dialogs/terminal-timeout/terminal-timeout.component';
 import { DraftBaseComponent } from '../abstract/draft-base';
 @Component({
   selector: 'app-terminal-component',
@@ -77,7 +77,10 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
       switch (this.draft.status_id) {
 
         case DraftStatuses.Waiting:
-          this.announce(TerminalWaitingComponent, 4000, this.newManagerAudio);
+          this.announce(TerminalWaitingComponent, 4000, this.newManagerAudio, {
+            draft: this.draft,
+            squadManager: this.draft.draft_manager
+          });
 
           if (this.draft.draft_manager_picks.filter(dmp => dmp.draft_manager_id == this.draft.draft_manager_id).length != this.draft.draft_manager.draft_manager_picks.length) {
             this.draft.draft_manager.draft_manager_picks = this.draft.draft_manager_picks.filter(dmp => dmp.draft_manager_id == this.draft.draft_manager_id);
@@ -96,7 +99,9 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
           break;
 
         case DraftStatuses.SealedBids:
-          let nominationAndBidsDialog = this.dialog.open(TerminalNominationComponent);
+          let nominationAndBidsDialog = this.dialog.open(TerminalNominationComponent, {
+            panelClass: ['animate__animated', 'animate__slideInRight']
+          });
           this.nominatedAudio.currentTime = 0;
           let nominatePromise = this.nominatedAudio.play();
 
@@ -119,7 +124,7 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
 
             nominationAndBidsDialog.close();
             this.draftControllerService.startBidsTimer();
-          }, 5000);
+          }, 7000);
           break;
 
         case DraftStatuses.BidsReceived:          
@@ -165,15 +170,19 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
   }
 
   private announceSigningComplete(): void {
-    this.announce(TerminalSigningComponent, 6000, this.announceAudio);
+    this.announce(TerminalSigningComponent, 6000, this.announceAudio, undefined);
   }
 
   private announceTimeout(): void {
-    this.announce(TerminalTimeoutComponent, 8000, this.timeoutAudio)
+    this.announce(TerminalTimeoutComponent, 8000, this.timeoutAudio, undefined);
   }
 
-  private announce(component: any, timeout: number, audioElement: HTMLAudioElement): void {
-    let dialog = this.dialog.open(component);
+  private announce(component: any, timeout: number, audioElement: HTMLAudioElement, data: any): void {
+    let dialog = this.dialog.open(component,
+      {
+        data: data,
+        panelClass: ['animate__animated', 'animate__slideInRight']
+      });
     setTimeout(() => {
       dialog.close();
     }, timeout);

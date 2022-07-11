@@ -1,0 +1,14 @@
+<div class="nomination-container">
+  <h2 class="panel-header nomination-container-header">NOMINATION:</h2>
+  <player [player]="currentPick.player" class="large"></player>
+
+  <div class="panel-header nomination-container-footer">
+    <div>SEALED BIDS: <b><u>MAX £{{(currentPick.player.now_cost/10) * 2}}M</u></b></div>
+    <mat-spinner [diameter]="30" [color]="'white'"></mat-spinner>
+  </div>
+
+  <div style="margin-top: 32px; display: flex; flex-direction: row; flex-wrap: wrap; max-width: fit-content; justify-content: center;">
+    <img *ngFor="let bidder of eligibleBidders" style="width: 160px; margin-bottom: 16px;" class="round-pick-badge" src="{{bidder.team_image_url}}" />
+  </div>
+
+</div>

@@ -43,6 +43,7 @@ export class DraftControllerService {
   }
 
   saveDraft(draft: Draft): Observable<Draft> {
+    this.draft.next(draft);
     return this.draftService.updateDraft(draft);
   }
 

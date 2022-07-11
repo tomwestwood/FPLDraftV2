@@ -32,8 +32,32 @@ body {
 }
 
 mat-dialog-container {
-    background-color: #2B7A78 !important;
-    border: 3px solid white;
+  background-color: #17252A !important;
+  border: 3px solid white;
+}
+
+.side-panel {
+  background-color: #17252A !important;
+
+  .mat-dialog-container {
+    transform: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+  } 
+}
+
+.panel-header {
+  background-color: #c2185b;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.animate__slideInRight {
+    right: 0;
+    height: 100%;
+    position: absolute !important;
+
 }
 
 .player-selected {

@@ -21,7 +21,7 @@ export class DraftComponent extends DraftBaseComponent {
 
   constructor(public draftControllerService: DraftControllerService, public dialog: MatDialog) {
     super(draftControllerService);
-  }s
+  }
 
   public setDraft(draft: Draft) {
     if (draft) {

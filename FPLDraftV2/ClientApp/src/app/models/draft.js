@@ -187,8 +187,6 @@ var DraftFunctions = /** @class */ (function () {
     DraftFunctions.getDraftSquadForManager = function (manager) {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
         var squad = new DraftSquad();
-        if (!manager)
-            debugger;
         if (manager === null || manager === void 0 ? void 0 : manager.draft_manager_picks) {
             squad.gk_1 = (_a = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[0]) !== null && _a !== void 0 ? _a : undefined;
             squad.gk_2 = (_b = manager.draft_manager_picks.filter(function (pick) { return pick.player.position.id == 1; })[1]) !== null && _b !== void 0 ? _b : undefined;

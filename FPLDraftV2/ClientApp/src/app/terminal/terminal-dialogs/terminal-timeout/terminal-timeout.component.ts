@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { Club, Player, FPLBase } from '../../models/fpl';
-import { Draft, DraftManager, DraftManagerFavourite, DraftManagerPick, DraftFunctions, SquadTicker, DraftSquad, RoundPicks, DraftStatuses, SealedBid } from '../../models/draft';
+import { Component, OnInit } from '@angular/core';
+import { FPLBase } from '../../../models/fpl';
+import { Draft } from '../../../models/draft';
 import { trigger, transition, style, animate, state } from '@angular/animations';
-import { DraftControllerService } from '../../draft/services/draft-controller.service';
-import { MatDialog } from '@angular/material/dialog';
+import { DraftControllerService } from '../../../draft/services/draft-controller.service';
 @Component({
   selector: 'app-terminal-timeout-component',
   templateUrl: './terminal-timeout.component.html',
@@ -31,7 +30,6 @@ import { MatDialog } from '@angular/material/dialog';
   ]
 })
 export class TerminalTimeoutComponent implements OnInit {
-
   draft: Draft;
   fplBase: FPLBase;
 
@@ -39,8 +37,6 @@ export class TerminalTimeoutComponent implements OnInit {
   }
 
   ngOnInit() {
-    
-
     this.draftControllerService.fplBase.subscribe((fplBase: FPLBase) => {
       this.fplBase = fplBase;
     });

@@ -1,0 +1,9 @@
+<div class="waiting-container">
+  <h2 class="waiting-container-header">NEXT UP:</h2>
+  <img class="waiting-manager-badge" src="{{draft.draft_manager.team_image_url}}" />
+
+  <mat-divider class="terminal-divider"></mat-divider>
+
+  <squad [draftManager]="squadManager" *ngIf="squadManager" class="squad"></squad>
+
+</div>
