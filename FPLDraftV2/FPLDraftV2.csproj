@@ -42,6 +42,7 @@
     <None Remove="ClientApp\src\app\controls\preview-squad\preview-squad.component.ts" />
     <None Remove="ClientApp\src\app\controls\squad\squad.component.ts" />
     <None Remove="ClientApp\src\app\controls\terminal-player\terminal-player.component.ts" />
+    <None Remove="ClientApp\src\app\draft-overview\draft-overview.component.ts" />
     <None Remove="ClientApp\src\app\draft\dialogs\draft-final-chance-dialog\draft-final-chance-dialog.component.ts" />
     <None Remove="ClientApp\src\app\draft\dialogs\draft-new-manager-dialog\draft-new-manager-dialog.component.ts" />
     <None Remove="ClientApp\src\app\draft\dialogs\draft-next-manager-dialog\draft-next-manager-dialog.component.ts" />
@@ -127,6 +128,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\draft\services\draft-controller.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\draft-overview\draft-overview.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\live\league-table\league-table.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

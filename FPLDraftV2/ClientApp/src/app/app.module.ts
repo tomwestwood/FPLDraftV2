@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { AdminComponent } from './admin/admin.component';
 import { HomeComponent } from './home/home.component';
+import { DraftOverviewComponent } from './draft-overview/draft-overview.component';
 
 import { SquadComponent } from './controls/squad/squad.component';
 import { PlayerComponent } from './controls/player/player.component';
@@ -72,6 +73,7 @@ import { TableComponent } from './live/table/table.component';
     AdminComponent,
     NavMenuComponent,
     HomeComponent,
+    DraftOverviewComponent,
 
     SquadComponent,
     PlayerComponent,
@@ -117,6 +119,7 @@ import { TableComponent } from './live/table/table.component';
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'admin', component: AdminComponent },
     { path: 'favouritelist', component: FavouritelistComponent },
+    { path: 'draft-overview', component: DraftOverviewComponent },
     { path: 'draft', component: DraftComponent },
     { path: 'terminal', component: TerminalComponent },
     { path: 'livefixture/:leagueId/:gameweekId/:id', component: LiveFixtureComponent },

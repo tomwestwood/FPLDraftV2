@@ -99,32 +99,7 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
           break;
 
         case DraftStatuses.SealedBids:
-          let nominationAndBidsDialog = this.dialog.open(TerminalNominationComponent, {
-            panelClass: ['animate__animated', 'animate__slideInRight']
-          });
-          this.nominatedAudio.currentTime = 0;
-          let nominatePromise = this.nominatedAudio.play();
-
-          if (nominatePromise !== undefined) {
-            nominatePromise.then(_ => {
-            }).catch(error => {
-            });
-          }
-
-          setTimeout(() => {
-            let placeBidsAudio = new Audio(''); // to remove:
-            placeBidsAudio.currentTime = 0;
-            let placeBidsPromise = placeBidsAudio.play();
-
-            if (placeBidsPromise !== undefined) {
-              placeBidsPromise.then(_ => {
-              }).catch(error => {
-              });
-            }
-
-            nominationAndBidsDialog.close();
-            this.draftControllerService.startBidsTimer();
-          }, 7000);
+          this.announceNomination();
           break;
 
         case DraftStatuses.BidsReceived:          
@@ -146,38 +121,32 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
     }
   }
 
-  private announcePick(pick: DraftManagerPick): void {
-    if (pick) {
-      this.announceAudio.currentTime = 0;
-      var playPromise = this.announceAudio.play();
+  private announceNomination(): void {
+    this.announce(TerminalNominationComponent, 7000, this.nominatedAudio, undefined, () => this.startBidsTimer());
+  }
 
-      if (playPromise !== undefined) {
-        playPromise.then(_ => {
-        }).catch(error => {
-        });
-      }
+  private startBidsTimer(): void {
+    let placeBidsAudio = new Audio(''); // to remove:
+    placeBidsAudio.currentTime = 0;
+    let placeBidsPromise = placeBidsAudio.play();
 
-      this.breakingNews = true;
-      setTimeout(() => {
-        this.breakingNews = false;
-        this.announcingPick = true;
-        this.announcementPick = pick;
-        setTimeout(() => {
-          this.announcingPick = false;
-        }, 5000);
-      }, 8000);
+    if (placeBidsPromise !== undefined) {
+      placeBidsPromise.then(_ => {
+      }).catch(error => {
+      });
     }
+    this.draftControllerService.startBidsTimer();
   }
 
   private announceSigningComplete(): void {
-    this.announce(TerminalSigningComponent, 6000, this.announceAudio, undefined);
+    this.announce(TerminalSigningComponent, 6000, this.announceAudio);
   }
 
   private announceTimeout(): void {
-    this.announce(TerminalTimeoutComponent, 8000, this.timeoutAudio, undefined);
+    this.announce(TerminalTimeoutComponent, 8000, this.timeoutAudio);
   }
 
-  private announce(component: any, timeout: number, audioElement: HTMLAudioElement, data: any): void {
+  private announce(component: any, timeout: number, audioElement: HTMLAudioElement, data: any = undefined, action: () => void = undefined) {
     let dialog = this.dialog.open(component,
       {
         data: data,
@@ -185,6 +154,9 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
       });
     setTimeout(() => {
       dialog.close();
+      if (action) {
+        action();
+      }
     }, timeout);
 
     if (audioElement)

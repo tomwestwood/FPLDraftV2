@@ -1,6 +1,6 @@
-<h1>Welcome to the 2020/21 WV1 Draft</h1>
-<p style="font-size: medium;">You can now set your favourites here:</p>
-<a mat-raised-button color="primary" href="../favouritelist">Favourites <span class="material-icons" style="margin-left: 2px;">stars</span></a>
-<p></p>
-<p style="font-size: medium;">You will need a pin-code to access your favourites, this will be sent to you via DM.</p>
-<p style="font-size: medium;">More to come <b>SOON.</b></p>
+<div class="video-container">
+  <video style="width: 100%;" muted autoplay playsinline oncanplay="this.play()" onloadedmetadata="this.muted = true" (ended)="autoShowDraftOverview()">
+    <source src="../../assets/draft_intro.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
