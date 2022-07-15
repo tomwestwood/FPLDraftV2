@@ -1,10 +1,38 @@
-.favourite {
-  cursor: pointer;
-  color: gray;
-  opacity: 0.3;
-}
+.overview-container {
+  display: flex;
+  flex-direction: column;
 
-.selected {
-  color: mediumspringgreen;
-  opacity: 1;
+  .options-container {
+    display: flex;
+
+    .option-container {
+      padding: 32px;
+      height: 100%;
+      border-start-start-radius: 16px;
+      border-start-end-radius: 16px;
+      border: 5px solid #D41383;
+      margin-right: 8px;
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      flex-grow: 1;
+      text-align: center;
+      width: min-content;
+
+      h4 {
+          margin: 8px;
+      }
+
+      .option-container-text {
+        overflow-wrap: break-word;
+        width: auto;
+        margin-bottom: 8px;
+        flex-grow: 1;
+      }
+
+      button {
+          margin-top: 8px;
+      }
+    }
+  }
 }

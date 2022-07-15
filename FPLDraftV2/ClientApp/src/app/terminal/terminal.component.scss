@@ -19,7 +19,7 @@ $total-items: 15;
   .round-number {
     text-align: center;
     font-size: x-large;
-    border-bottom: 3px solid #c2185b;
+    border-bottom: 3px solid #D41383;
     padding: 8px;
     margin-top: 8px;
     margin-bottom: 16px;
@@ -95,13 +95,13 @@ $total-items: 15;
       min-width: 420px;
       margin: 32px;
       padding: 32px;
-      border: 6px solid #c2185b;
+      border: 6px solid #D41383;
     }
   }
 }
 
 .fill-pink {
-  color: #c2185b;
+  color: #D41383;
 }
 
 .terminal-update-header {
@@ -109,7 +109,7 @@ $total-items: 15;
   align-items: center;
 
   .terminal-update-image {
-    border: 5px solid #c2185b;
+    border: 5px solid #D41383;
     padding: 2px;
 
     .span-container {
@@ -146,11 +146,11 @@ $total-items: 15;
 .terminal-link {
   height: 24px;
   width: 42px;
-  border-right: 5px solid #c2185b !important;
+  border-right: 5px solid #D41383 !important;
 }
 
 .terminal-link-horizontal {
   width: 60px;
-  border-top: 5px solid #c2185b !important;
+  border-top: 5px solid #D41383 !important;
   align-self: center;
 }

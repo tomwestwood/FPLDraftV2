@@ -43,7 +43,7 @@ export class DraftComponent extends DraftBaseComponent {
         setTimeout(() => {
           this.dialog.open(DraftNextManagerDialogComponent, {
             disableClose: true,
-            data: { draft: this.draft, currentPick: this.currentPick, signingManager: this.draftControllerService.getManagerById(this.currentPick.draft_manager_id) }
+            data: { draft: this.draft, currentPick: this.currentPick, signingManager: this.currentPick ? this.draftControllerService.getManagerById(this.currentPick.draft_manager_id) : undefined }
           });
         }, 1000);
       }
