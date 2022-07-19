@@ -37,6 +37,7 @@ export class AdminComponent extends DraftBaseComponent {
           bid_amount: dm.bid,
           draft_manager_id: dm.id,
           draft_manager_name: dm.name,
+          draft_manager_team: dm.team_name,
           player_id: this.currentPick.player_id,
           player_name: this.currentPick.player.name,
           bid_eligible: true,

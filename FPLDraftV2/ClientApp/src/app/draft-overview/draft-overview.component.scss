@@ -20,7 +20,7 @@
       width: min-content;
 
       h4 {
-          margin: 8px;
+        margin: 8px;
       }
 
       .option-container-text {
@@ -31,7 +31,13 @@
       }
 
       button {
-          margin-top: 8px;
+        margin-top: 8px;
+        margin: 4px;
+        width: 100%;
+      }
+
+      button:not(:only-child) {
+        width: 50%;
       }
     }
   }

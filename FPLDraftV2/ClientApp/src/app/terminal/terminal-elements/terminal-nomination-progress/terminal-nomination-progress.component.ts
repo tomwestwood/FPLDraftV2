@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { trigger, transition, style, animate, state } from '@angular/animations';
 import { Draft, DraftManager, DraftManagerPick, DraftStatuses, SealedBid } from '../../../models/draft';
 import { DraftControllerService } from '../../../draft/services/draft-controller.service';
+import { DraftSelectingComponent } from '../../../draft/draft-selecting/draft-selecting.component';
 @Component({
   selector: 'app-terminal-nomination-progress',
   templateUrl: './terminal-nomination-progress.component.html',
@@ -80,6 +81,10 @@ export class TerminalNominationProgressComponent {
     this.bidsAudio.pause();
     this.bidsAudio.currentTime = 0;
     clearInterval(this.timeout);
+  }
+
+  getManagerImageUrlFromId(sealedBid: SealedBid): string {
+    return this.draftControllerService.getManagerById(sealedBid.draft_manager_id)?.team_image_url ?? '';
   }
 
   replacePlayerImageNotFound(event, player) {

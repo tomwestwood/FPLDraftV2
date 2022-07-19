@@ -6,26 +6,26 @@
       <span class="material-icons">chat</span>
       <h4>INTRO</h4>
       <span class="option-container-text">Lorem ipsum text placeholder etc etc etc sjoisdj sdjiodasj dsajoidasj</span>
-      <button mat-stroked-button color="primary">VIEW</button>
+      <div>
+        <button mat-stroked-button color="primary">VIEW</button>
+      </div>
     </div>
     <div class="option-container">
       <span class="material-icons">ondemand_video</span>
       <h4>DRAW</h4>
       <span class="option-container-text">Lorem ipsum text placeholder etc etc etc sjoisdj sdjiodasj dsajoidasj</span>
-      <button mat-stroked-button color="primary">VIEW</button>
+      <div>
+        <button mat-stroked-button color="primary">VIEW</button>
+      </div>
     </div>
     <div class="option-container">
       <span class="material-icons">more_time</span>
       <h4>DRAFT</h4>
       <span class="option-container-text">Lorem ipsum text placeholder etc etc etc sjoisdj sdjiodasj dsajoidasj</span>
-      <button mat-stroked-button color="primary">DRAFT</button>
-      <button mat-stroked-button color="primary">TERMINAL</button>
-    </div>
-    <div class="option-container">
-      <span class="material-icons">ondemand_video</span>
-      <h4>REVIEW</h4>
-      <span class="option-container-text">Lorem ipsum text placeholder etc etc etc sjoisdj sdjiodasj dsajoidasj</span>
-      <button mat-stroked-button color="primary">VIEW</button>
+      <div style="display: flex; width: 100%;">
+        <button mat-stroked-button color="primary" [routerLink]="['/draft']">DRAFT</button>
+        <button mat-stroked-button color="primary" [routerLink]="['/terminal']">TERMINAL</button>
+      </div>
     </div>
   </div>
 </div>

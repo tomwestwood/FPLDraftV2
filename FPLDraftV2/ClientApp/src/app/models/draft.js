@@ -163,6 +163,7 @@ var DraftFunctions = /** @class */ (function () {
         var basicSealedBid = new SealedBid();
         basicSealedBid.draft_manager_id = sealedBid.draft_manager_id;
         basicSealedBid.draft_manager_name = sealedBid.draft_manager_name;
+        basicSealedBid.draft_manager_team = sealedBid.draft_manager_team;
         basicSealedBid.player_id = sealedBid.player_id;
         basicSealedBid.player_name = sealedBid.player_name;
         basicSealedBid.bid_amount = sealedBid.bid_amount;
@@ -215,6 +216,9 @@ var DraftFunctions = /** @class */ (function () {
             squad.budget_per_player = 100 / 15;
         }
         return squad;
+    };
+    DraftFunctions.getManagerFromId = function (draft, id) {
+        return draft.draft_managers.find(function (dm) { return dm.id == id; });
     };
     DraftFunctions.setPlayerOwner = function (player, draftManager) {
         player.draft_manager_id = draftManager.id;

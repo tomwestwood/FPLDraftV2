@@ -1,5 +1,31 @@
-body {
-    background-color: red;
-    padding: 128px;
-    font-size: xx-large;
+.timeout-container {
+  height: 100%;
+  width: 100%;
+  padding: 32px;
+
+  .timeout-pathetic {
+      color: red;
+      font-size: xx-large;
+      text-align: center;
+      margin-bottom: 32px;
+  }
+
+  .timeout-header-container {
+    .timeout-header {
+      background-color: #D41383;
+      padding: 16px;
+      border-start-start-radius: 16px;
+      border-start-end-radius: 16px;
+      text-align: center;
+      font-size: xx-large;
+    }
+
+    .timeout-team-container {
+      border-end-start-radius: 16px;
+      border-end-end-radius: 16px;
+      border: 12px #D41383 solid;
+      padding: 16px;
+      text-align: center;
+    }
+  }
 }

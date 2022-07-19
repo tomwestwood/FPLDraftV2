@@ -9,6 +9,7 @@ import { TerminalNominationComponent } from './terminal-dialogs/terminal-nominat
 import { TerminalSigningComponent } from './terminal-dialogs/terminal-signing/terminal-signing.component';
 import { TerminalTimeoutComponent } from './terminal-dialogs/terminal-timeout/terminal-timeout.component';
 import { DraftBaseComponent } from '../abstract/draft-base';
+import { TerminalBidsComponent } from './terminal-dialogs/terminal-bids/terminal-bids.component';
 @Component({
   selector: 'app-terminal-component',
   templateUrl: './terminal.component.html',
@@ -103,8 +104,7 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
           break;
 
         case DraftStatuses.BidsReceived:          
-          // to remove?:
-          this.playAudio(new Audio(''));
+          this.announceBids();
           break;
 
         case DraftStatuses.SigningComplete:
@@ -112,6 +112,8 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
             this.signingManager.draft_manager_picks = this.draft.draft_manager_picks.filter(dmp => dmp.draft_manager_id == this.signingManager.id);
             this.draft.draft_manager.draft_squad = DraftFunctions.getDraftSquadForManager(this.draft.draft_manager);
             this.signingManager.draft_squad = DraftFunctions.getDraftSquadForManager(this.signingManager);
+
+            this.announceSigningComplete();
           }
           break;
       }
@@ -143,7 +145,11 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
   }
 
   private announceTimeout(): void {
-    this.announce(TerminalTimeoutComponent, 8000, this.timeoutAudio);
+    this.announce(TerminalTimeoutComponent, 5000, /*this.timeoutAudio*/ undefined, { draft: this.draft });
+  }
+
+  private announceBids(): void {
+    this.announce(TerminalBidsComponent, 6000, /*this.timeoutAudio*/ undefined, { pick: this.currentPick, draft: this.draft });
   }
 
   private announce(component: any, timeout: number, audioElement: HTMLAudioElement, data: any = undefined, action: () => void = undefined) {

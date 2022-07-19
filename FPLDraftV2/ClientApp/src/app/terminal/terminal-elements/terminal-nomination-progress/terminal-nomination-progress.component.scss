@@ -19,6 +19,40 @@
   }
 }
 
+
+  .bid {
+    display: flex;
+    flex-direction: row;
+    border: #D41383 solid 6px;
+    border-radius: 8px;
+    margin: 4px;
+
+    .bid-image {
+      height: 48px;
+    }
+
+    .bid-amount {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: large;
+      background: #D41383;
+      flex-grow: 1;
+      padding: 8px;
+
+      &.max-bid {
+        background-color: mediumseagreen;
+      }
+
+      &.ineligible_bid {
+        background-color: red;
+      }
+    }
+  }
+
+
+
+
 // override base styles:
 
 .mat-divider-vertical {

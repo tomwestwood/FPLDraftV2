@@ -71,6 +71,7 @@ export class DraftManagerPick {
 export class SealedBid {
   draft_manager_id: number;
   draft_manager_name: string;
+  draft_manager_team: string;
   player_id: number;
   player_name: string;
   bid_amount: number;
@@ -215,6 +216,7 @@ export class DraftFunctions {
     var basicSealedBid = new SealedBid();
     basicSealedBid.draft_manager_id = sealedBid.draft_manager_id;
     basicSealedBid.draft_manager_name = sealedBid.draft_manager_name;
+    basicSealedBid.draft_manager_team = sealedBid.draft_manager_team;
     basicSealedBid.player_id = sealedBid.player_id;
     basicSealedBid.player_name = sealedBid.player_name;
     basicSealedBid.bid_amount = sealedBid.bid_amount;
@@ -269,6 +271,10 @@ export class DraftFunctions {
     }
 
     return squad;
+  }
+
+  static getManagerFromId(draft: Draft, id: number) {
+    return draft.draft_managers.find(dm => dm.id == id);
   }
 
   static setPlayerOwner(player: Player, draftManager: DraftManager): void {

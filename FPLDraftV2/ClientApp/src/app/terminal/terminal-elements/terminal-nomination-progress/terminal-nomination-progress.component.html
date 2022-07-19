@@ -23,9 +23,8 @@
   </div>
 
   <div class="nomination-item" *ngIf="draft.status_id >= 9 && currentPick?.sealed_bids?.length > 0">
-    <div><b>BIDS RECEIVED</b></div>
-    <div [ngClass]="{ 'max-bid': bid.is_max_bid, 'ineligible_bid': !bid.bid_eligible }" class="bid" *ngFor="let bid of currentPick.sealed_bids">
-      {{bid.draft_manager_name}}: £{{bid.bid_amount}}m <!--<span *ngIf="bid.is_max_bid" class="status-desc status-icon material-icons timer-text">done</span>-->
+    <div class="bid" *ngFor="let bid of currentPick.sealed_bids">
+      <img src="{{getManagerImageUrlFromId(bid)}}" class="bid-image" /> <span class="bid-amount" [ngClass]="{ 'max-bid': bid.is_max_bid, 'ineligible_bid': !bid.bid_eligible }">£{{bid.bid_amount}}M</span> <!--<span *ngIf="bid.is_max_bid" class="status-desc status-icon material-icons timer-text">done</span>-->
     </div>
   </div>
 
@@ -39,8 +38,7 @@
           <span class="status-desc status-icon material-icons timer-text">warning_amber</span>
         </div>
         <div class="terminal-update-heading">
-          <div>FINAL CHANCE!</div>
-          <div>{{draft.draft_manager.team_name}} have final refusal on {{currentPick.player.first_name}} {{currentPick.player.web_name}} for £{{getMaxBidAmount(currentPick)}}m</div>
+          <h4 style="text-align: center; margin-left: 16px;">FINAL CHANCE!</h4>
         </div>
       </div>
     </div>

@@ -73,6 +73,7 @@
     <None Remove="ClientApp\src\app\services\draft.service.ts" />
     <None Remove="ClientApp\src\app\services\fpl.service.ts" />
     <None Remove="ClientApp\src\app\services\signalR.service.ts" />
+    <None Remove="ClientApp\src\app\terminal\terminal-dialogs\terminal-bids\terminal-bids.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-elements\terminal-draft-managers\terminal-draft-managers.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-elements\terminal-nomination-progress\terminal-nomination-progress.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-elements\terminal-squad-info\terminal-squad-info.component.ts" />
@@ -157,6 +158,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\services\fpl.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-dialogs\terminal-bids\terminal-bids.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-elements\terminal-draft-managers\terminal-draft-managers.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

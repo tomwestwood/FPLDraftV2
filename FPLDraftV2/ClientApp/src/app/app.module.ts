@@ -36,6 +36,7 @@ import { TerminalWaitingComponent } from './terminal/terminal-dialogs/terminal-w
 import { TerminalNominationComponent } from './terminal/terminal-dialogs/terminal-nomination/terminal-nomination.component';
 import { TerminalSigningComponent } from './terminal/terminal-dialogs/terminal-signing/terminal-signing.component';
 import { TerminalTimeoutComponent } from './terminal/terminal-dialogs/terminal-timeout/terminal-timeout.component';
+import { TerminalBidsComponent } from './terminal/terminal-dialogs/terminal-bids/terminal-bids.component';
 
 import { LeagueTableComponent } from './live/league-table/league-table.component';
 
@@ -102,6 +103,7 @@ import { TableComponent } from './live/table/table.component';
     TerminalNominationComponent,
     TerminalSigningComponent,
     TerminalTimeoutComponent,
+    TerminalBidsComponent,
 
     // fancast:
     FancastDraftComponent,

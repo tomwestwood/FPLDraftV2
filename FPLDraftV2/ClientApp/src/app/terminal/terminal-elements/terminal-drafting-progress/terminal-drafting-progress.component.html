@@ -6,7 +6,7 @@
   </div>
 
   <div class="terminal-update-heading">
-    <div>{{draft.status_id == 2 ? 'Waiting for player' : 'Signed in'}}</div>
+    <div>{{draft.status_id == 2 ? 'WAITING FOR PLAYER' : 'SIGNED-IN'}}</div>
   </div>
 </div>
 
@@ -22,7 +22,7 @@
       <span *ngIf="draft.status_id == 6" class="status-desc status-icon material-icons timer-text">timer</span>
     </div>
     <div class="terminal-update-heading">
-      <div>{{draft.status_id == 4 ? 'Now nominating...' : draft.status_id == 6 ? 'Timeout' : 'Nomination successful'}}</div>
+      <div [ngStyle]="{'color': draft.status_id == 6 ? 'red' : 'white'}">{{draft.status_id == 4 ? 'DRAFTING...' : draft.status_id == 6 ? 'TIMEOUT' : 'NOMINATION SUCCESSFUL'}}</div>
     </div>
     <mat-divider *ngIf="draft.status_id >= 7" class="terminal-link-horizontal"></mat-divider>
   </div>

@@ -9,6 +9,7 @@ namespace FPLV2Core.Models.FPLDraft
     {
         public int draft_manager_id { get; set; }
         public string draft_manager_name { get; set; }
+        public string draft_manager_team { get; set; }
         public int player_id { get; set; }
         public int player_name { get; set; }
         public decimal bid_amount { get; set; }

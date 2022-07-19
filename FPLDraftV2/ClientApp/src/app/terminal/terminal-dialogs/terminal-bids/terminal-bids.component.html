@@ -1,0 +1,13 @@
+<div class="bid-container" *ngIf="currentPick">
+  <h1 style="text-align: center;">BIDS RECEIVED FOR:</h1>
+
+  <div class="player-container">
+    <player [player]="currentPick.player" class="player large"></player>
+  </div>
+
+  <div class="bids-container">
+    <div class="bid" *ngFor="let bid of currentPick.sealed_bids">
+      <img src="{{getManagerImageUrlFromId(bid)}}" class="bid-image" /> <span class="bid-amount" [ngClass]="{ 'max-bid': bid.is_max_bid, 'ineligible_bid': !bid.bid_eligible }">£{{bid.bid_amount}}M</span> <!--<span *ngIf="bid.is_max_bid" class="status-desc status-icon material-icons timer-text">done</span>-->
+    </div>
+  </div>
+</div>
