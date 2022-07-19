@@ -10,6 +10,15 @@
 
     &.current-manager {
       border: solid 6px #D41383;
+      width: 240px;
     }
   }
+
+  .status-desc {
+    margin-left: 4px;
+  }
+}
+
+.has-picked {
+  opacity: 0.5;
 }
