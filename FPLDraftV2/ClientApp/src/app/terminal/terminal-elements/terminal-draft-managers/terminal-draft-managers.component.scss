@@ -6,10 +6,10 @@
   .round-pick-badge {
     margin: 2px;
     width: 200px;
-    border: 5px solid #D41383;
+    border: 2px solid #D41383;
 
     &.current-manager {
-      border: solid 6px #FFC000;
+      border: solid 6px #D41383;
     }
   }
 }

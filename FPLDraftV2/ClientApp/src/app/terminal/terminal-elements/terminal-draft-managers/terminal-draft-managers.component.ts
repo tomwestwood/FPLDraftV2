@@ -35,6 +35,7 @@ export class TerminalDraftManagersComponent implements OnInit {
   constructor(private draftControllerService: DraftControllerService) {
     this.draftControllerService.draft.subscribe((draft: Draft) => {
       if (this.draft) {
+        this.draft = draft;
         this.picksTicker = this.draftControllerService.getRoundPickStatus();
       }
     });
@@ -42,5 +43,11 @@ export class TerminalDraftManagersComponent implements OnInit {
 
   ngOnInit() {
     this.picksTicker = this.draftControllerService.getRoundPickStatus();
+  }
+
+  private transfersRemaining(draftManager: DraftManager): number {
+    let numOfBidsPlaced = this.draft.draft_manager_picks.filter(dmp => dmp.sealed_bids?.some(sb => sb.draft_manager_id == draftManager.id)).length;
+    return 5 - numOfBidsPlaced;
+
   }
 }
