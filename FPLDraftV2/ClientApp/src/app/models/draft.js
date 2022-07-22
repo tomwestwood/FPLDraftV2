@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DraftFunctions = exports.FancastSquadTicker = exports.RoundPicks = exports.SquadTicker = exports.DraftSquad = exports.DraftManagerFavourite = exports.SealedBid = exports.DraftManagerPick = exports.DraftManager = exports.Draft = exports.DraftStatuses = void 0;
+exports.DraftFunctions = exports.FancastSquadTicker = exports.RoundPicks = exports.SquadTicker = exports.DraftSquad = exports.DraftManagerFavourite = exports.SealedBid = exports.DraftManagerPick = exports.DraftManagerMoreInfo = exports.DraftManager = exports.Draft = exports.DraftStatuses = void 0;
 var fpl_1 = require("./fpl");
 var DraftStatuses;
 (function (DraftStatuses) {
@@ -29,6 +29,12 @@ var DraftManager = /** @class */ (function () {
     return DraftManager;
 }());
 exports.DraftManager = DraftManager;
+var DraftManagerMoreInfo = /** @class */ (function () {
+    function DraftManagerMoreInfo() {
+    }
+    return DraftManagerMoreInfo;
+}());
+exports.DraftManagerMoreInfo = DraftManagerMoreInfo;
 var DraftManagerPick = /** @class */ (function () {
     function DraftManagerPick() {
     }
@@ -100,6 +106,10 @@ var DraftFunctions = /** @class */ (function () {
         basicManager.team_colour_1 = draft.draft_manager.team_colour_1;
         basicManager.team_colour_2 = draft.draft_manager.team_colour_2;
         basicManager.team_fpl_id = draft.draft_manager.team_fpl_id;
+        //basicManager.more_info.announce_audio = draft.draft_manager.more_info.announce_audio;
+        //basicManager.more_info.intro_audio = draft.draft_manager.more_info.intro_audio;
+        //basicManager.more_info.main_audio = draft.draft_manager.more_info.main_audio;
+        basicManager.more_info = draft.draft_manager.more_info;
         basicDraft.draft_manager = basicManager;
         basicDraft.draft_managers = [];
         draft.draft_managers.forEach(function (dm) {

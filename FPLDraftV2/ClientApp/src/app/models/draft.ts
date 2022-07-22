@@ -51,8 +51,15 @@ export class DraftManager {
 
   bid: number;
 
+  more_info: DraftManagerMoreInfo;
+
   // special:
   has_picked_this_round: boolean;
+}
+export class DraftManagerMoreInfo {
+  intro_audio: string;
+  main_audio: string;
+  announce_audio: string;
 }
 export class DraftManagerPick {
   id: number;
@@ -150,6 +157,11 @@ export class DraftFunctions {
     basicManager.team_colour_1 = draft.draft_manager.team_colour_1;
     basicManager.team_colour_2 = draft.draft_manager.team_colour_2;
     basicManager.team_fpl_id = draft.draft_manager.team_fpl_id;
+    //basicManager.more_info.announce_audio = draft.draft_manager.more_info.announce_audio;
+    //basicManager.more_info.intro_audio = draft.draft_manager.more_info.intro_audio;
+    //basicManager.more_info.main_audio = draft.draft_manager.more_info.main_audio;
+    basicManager.more_info = draft.draft_manager.more_info;
+
     basicDraft.draft_manager = basicManager;
 
     basicDraft.draft_managers = [];

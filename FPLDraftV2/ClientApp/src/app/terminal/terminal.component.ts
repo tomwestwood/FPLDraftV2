@@ -72,7 +72,13 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
       switch (this.draft.status_id) {
 
         case DraftStatuses.Waiting:
-          this.announce(TerminalWaitingComponent, 4000, this.newManagerAudio, {
+          let managerIntroAudio = this.draft.draft_managers.find(dm => dm.id == this.draft.draft_manager_id)?.more_info?.intro_audio?.length > 0 ?
+            new Audio(this.draft.draft_manager.more_info?.intro_audio) :
+            this.newManagerAudio;
+
+          console.log(`${this.draft.draft_manager.team_name}: ${managerIntroAudio.src}`);
+
+          this.announce(TerminalWaitingComponent, 4000, managerIntroAudio, {
             draft: this.draft,
             squadManager: this.draft.draft_manager
           });
