@@ -96,7 +96,8 @@ namespace FPLV2Core.Database.DraftDB
                                 team_fpl_id = !dr.IsNull("team_fpl_id") ? (int)dr["team_fpl_id"] : 0,
                                 waiver_order = !dr.IsNull("waiver_order") ? (int)dr["waiver_order"] : 0,
                                 transfers_remaining = !dr.IsNull("transfers_remaining") ? (int)dr["transfers_remaining"] : 0,
-                                slack_id = !dr.IsNull("slack_id") ? (string)dr["slack_id"] : string.Empty
+                                slack_id = !dr.IsNull("slack_id") ? (string)dr["slack_id"] : string.Empty,
+                                //more_info = !dr.IsNull("more_info") ? JsonConvert.DeserializeObject<DraftManagerMoreInfo>(dr["more_info"].ToString()) : new DraftManagerMoreInfo()
                             });
                         }
                     }

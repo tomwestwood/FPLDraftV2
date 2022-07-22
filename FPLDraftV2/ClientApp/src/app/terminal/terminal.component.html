@@ -20,7 +20,7 @@
         <!-- Current picker: -->
         <div *ngIf="draft.status_id >= 2" class="terminal-update">
           <div class="terminal-update-header">
-            <img class="terminal-update-image" [ngStyle]="{ 'border-color': draft.draft_manager.team_colour_1 }" src="{{draft.draft_manager.team_image_url}}" />
+            <img class="terminal-update-image" src="{{draft.draft_manager.team_image_url}}" />
           </div>
           <mat-divider *ngIf="draft.status_id >= 2" class="terminal-link-horizontal"></mat-divider>
         </div>
@@ -356,14 +356,11 @@
 
   </div>
 
-  <!--<div class="terminal-bottom">
-    <div id="news_ticker">
-      <img class="terminal-logo" src="../../assets/draft_tv.png" />
-      <span>Latest News</span>
-      <ul>
-        <li *ngFor="let tickerItem of tickerItems"><a href="#">{{tickerItem}}</a></li>
-      </ul>
-    </div>
-  </div>-->
+  <div class="terminal-bottom">
+    <app-terminal-ticker [draft]="draft"></app-terminal-ticker>
+  </div>
+
+  <!--<img src="../../assets/KPLDraft.png" style="max-height: calc(100% - 128px); max-width: calc(100% - 128px); position: absolute; opacity: 0.05; margin: 64px;" />-->
 
 </div>
+<!--<div style="height: 100%; width: 100%; border: 3px solid white; position: absolute; left: 0; top: 0; z-index: 4;"></div>-->

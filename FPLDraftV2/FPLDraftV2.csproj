@@ -81,6 +81,7 @@
     <None Remove="ClientApp\src\app\terminal\terminal-dialogs\terminal-signing\terminal-signing.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-dialogs\terminal-timeout\terminal-timeout.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal-dialogs\terminal-waiting\terminal-waiting.component.ts" />
+    <None Remove="ClientApp\src\app\terminal\terminal-elements\terminal-ticker\terminal-ticker.component.ts" />
     <None Remove="ClientApp\src\app\terminal\terminal.component.ts" />
   </ItemGroup>
 
@@ -162,6 +163,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-elements\terminal-draft-managers\terminal-draft-managers.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-elements\terminal-ticker\terminal-ticker.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\terminal\terminal-elements\terminal-squad-info\terminal-squad-info.component.ts">

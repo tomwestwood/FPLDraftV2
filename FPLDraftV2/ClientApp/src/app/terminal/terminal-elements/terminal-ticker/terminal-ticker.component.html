@@ -1,0 +1,23 @@
+<div id="news_ticker" class="news-ticker" *ngIf="draft">
+  <img class="terminal-logo" src="../../assets/KPLDraft.png" />
+
+  <img *ngIf="altTickerItems" src="{{altTickerItems[0].imgLocation}}" style="background-color: #17252A; border-right: 3px solid #D41383; z-index: 3;" />
+
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <div class="ticker-item" *ngFor="let tickerItem of altTickerItems">
+        <div class="ticker-item-container">
+          <div class="bookend">{{tickerItem.header}}</div>
+          <div class="content">
+            <div class="player-container" *ngFor="let pick of tickerItem.picks">
+              <img style="height: 100%;" src="{{pick.player.photo_url}}" (error)="replacePlayerImageNotFound($event, player)" />
+              <span style="margin-left: 4px;">{{pick.player.web_name | uppercase}}</span>
+              <div class="sub-content">£{{pick.signed_price}}M</div>
+            </div>
+            <div *ngIf="tickerItem.picks?.length == 0" style="color: gray;">NONE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>

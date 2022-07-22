@@ -28,6 +28,7 @@ import { TerminalDraftManagersComponent } from './terminal/terminal-elements/ter
 import { TerminalDraftingProgressComponent } from './terminal/terminal-elements/terminal-drafting-progress/terminal-drafting-progress.component';
 import { TerminalNominationProgressComponent } from './terminal/terminal-elements/terminal-nomination-progress/terminal-nomination-progress.component';
 import { TerminalSquadInfoComponent } from './terminal/terminal-elements/terminal-squad-info/terminal-squad-info.component';
+import { TerminalTickerComponent } from './terminal/terminal-elements/terminal-ticker/terminal-ticker.component';
 import { PreviewSquadComponent } from './controls/preview-squad/preview-squad.component';
 import { LiveFixtureComponent } from './live/fixture/liveFixture.component';
 import { LineupComponent } from './live/lineup/lineup.component';
@@ -104,6 +105,7 @@ import { TableComponent } from './live/table/table.component';
     TerminalSigningComponent,
     TerminalTimeoutComponent,
     TerminalBidsComponent,
+    TerminalTickerComponent,
 
     // fancast:
     FancastDraftComponent,

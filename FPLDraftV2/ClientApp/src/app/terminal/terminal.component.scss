@@ -63,11 +63,10 @@ $total-items: 15;
           align-self: start;
 
           &.vertical {
-              flex-direction: column;
+            flex-direction: column;
           }
         }
       }
-
       /*.breaking-news {
         background: yellow;
         height: 100%;
@@ -98,6 +97,11 @@ $total-items: 15;
       border: 6px solid #D41383;
     }
   }
+
+  .terminal-bottom {
+    border-top: 3px solid #D41383;
+    display: flex;
+  }
 }
 
 .fill-pink {
@@ -109,7 +113,7 @@ $total-items: 15;
   align-items: center;
 
   .terminal-update-image {
-    border: 5px solid #D41383;
+    border: 5px solid mediumseagreen;
     padding: 2px;
 
     .span-container {

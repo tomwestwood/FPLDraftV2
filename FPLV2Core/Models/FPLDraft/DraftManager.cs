@@ -21,9 +21,17 @@ namespace FPLV2Core.Models.FPLDraft
         public int transfers_remaining { get; set; }
         public string slack_id { get; set; }
 
+        public DraftManagerMoreInfo more_info { get; set; }
 
         public IEnumerable<DraftManagerPick> draft_manager_picks { get; set; }
         public IEnumerable<DraftManagerFavourite> draft_manager_favourites { get; set; }
         public DraftSquad draft_squad { get; set; }
+    }
+
+    public class DraftManagerMoreInfo
+    {
+        public string intro_audio { get; set; }
+        public string main_audio { get; set; }
+        public string announce_audio { get; set; }
     }
 }

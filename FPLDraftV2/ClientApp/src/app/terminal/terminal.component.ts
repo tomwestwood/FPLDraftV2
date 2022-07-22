@@ -36,8 +36,7 @@ import { TerminalBidsComponent } from './terminal-dialogs/terminal-bids/terminal
     ])
   ]
 })
-export class TerminalComponent extends DraftBaseComponent implements OnInit {  
-
+export class TerminalComponent extends DraftBaseComponent implements OnInit {
   announcementPick: DraftManagerPick;
   squadTicker: SquadTicker;
   displaySquadTicker: boolean;
@@ -45,8 +44,6 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
   managerUpdated: boolean;
   breakingNews: boolean;
   announcingPick: boolean;
-
-  tickerItems: string[];
 
   newManagerAudio = new Audio('../../assets/mustang.mp3');
   nominatedAudio = new Audio('../../assets/player_nominated.wav');
@@ -67,9 +64,6 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
   public setDraft(draft: Draft): void {
     if (draft) {
       this.draft = draft;
-
-      //this.initialiseSquadTicker();
-      //this.updateTickerItems();
 
       this.draftControllerService.stopDraftingTimer();
       this.draftControllerService.stopBidsTimer();
@@ -181,145 +175,6 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
       }
     }
   }
-
-
-  // squad ticker stuff:
-  private initialiseSquadTicker(): void {
-    this.squadTicker = new SquadTicker();
-    this.squadTicker.ticker_index = 1;
-    this.squadTicker.ticker_direction = false;
-    this.squadTicker.ticker_manager = this.draft.draft_managers.find(dm => dm.draft_seed == 1);
-    this.squadTicker.ticker_squad = DraftFunctions.getDraftSquadForManager(this.squadTicker.ticker_manager);
-    this.squadTickerTimer();
-  }
-
-  private squadTickerTimer(): void {
-    this.squadTicker.ticker_timeout = setInterval(() => {
-      this.displaySquadTicker = false;
-      setTimeout(() => { this.displaySquadTicker = true; }, 50)
-      if ((this.squadTicker.ticker_index == 1 && this.squadTicker.ticker_direction)
-        || (this.squadTicker.ticker_index == this.draft.draft_managers.length && !this.squadTicker.ticker_direction)) {
-        this.squadTicker.ticker_direction = !this.squadTicker.ticker_direction;
-      } else if (this.squadTicker.ticker_direction) {
-        this.squadTicker.ticker_index--;
-        this.squadTicker.ticker_manager = this.draft.draft_managers.find(dm => dm.draft_seed == this.squadTicker.ticker_index);
-        this.squadTicker.ticker_squad = DraftFunctions.getDraftSquadForManager(this.squadTicker.ticker_manager);
-      } else if (!this.squadTicker.ticker_direction) {
-        this.squadTicker.ticker_index++;
-        this.squadTicker.ticker_manager = this.draft.draft_managers.find(dm => dm.draft_seed == this.squadTicker.ticker_index);
-        this.squadTicker.ticker_squad = DraftFunctions.getDraftSquadForManager(this.squadTicker.ticker_manager);
-      }
-      //this.displaySquadTicker = true;
-    }, 10000);
-  }
-
-  private updateTickerItems(): void {
-    this.tickerItems = [] = [];
-    this.tickerItems.push(this.generateRandomTickerItem());
-    this.tickerItems.push(this.generateRandomTickerItem());
-    this.tickerItems.push(this.generateRandomTickerItem());
-    this.tickerItems.push(this.generateRandomTickerItem());
-    this.tickerItems.push(this.generateRandomTickerItem());
-
-    this.squadTicker.ticker_timeout = setInterval(() => {
-      this.tickerItems = [] = [];
-      this.tickerItems.push(this.generateRandomTickerItem());
-      this.tickerItems.push(this.generateRandomTickerItem());
-      this.tickerItems.push(this.generateRandomTickerItem());
-      this.tickerItems.push(this.generateRandomTickerItem());
-    }, 30000);
-  }
-
-  private generateRandomTickerItem(): string {
-    var manager = this.draft.draft_managers[Math.floor(Math.random() * this.draft.draft_managers.length)];
-    var manager2 = this.draft.draft_managers[Math.floor(Math.random() * this.draft.draft_managers.length)];
-    var player = this.fplBase.elements.filter(e => e.draft_manager_id == undefined)[Math.floor(Math.random() * this.fplBase.elements.filter(e => e.draft_manager_id == undefined).length)];
-    if (player == undefined)
-      player = this.fplBase.elements.filter(e => e.draft_manager_id == undefined)[Math.floor(Math.random() * this.fplBase.elements.filter(e => e.draft_manager_id == undefined).length)];
-
-    return this.getRandomTickerItem(manager, manager2, player);
-  }
-
-  private getRandomTickerItem(manager: DraftManager, manager2: DraftManager, player: Player): string {
-    var randomStatements: string[] = [];
-
-    randomStatements.push(`${manager.name} linked with audacious bid for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.club.name} ${player.position.singular_name} ${player.first_name} ${player.web_name} open to move to ${manager.team_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} spotted at ${manager.team_name} training facility`);
-    randomStatements.push(`${player.first_name} ${player.web_name} not interested in move to ${manager.team_name}. Could never see himself working with ${manager.name}`);
-    randomStatements.push(`${manager.name} urges ${manager.team_name} board to move for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.name} hopes to keep ${player.first_name} ${player.web_name} transfer under the radar`);
-    randomStatements.push(`Draft TV sources understand ${player.first_name} ${player.web_name} could move to ${manager.team_name} in next 24 hours`);
-    randomStatements.push(`${manager.name} hopes to beat ${manager2.name} to ${player.first_name} ${player.web_name} signature`);
-    randomStatements.push(`${manager.name} doubts the club can afford ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.team_name} and ${manager2.team_name} to battle it out for ${player.first_name} ${player.web_name} signing`);
-    randomStatements.push(`${manager.name} spotted partying in Cannock nightclub with ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} agent boasts of interest from ${manager.team_name} and ${manager2.team_name}`);
-    randomStatements.push(`${manager.name} linked with audacious bid for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.club.name} ${player.position.singular_name} ${player.first_name} ${player.web_name} open to move to ${manager.team_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} spotted at ${manager.team_name} training facility`);
-    randomStatements.push(`${player.first_name} ${player.web_name} not interested in move to ${manager.team_name}. Could never see himself working with ${manager.name}`);
-    randomStatements.push(`${manager.name} urges ${manager.team_name} board to move for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.name} hopes to keep ${player.first_name} ${player.web_name} transfer under the radar`);
-    randomStatements.push(`Draft TV sources understand ${player.first_name} ${player.web_name} could move to ${manager.team_name} in next 24 hours`);
-    randomStatements.push(`${manager.name} hopes to beat ${manager2.name} to ${player.first_name} ${player.web_name} signature`);
-    randomStatements.push(`${manager.name} doubts the club can afford ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.team_name} and ${manager2.team_name} to battle it out for ${player.first_name} ${player.web_name} signing`);
-    randomStatements.push(`${manager.name} spotted partying in Cannock nightclub with ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} agent boasts of interest from ${manager.team_name} and ${manager2.team_name}`);
-    randomStatements.push(`${manager.name} linked with audacious bid for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.club.name} ${player.position.singular_name} ${player.first_name} ${player.web_name} open to move to ${manager.team_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} spotted at ${manager.team_name} training facility`);
-    randomStatements.push(`${player.first_name} ${player.web_name} not interested in move to ${manager.team_name}. Could never see himself working with ${manager.name}`);
-    randomStatements.push(`${manager.name} urges ${manager.team_name} board to move for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.name} hopes to keep ${player.first_name} ${player.web_name} transfer under the radar`);
-    randomStatements.push(`Draft TV sources understand ${player.first_name} ${player.web_name} could move to ${manager.team_name} in next 24 hours`);
-    randomStatements.push(`${manager.name} hopes to beat ${manager2.name} to ${player.first_name} ${player.web_name} signature`);
-    randomStatements.push(`${manager.name} doubts the club can afford ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.team_name} and ${manager2.team_name} to battle it out for ${player.first_name} ${player.web_name} signing`);
-    randomStatements.push(`${manager.name} spotted partying in Cannock nightclub with ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} agent boasts of interest from ${manager.team_name} and ${manager2.team_name}`);
-    randomStatements.push(`${manager.name} linked with audacious bid for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.club.name} ${player.position.singular_name} ${player.first_name} ${player.web_name} open to move to ${manager.team_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} spotted at ${manager.team_name} training facility`);
-    randomStatements.push(`${player.first_name} ${player.web_name} not interested in move to ${manager.team_name}. Could never see himself working with ${manager.name}`);
-    randomStatements.push(`${manager.name} urges ${manager.team_name} board to move for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.name} hopes to keep ${player.first_name} ${player.web_name} transfer under the radar`);
-    randomStatements.push(`Draft TV sources understand ${player.first_name} ${player.web_name} could move to ${manager.team_name} in next 24 hours`);
-    randomStatements.push(`${manager.name} hopes to beat ${manager2.name} to ${player.first_name} ${player.web_name} signature`);
-    randomStatements.push(`${manager.name} doubts the club can afford ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.team_name} and ${manager2.team_name} to battle it out for ${player.first_name} ${player.web_name} signing`);
-    randomStatements.push(`${manager.name} spotted partying in Cannock nightclub with ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} agent boasts of interest from ${manager.team_name} and ${manager2.team_name}`);
-    randomStatements.push(`${manager.name} linked with audacious bid for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.club.name} ${player.position.singular_name} ${player.first_name} ${player.web_name} open to move to ${manager.team_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} spotted at ${manager.team_name} training facility`);
-    randomStatements.push(`${player.first_name} ${player.web_name} not interested in move to ${manager.team_name}. Could never see himself working with ${manager.name}`);
-    randomStatements.push(`${manager.name} urges ${manager.team_name} board to move for ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.name} hopes to keep ${player.first_name} ${player.web_name} transfer under the radar`);
-    randomStatements.push(`Draft TV sources understand ${player.first_name} ${player.web_name} could move to ${manager.team_name} in next 24 hours`);
-    randomStatements.push(`${manager.name} hopes to beat ${manager2.name} to ${player.first_name} ${player.web_name} signature`);
-    randomStatements.push(`${manager.name} doubts the club can afford ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${manager.team_name} and ${manager2.team_name} to battle it out for ${player.first_name} ${player.web_name} signing`);
-    randomStatements.push(`${manager.name} spotted partying in Cannock nightclub with ${player.first_name} ${player.web_name}`);
-    randomStatements.push(`${player.first_name} ${player.web_name} agent boasts of interest from ${manager.team_name} and ${manager2.team_name}`);
-
-    randomStatements.push(`${manager.team_name} and ${manager2.team_name} working on secret trade deals`);
-    randomStatements.push(`${manager.team_name} and ${manager2.team_name} working on secret trade deals `);
-
-    // gossip:
-    randomStatements.push(`Safe-sex advocates Sydenham Snakes sign sponsorship deal with condom giant Durex.`);
-    randomStatements.push(`HMRC probe club accounts of Tonbridge Tigers and Birmingham Bufallos in tax fiddling scandal`);
-    randomStatements.push(`Secret source claims to have 'proof' of draw-fixing from Woodall brothers in 2019/20 season`);
-    randomStatements.push(`Daniel Picken FURIOUS as Lunt Leopards board enforce smoking ban at stadium`);
-    randomStatements.push(`Albion Street Animals coach Tony Nicklin adamant pre-season DOES matter`);
-    randomStatements.push(`Thompson goes on CRAZY signing spree amidst Vhiskey bender. Due to meet board this evening.`);
-    randomStatements.push(`Chris Eddowes ruffles feathers as he trials meat and booze restrictions at the Panthers stadium`);
-    randomStatements.push(`P. Nicklin of Featherstone Fire refuses to comment on lack of custard pants`);
-    randomStatements.push(`Prestwich Power boss Tom Westwood denies new baby will affect his performance this season`);
-    randomStatements.push(`Wayne Nicklin said to be working on loophole to allow signing of Baggies players`);
-    randomStatements.push(`Lee Woodall looking to secure first proper draft title this season`);
-
-    return randomStatements[Math.floor(Math.random() * randomStatements.length)];
-  }
 }
+
+
