@@ -76,8 +76,6 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
             new Audio(this.draft.draft_manager.more_info?.intro_audio) :
             this.newManagerAudio;
 
-          console.log(`${this.draft.draft_manager.team_name}: ${managerIntroAudio.src}`);
-
           this.announce(TerminalWaitingComponent, 4000, managerIntroAudio, {
             draft: this.draft,
             squadManager: this.draft.draft_manager
@@ -124,7 +122,11 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
   }
 
   private announceNomination(): void {
-    this.announce(TerminalNominationComponent, 7000, this.nominatedAudio, undefined, () => this.startBidsTimer());
+    let managerIntroAudio = this.draft.draft_managers.find(dm => dm.id == this.draft.draft_manager_id)?.more_info?.intro_audio?.length > 0 ?
+      new Audio(this.draft.draft_manager.more_info?.intro_audio) :
+      this.nominatedAudio;
+
+    this.announce(TerminalNominationComponent, 7000, managerIntroAudio, undefined, () => this.startBidsTimer());
   }
 
   private startBidsTimer(): void {
@@ -141,7 +143,11 @@ export class TerminalComponent extends DraftBaseComponent implements OnInit {
   }
 
   private announceSigningComplete(): void {
-    this.announce(TerminalSigningComponent, 6000, this.announceAudio);
+    let managerSigningAudio = this.draft.draft_managers.find(dm => dm.id == this.draft.draft_manager_id)?.more_info?.intro_audio?.length > 0 ?
+      new Audio(this.draft.draft_manager.more_info?.intro_audio) :
+      this.announceAudio;
+
+    this.announce(TerminalSigningComponent, 6000, managerSigningAudio);
   }
 
   private announceTimeout(): void {
